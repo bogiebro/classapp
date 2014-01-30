@@ -1,0 +1,18 @@
+{
+  "name": "wybcx",
+  "version": "0.0.0",
+  "homepage": "http://github.com/bogiebro/classapp",
+  "description": "Easy study groups for Yalies",
+  "main": "app.js",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+  }
+}
