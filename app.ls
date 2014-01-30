@@ -1,13 +1,5 @@
-require! <[ express http path passport fs multiparty ./sockets ]>
+require! <[ express http path multiparty ./sockets ]>
 io = require('socket.io')
-
-# Yale CAS
-cas = require('grand_master_cas')
-cas.configure({
-  casHost: "secure.its.yale.edu",
-  casPath: "/cas",
-  service: "http://localhost:3000",
-})
 
 # Express config
 app = express!
@@ -20,12 +12,25 @@ app.use _
   .. express.urlencoded!
   .. app.router
   .. express.errorHandler! if development
-  .. express.cookieParser!
+
+session =
+  express.cookieParser!
+  express.session(secret: process.env.SECRET)
+
+# Yale CAS
+cas = require('grand_master_cas')
+cas.configure({
+  casHost: "secure.its.yale.edu",
+  casPath: "/cas",
+  ssl: true,
+  port: 443,
+  service: process.env.SITE + ':' + app.get('port')
+})
 
 json = express.json!
 
 # http responses
-app.get '/', cas.bouncer, (req, res)!-> res.send 200
+app.get '/', session, cas.bouncer, (req, res)!-> res.send 200
 
 # socketio responses
 server = http.createServer(app)
