@@ -6,6 +6,7 @@
     "postinstall": "sh install.sh"
   },
   "dependencies": {
+    "connect": "*",
     "LiveScript-brunch": "1.5.x",
     "express": "3.3.5",
     "jade": "*",
@@ -24,6 +25,7 @@
     "multiparty": "~3.1.1",
     "async": "~0.2.9",
     "prelude-ls": "~1.0.3",
-    "grand_master_cas": "~0.2.3"
+    "grand_master_cas": "~0.2.3",
+    "socket.io-express": "0.0.1"
   }
 }

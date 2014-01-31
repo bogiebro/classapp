@@ -1,4 +1,5 @@
 require! <[ redis url ]>
+{each, flip} = require 'prelude-ls'
 
 var pusher, subscriber, redisClient
 
@@ -14,31 +15,26 @@ exports.startRedis = (io)->
     subscriber := redisClient!
     pusher := redisClient!
     subscriber.on "message", (channel, message)->
-        io.sockets.emit(channel, JSON.parse(message))
+        data = JSON.parse(message)
+        io.sockets.in(data.room).emit(channel, data)
     subscriber.subscribe('chat')
     subscriber.subscribe('nextmeeting')
 
 exports.connect = (s) ->
-    s.on 'join', (name)->
-        <- s.set('nickname', name)
-        pusher.publish('chat', JSON.stringify({type: 'join', name: name}))
-    s.on 'disconnect', (data)->
-        (err, name) <- s.get 'nickname'
-        console.error err if err
-        pusher.publish('chat', JSON.stringify({type: 'leave', name: name}))
+    rooms = s.handshake.session.rooms
+    user = s.handshake.session.cas_user
+    each s.join rooms
     s.on 'chat' (data)->
-        (err, name) <- s.get 'nickname'
-        console.error err if err 
-        pusher.publish('chat', JSON.stringify({type: 'chat', name: name, content: data}))
+        if data.room in rooms
+            pusher.publish('chat', JSON.stringify(data with name: user))
+    flip(each)(rooms, (room)->
+        pusher.get ("nextmeeting:#room"), (err, reply)->
+            s.emit('nextmeeting', JSON.parse(reply)) if reply)
 
-    pusher.get 'nextmeeting', (err, reply)->
-        res =   if reply then JSON.parse reply
-                else {}
-        s.emit('nextmeeting', res)
-
-exports.sendChat = (data)-> pusher.publish('chat', JSON.stringify(data))
+exports.sendChat = (group, data)->
+    pusher.publish('chat', JSON.stringify(data with group: group))
 
 exports.setNextMeeting = (nextmeeting)->
     str = JSON.stringify(nextmeeting)
-    pusher.set('nextmeeting', str)
+    pusher.set("nextmeeting:#{nextmeeting.room}", str)
     pusher.publish('nextmeeting', str)
