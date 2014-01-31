@@ -1,4 +1,5 @@
 require! <[ express http path multiparty ./sockets ]>
+cas = require('grand_master_cas')
 MemoryStore = express.session.MemoryStore
 sessionStore = new MemoryStore! # should probably use redis instead
 
@@ -6,40 +7,42 @@ sessionStore = new MemoryStore! # should probably use redis instead
 app = express!
 development = 'development' == app.get('env')
 app.set('port', process.env.PORT || 3000)
-app.use _
-  .. if development then express.logger 'dev' else express.logger!
-  .. express.compress!
-  .. <| express.static <| path.join(__dirname, 'build')
-  .. express.urlencoded!
-  .. app.router
-  .. express.errorHandler! if development
 
 # Yale CAS
 cookieParser = express.cookieParser(process.env.SECRET)
-session =
-  cookieParser
-  express.session(store: sessionStore)
-  (req, res, next)->
-    req.session.rooms = ['main'] # for testing
-    req.session.auth =
-      loggedIn: true
-      user: req.session.cas_user # should find on facebook instead
-    next!
-
-cas = require('grand_master_cas')
+getUser = (req, res, next)->
+  req.session.rooms = ['main'] # for testing
+  req.session.auth =
+    loggedIn: true
+    user: req.session.cas_user # should find on facebook instead
+  next!
 cas.configure({
   casHost: "secure.its.yale.edu",
   casPath: "/cas",
   ssl: true,
   port: 443,
-  service: "#{process.env.SITE}:#{app.get('port')}"
+  service: "#{process.env.SITE}:#{app.get('port')}/auth/"
 })
+
+# Global middleware
+app.use _
+  .. if development then express.logger 'dev' else express.logger!
+  .. express.compress!
+app.use('/open', express.static(path.join(__dirname, 'build/open')))
+app.use _
+  .. express.urlencoded!
+  .. app.router
+  .. cookieParser
+  .. express.session(store: sessionStore)
+  .. cas.bouncer
+  .. getUser
+app.use('/auth', express.static(path.join(__dirname, 'build/auth')))
+app.use(express.errorHandler! if development)
 
 json = express.json!
 
-# http responses
-app.get '/', session, cas.bouncer, (req, res)!->
-  res.send 200
+# root
+app.get '/', (req, res)!-> res.send 200
 
 # socketio responses
 server = http.createServer(app)

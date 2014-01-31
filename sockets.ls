@@ -27,14 +27,10 @@ exports.connect = (s) ->
     s.on 'chat' (data)->
         if data.room in rooms
             pusher.publish('chat', JSON.stringify(data with name: user))
+    s.on 'nextmeeting' (nextmeeting)->
+        str = JSON.stringify(nextmeeting)
+        pusher.set("nextmeeting:#{nextmeeting.room}", str)
+        pusher.publish('nextmeeting', str)
     flip(each)(rooms, (room)->
         pusher.get ("nextmeeting:#room"), (err, reply)->
             s.emit('nextmeeting', JSON.parse(reply)) if reply)
-
-exports.sendChat = (group, data)->
-    pusher.publish('chat', JSON.stringify(data with group: group))
-
-exports.setNextMeeting = (nextmeeting)->
-    str = JSON.stringify(nextmeeting)
-    pusher.set("nextmeeting:#{nextmeeting.room}", str)
-    pusher.publish('nextmeeting', str)
