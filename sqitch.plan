@@ -2,3 +2,6 @@
 %project=classapp
 %uri=http://github.com/bogiebro/classapp
 
+users 2014-02-02T00:16:40Z Sam <amsay@amsay.net> # Creates user table
+rooms 2014-02-02T00:39:18Z Sam <amsay@amsay.net> # Adds rooms table
+userrooms [users rooms] 2014-02-02T02:15:19Z Sam <amsay@amsay.net> # Adds user rooms join
