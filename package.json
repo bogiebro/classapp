@@ -10,7 +10,6 @@
     "express": "3.3.5",
     "jade": "*",
     "stylus": "*",
-    "socket.io": "*",
     "javascript-brunch": ">= 1.0 < 1.8",
     "css-brunch": ">= 1.0 < 1.8",
     "ngmin-uglify-js-brunch": "~1.7.2",
@@ -18,16 +17,8 @@
     "jade-angularjs-brunch": "*",
     "brunch": "1.x",
     "bower": "1.2.7",
-    "redis": "~0.10.0",
-    "hiredis": "*",
     "LiveScript": "*",
-    "multiparty": "~3.1.1",
-    "async": "~0.2.9",
-    "prelude-ls": "~1.0.3",
     "grand_master_cas": "~0.2.3",
-    "socket.io-express": "0.0.1",
-    "pg": "~2.11.1",
-    "any-db": "~2.1.0",
-    "any-db-postgres": "~2.1.1"
+    "firebase-token-generator": "~0.1.4"
   }
 }

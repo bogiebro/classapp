@@ -8,10 +8,12 @@ exports.config =
     files:
         javascripts:
             joinTo:
-                "js/vendor.js": /^bower_components/
+                "static/js/vendor.js": /^bower_components/
+                "static/js/main.js": /^app/
         stylesheets:
             joinTo:
-                "css/vendor.css": /^bower_components/
+                "static/css/vendor.css": /^bower_components/
+                "static/css/main.css": /^app/
         templates:
             joinTo: 
               '.compile-jade': /^app/
