@@ -1,7 +1,19 @@
 require! <[ express http path multiparty ./sockets ]>
 cas = require('grand_master_cas')
-MemoryStore = express.session.MemoryStore
-sessionStore = new MemoryStore! # should probably use redis instead
+
+# postgres configuration
+db = require 'any-db'
+pool = db.createPool(process.env.DATABASE_URL, {min: 2, max: 20})
+
+# redis configuration
+if process.env.REDISTOGO_URL
+    rtg   = url.parse(process.env.REDISTOGO_URL)
+    redisClient = ->
+        redis.createClient(rtg.port, rtg.hostname)
+            ..auth(rtg.auth.split(":")[1])
+else redisClient = -> redis.createClient!
+RedisStore = require('connect-redis')(express)
+redisStore = new RedisStore(client: redisClient!)
 
 # Express config
 app = express!
@@ -33,7 +45,7 @@ app.use _
   .. express.urlencoded!
   .. app.router
   .. cookieParser
-  .. express.session(store: sessionStore)
+  .. express.session(store: redisStore)
   .. cas.bouncer
   .. getUser
 app.use('/auth', express.static(path.join(__dirname, 'build/auth')))
@@ -41,15 +53,19 @@ app.use(express.errorHandler! if development)
 
 json = express.json!
 
-# root
+# http services IMPLEMENT THESE GUYS
 app.get '/', (req, res)!-> res.send 200
+app.get '/nextMeeting' (req, res)!-> res.json({})
+app.get '/oldChats' (req, res)!-> res.json({})
+app.get '/publicRooms' (req, res)!-> res.json({})
+app.get '/myRooms' (req, res)!-> res.json({})
 
 # socketio responses
 server = http.createServer(app)
 io = require('socket.io').listen(server)
 io.set('authorization',
   require('socket.io-express').createAuthFunction(cookieParser, sessionStore))
-sockets.startRedis(io)
+sockets.startDB(io, pool, redisClient)
 io.sockets.on('connection', sockets.connect)
 
 # start the server
