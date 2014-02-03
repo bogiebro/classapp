@@ -2,15 +2,19 @@ doctype 5
 html(ng-app="tester")
     head
         title Test App
+
         script(src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.min.js')
         script(src='https://cdn.firebase.com/v0/firebase.js')
         script(src='https://cdn.firebase.com/libs/angularfire/0.6.0/angularfire.min.js')
         script(src='/static/js/vendor.js')
         script(src='/static/js/main.js')
 
+        link(rel='stylesheet', href="/static/css/main.css")
+
     body
-        div(ng-controller='TestCtrl')
-            div(ng-repeat="msg in messages")
-                div {{msg.body}}
-            form(ng-submit="submit()")
-                input(type="text", ng-model="message", placeholder="Type a Message", class="form-control")
+        .container
+            div(ng-controller='TestCtrl')
+                div(ng-repeat="msg in messages")
+                    div <em>{{msg.netid}}</em>: {{msg.body}}
+                form(ng-submit="submit()")
+                    input(type="text", ng-model="message", placeholder="Type a Message", class="form-control")

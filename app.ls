@@ -22,7 +22,6 @@ app.use _
   .. express.compress!
 app.use('/static', express.static(path.join(__dirname, 'build/static')))
 app.use _
-  .. express.urlencoded!
   .. express.cookieParser!
   .. express.session(secret: process.env.SESSIONSECRET)
   .. cas.bouncer
@@ -34,7 +33,7 @@ app.use(express.errorHandler! if development)
 app.get '/generate' (req, res)!->
   tokenGenerator = new FirebaseTokenGenerator(process.env.GENSECRET)
   token = tokenGenerator.createToken(netid: req.session.cas_user)
-  res.json(token: token)
+  res.json(token: token, netid: req.session.cas_user)
 
 # Get the root
 app.get '/' (req, res)!-> res.redirect '/auth/index.html'
