@@ -1,18 +1,35 @@
-app = angular.module("tester", ["firebase"])
-app.controller 'TestCtrl', ($scope, $firebase, $http)->
+angular.module("classapp", ['ui.bootstrap', 'ui.bootstrap.tpls',
+    'ngRoute', 'firebase', 'app.auth.templates'])
 
-    var netid
+.factory '$ref' ($http, $rootScope)->
+    result = 
+        base: new Firebase('https://torid-fire-3655.firebaseio.com')
+    $http.get('/generate').success (data)->
+        (error) <- result.base.auth(data.token)
+        console.log("Login Failed!", error) if error
+        result.netid = data.netid
+        $rootScope.$broadcast('loggedin')
+    return result
 
-    dataRef = new Firebase('https://torid-fire-3655.firebaseio.com')
-    do
-        data <- $http.get('/generate').success
-        netid := data.netid
-        error <- dataRef.auth(data.token)
-        if (error) then console.log("Login Failed!", error)
-        else console.log("Login Succeeded!")
+.config ($routeProvider)->
+    $routeProvider.
+        when('/', {controller:'MainCtrl', templateUrl:'app/auth/main.jade'})
 
-    $scope.messages = $firebase(dataRef);
+.controller 'MainCtrl', ($firebase, $scope, $ref, $modal)->
+    $scope.messages = $firebase($ref.base.child('messages'))
+
+    $scope.$on 'loggedin', ->
+        $firebase($ref.base.child("users/#{$ref.netid}")).$bind($scope, "me").then (unbind)->
+            if not $scope.me.name?
+                $modal.open(
+                    templateUrl: 'askId'
+                    controller: ($scope, $modalInstance)->
+                        $scope.info = {}
+                        $scope.dismiss = ->
+                            $modalInstance.close($scope.info)
+                ).result.then (val)->
+                    $scope.me = val
 
     $scope.submit = ->
-        $scope.messages.$add({netid: netid, body: $scope.message});
-        $scope.message = '';
+        $scope.messages.$add({netid: $ref.netid, body: $scope.message})
+        $scope.message = ''

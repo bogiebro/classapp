@@ -20,7 +20,8 @@ cas.configure({
 app.use _
   .. if development then express.logger 'dev' else express.logger!
   .. express.compress!
-app.use('/static', express.static(path.join(__dirname, 'build/static')))
+app.use('/js', express.static(path.join(__dirname, 'build/js')))
+app.use('/css', express.static(path.join(__dirname, 'build/css')))
 app.use _
   .. express.cookieParser!
   .. express.session(secret: process.env.SESSIONSECRET)
