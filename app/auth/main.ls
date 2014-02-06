@@ -1,7 +1,6 @@
 angular.module("classapp", ['ui.bootstrap', 'ui.bootstrap.tpls',
     'ngRoute', 'firebase', 'app.auth.templates', 'ezfb'])
 
-# this should cache previous values
 .factory '$ref' ($http, $rootScope)->
     result = 
         base: new Firebase('https://torid-fire-3655.firebaseio.com')
@@ -17,30 +16,33 @@ angular.module("classapp", ['ui.bootstrap', 'ui.bootstrap.tpls',
     $routeProvider.
         when('/', {controller:'MainCtrl', templateUrl:'app/auth/main.jade'})
 
+.controller 'InfoCtrl', ($scope, $modalInstance, $FB, me)->
+    $scope.me = me
+    $scope.fbLogin = ->
+        $FB.login(((res)->
+            if (res.authResponse)
+                api <- $FB.api('/me')
+                $scope.me <<< api
+        ), {})
+    $scope.dismiss = ->
+        $modalInstance.close($scope.me)
 
 .controller 'MainCtrl', ($firebase, $scope, $ref, $modal)->
 
     $scope.messages = $firebase($ref.base.child('messages'))
+    $scope.me = {}
+
+    $scope.setupUser = ->
+        $modal.open(
+            templateUrl: 'askId'
+            controller: 'InfoCtrl'
+            resolve: {me: (-> $scope.me)}
+        ).result.then (val)->
+            $scope.me = val
 
     $scope.$on 'loggedin', ->
         $firebase($ref.base.child("users/#{$ref.netid}")).$bind($scope, "me").then (unbind)->
-            if not $scope.me.name?
-                $modal.open(
-                    templateUrl: 'askId'
-                    controller: ($scope, $modalInstance, $FB)->
-
-                        $scope.fbLogin = ->
-                            $FB.login(((res)->
-                                if (res.authResponse)
-                                    api <- $FB.api('/me')
-                                    $scope.info.name = api.name
-                            ), {})
-
-                        $scope.info = {}
-                        $scope.dismiss = ->
-                            $modalInstance.close($scope.info)
-                ).result.then (val)->
-                    $scope.me = val
+            $scope.setupUser! if not $scope.me.name?
 
     $scope.submit = ->
         $scope.messages.$add({netid: $ref.netid, body: $scope.message})

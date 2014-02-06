@@ -16,6 +16,11 @@ cas.configure({
   service: "#{process.env.SITE}/auth/"
 })
 
+removeQuery = (req, res, next)->
+  if req.query.ticket?
+    res.redirect(req.path)
+  else next()
+
 # Middleware
 app.use _
   .. if development then express.logger 'dev' else express.logger!
@@ -27,6 +32,7 @@ app.use _
   .. express.session(secret: process.env.SESSIONSECRET)
   .. cas.bouncer
   .. app.router
+  .. removeQuery
 app.use('/auth', express.static(path.join(__dirname, 'build/auth')))
 app.use(express.errorHandler! if development)
 
