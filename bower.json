@@ -16,6 +16,7 @@
   "dependencies": {
     "angular": "*",
     "angular-bootstrap": ">= 0.9",
-    "angular-route": "*"
+    "angular-route": "*",
+    "angular-easyfb": "*"
   }
 }

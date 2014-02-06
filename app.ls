@@ -13,7 +13,7 @@ cas.configure({
   casPath: "/cas",
   ssl: true,
   port: 443,
-  service: "#{process.env.SITE}:#{app.get('port')}/auth/"
+  service: "#{process.env.SITE}/auth/"
 })
 
 # Middleware

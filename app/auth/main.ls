@@ -1,6 +1,7 @@
 angular.module("classapp", ['ui.bootstrap', 'ui.bootstrap.tpls',
-    'ngRoute', 'firebase', 'app.auth.templates'])
+    'ngRoute', 'firebase', 'app.auth.templates', 'ezfb'])
 
+# this should cache previous values
 .factory '$ref' ($http, $rootScope)->
     result = 
         base: new Firebase('https://torid-fire-3655.firebaseio.com')
@@ -11,11 +12,14 @@ angular.module("classapp", ['ui.bootstrap', 'ui.bootstrap.tpls',
         $rootScope.$broadcast('loggedin')
     return result
 
-.config ($routeProvider)->
+.config ($routeProvider, $FBProvider)->
+    $FBProvider.setInitParams(appId: '644243232277907')
     $routeProvider.
         when('/', {controller:'MainCtrl', templateUrl:'app/auth/main.jade'})
 
+
 .controller 'MainCtrl', ($firebase, $scope, $ref, $modal)->
+
     $scope.messages = $firebase($ref.base.child('messages'))
 
     $scope.$on 'loggedin', ->
@@ -23,7 +27,15 @@ angular.module("classapp", ['ui.bootstrap', 'ui.bootstrap.tpls',
             if not $scope.me.name?
                 $modal.open(
                     templateUrl: 'askId'
-                    controller: ($scope, $modalInstance)->
+                    controller: ($scope, $modalInstance, $FB)->
+
+                        $scope.fbLogin = ->
+                            $FB.login(((res)->
+                                if (res.authResponse)
+                                    api <- $FB.api('/me')
+                                    $scope.info.name = api.name
+                            ), {})
+
                         $scope.info = {}
                         $scope.dismiss = ->
                             $modalInstance.close($scope.info)
