@@ -2,6 +2,7 @@
 # http://docs.angularjs.org/guide/dev_guide.services.testing_services
 # http://nathanleclaire.com/blog/2013/12/13/how-to-unit-test-controllers-in-angularjs-without-setting-your-hair-on-fire/
 # http://www.sitepoint.com/unit-and-e2e-testing-in-angularjs/
+# https://github.com/angular/protractor/blob/master/docs/getting-started.md
 
 describe "login process", ->
     beforeEach(module('App'))
