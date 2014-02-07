@@ -1,4 +1,4 @@
-angular.module("classapp", ['ui.bootstrap', 'ui.bootstrap.tpls',
+window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls',
     'ngRoute', 'firebase', 'app.auth.templates', 'ezfb'])
 
 .factory '$ref' ($http, $rootScope)->

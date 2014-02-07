@@ -17,6 +17,7 @@
     "angular": "*",
     "angular-bootstrap": ">= 0.9",
     "angular-route": "*",
-    "angular-easyfb": "*"
+    "angular-easyfb": "*",
+    "angular-mocks": "*"
   }
 }
