@@ -1,0 +1,2 @@
+brunch watch &
+foreman start

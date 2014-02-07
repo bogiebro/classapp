@@ -15,8 +15,8 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'build/js/vendor.js',
-      'lib/firebase.js',
-      'lib/angularfire.min.js',
+      'test/lib/firebase.js',
+      'test/lib/angularfire.min.js',
       'build/js/app.auth.templates.js',
       'build/js/main.js',
       'test/**/*.coffee'

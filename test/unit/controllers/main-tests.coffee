@@ -9,7 +9,9 @@ describe "login process", ->
 
     it 'should have a MainCtrl controller', inject ($rootScope, $controller)->
         scope = $rootScope.$new()
-        ctrl = $controller('MainCtrl', {$scope: scope})
+        firebase = new Firebase('https://torid-fire-3655.firebaseio.com')
+        ref = {base: firebase, netid: 'fake32'}
+        ctrl = $controller('MainCtrl', {$scope: scope, $ref: ref})
         expect(ctrl).toBeDefined()
 
     it 'should have an InfoCtrl controller', inject ($rootScope, $controller)->
