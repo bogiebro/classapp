@@ -1,15 +1,13 @@
 window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls',
-    'ngRoute', 'firebase', 'app.auth.templates', 'ezfb'])
+    'ngRoute', 'firebase', 'app.auth.templates', 'ezfb', 'ngCookies'])
 
-.factory '$ref' ($http, $rootScope)->
-    result = 
-        base: new Firebase('https://torid-fire-3655.firebaseio.com')
-    $http.get('/generate').success (data)->
-        (error) <- result.base.auth(data.token)
+.factory '$ref' ($cookies, $rootScope)->
+    cookieData = JSON.parse($cookies.casInfo)
+    firebase = new Firebase('https://torid-fire-3655.firebaseio.com')
+    do
+        error <- firebase.auth(cookieData.token)
         console.log("Login Failed!", error) if error
-        result.netid = data.netid
-        $rootScope.$broadcast('loggedin')
-    return result
+    return {base: firebase, netid: cookieData.netid}
 
 .config ($routeProvider, $FBProvider)->
     $FBProvider.setInitParams(appId: '644243232277907')

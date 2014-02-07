@@ -18,7 +18,6 @@
     "brunch": "1.x",
     "bower": "1.2.7",
     "LiveScript": "*",
-    "grand_master_cas": "~0.2.3",
     "firebase-token-generator": "~0.1.4"
   }
 }

@@ -1,25 +1,16 @@
-require! <[ express http path ]>
+require! <[ express http path ./cas ]>
 FirebaseTokenGenerator = require("firebase-token-generator")
 
 # Express config
 app = express!
 development = 'development' == app.get('env')
 app.set('port', process.env.PORT || 3000)
+tokenGenerator = new FirebaseTokenGenerator(process.env.GENSECRET)
 
-# Yale CAS
-cas = require('grand_master_cas')
-cas.configure({
-  casHost: "secure.its.yale.edu",
-  casPath: "/cas",
-  ssl: true,
-  port: 443,
-  service: "#{process.env.SITE}/auth/"
-})
-
-removeQuery = (req, res, next)->
-  if req.query.ticket?
-    res.redirect(req.path)
-  else next()
+# Firebase token generation
+generateToken = (netid)-> JSON.stringify do
+  token: tokenGenerator.createToken(netid: netid)
+  netid: netid
 
 # Middleware
 app.use _
@@ -29,18 +20,10 @@ app.use('/js', express.static(path.join(__dirname, 'build/js')))
 app.use('/css', express.static(path.join(__dirname, 'build/css')))
 app.use _
   .. express.cookieParser!
-  .. express.session(secret: process.env.SESSIONSECRET)
-  .. cas.bouncer
+  .. cas.checkCookie(generateToken)
   .. app.router
-  .. removeQuery
 app.use('/auth', express.static(path.join(__dirname, 'build/auth')))
 app.use(express.errorHandler! if development)
-
-# Get a Firebase Auth token
-app.get '/generate' (req, res)!->
-  tokenGenerator = new FirebaseTokenGenerator(process.env.GENSECRET)
-  token = tokenGenerator.createToken(netid: req.session.cas_user)
-  res.json(token: token, netid: req.session.cas_user)
 
 # Get the root
 app.get '/' (req, res)!-> res.redirect '/auth/index.html'
