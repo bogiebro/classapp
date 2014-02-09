@@ -1,7 +1,7 @@
 window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls',
     'ngRoute', 'firebase', 'app.auth.templates', 'ezfb', 'ngCookies'])
 
-.factory '$ref' ($cookies, $rootScope)->
+.factory '$ref' ($cookies)->
     cookieData = JSON.parse($cookies.casInfo)
     firebase = new Firebase('https://torid-fire-3655.firebaseio.com')
     do
