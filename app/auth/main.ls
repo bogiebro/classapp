@@ -9,6 +9,19 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls',
         console.log("Login Failed!", error) if error
     return {base: firebase, netid: cookieData.netid}
 
+.factory '$trackConnected' ($ref, $firebase)->
+    myConnectionsRef = $ref.base.child "users/#{$ref.netid}/connections"
+    connectedRef = $ref.base.child '.info/connected'
+    connectedRef.on 'value' (snap)!->
+        if (snap.val!)
+            myConnectionsRef.push true
+            con.onDisconnect!remove!
+    return (netids)->
+        obj = {}
+        for netid in netids
+            obj[netid] = $firebase($ref.base.child("users/#{netid}/connections"))
+        return obj
+
 .config ($routeProvider, $FBProvider)->
     $FBProvider.setInitParams(appId: '644243232277907')
     $routeProvider.
@@ -27,7 +40,7 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls',
 
 .controller 'MainCtrl', ($firebase, $scope, $ref, $modal)->
 
-    $scope.messages = $firebase($ref.base.child('messages'))
+    $scope.messages = $firebase($ref.base.child('groups/CPSC433/chats'))
     $scope.me = {}
 
     $scope.setupUser = ->
