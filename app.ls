@@ -18,6 +18,7 @@ app.use _
   .. express.compress!
 app.use('/js', express.static(path.join(__dirname, 'build/js')))
 app.use('/css', express.static(path.join(__dirname, 'build/css')))
+app.use('/static', express.static(path.join(__dirname, 'build/static')))
 app.use _
   .. express.cookieParser!
   .. cas.checkCookie(generateToken)
@@ -26,7 +27,7 @@ app.use('/auth', express.static(path.join(__dirname, 'build/auth')))
 app.use(express.errorHandler! if development)
 
 # Get the root
-app.get '/' (req, res)!-> res.redirect '/auth/index.html'
+app.get '/' (req, res)!-> res.redirect '/static/index.html'
 
 # start the server
 http.createServer(app).listen(app.get('port'), ->
