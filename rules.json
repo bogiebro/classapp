@@ -1,0 +1,15 @@
+{
+    "rules": {
+        ".read": true,
+        ".write": "auth != null",
+        "group": {
+            "$groupid": {
+                "chat": {
+                    "$chat": {
+                        ".validate": "newData.hasChildren(['netid', 'body']) && newData.child('body').isString() && auth.netid == newData.child('netid').val()"
+                    }
+                }
+            }
+        }
+    }
+}

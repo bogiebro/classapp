@@ -1,5 +1,5 @@
 window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls',
-    'ngRoute', 'firebase', 'app.auth.templates', 'ezfb', 'ngCookies'])
+    'ngRoute', 'firebase', 'app.auth.templates', 'ezfb', 'ngCookies', 'omr.angularFileDnD'])
 
 .factory '$ref' ($cookies)->
     cookieData = JSON.parse($cookies.casInfo)
@@ -40,7 +40,7 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls',
 
 .controller 'MainCtrl', ($firebase, $scope, $ref, $modal)->
 
-    $scope.messages = $firebase($ref.base.child('groups/CPSC433/chats'))
+    $scope.messages = $firebase($ref.base.child('groups/CPSC433/chat'))
     $scope.me = {}
 
     $scope.setupUser = ->
