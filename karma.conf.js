@@ -51,7 +51,8 @@ module.exports = function(config) {
     autoWatch: true,
 
     preprocessors: {
-      'test/unit/**/*.coffee': ['coffee']
+      'test/unit/**/*.coffee': ['coffee'],
+      'test/lib/*.coffee': ['coffee']
     },
 
     // Start these browsers, currently available:

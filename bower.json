@@ -19,6 +19,10 @@
     "angular-route": "*",
     "angular-easyfb": "*",
     "angular-mocks": "*",
-    "angular-cookies": "*"
+    "angular-cookies": "*",
+    "angular-file-dnd": "*"
+  },
+  "resolutions": {
+    "angular": "1.2.12"
   }
 }

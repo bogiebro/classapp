@@ -1,13 +1,26 @@
 window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls',
-    'ngRoute', 'firebase', 'app.auth.templates', 'ezfb', 'ngCookies'])
+    'ngRoute', 'firebase', 'app.auth.templates', 'ezfb', 'ngCookies', 'omr.angularFileDnD'])
 
-.factory '$ref' ($cookies, $rootScope)->
+.factory '$ref' ($cookies)->
     cookieData = JSON.parse($cookies.casInfo)
     firebase = new Firebase('https://torid-fire-3655.firebaseio.com')
     do
         error <- firebase.auth(cookieData.token)
         console.log("Login Failed!", error) if error
     return {base: firebase, netid: cookieData.netid}
+
+.factory '$trackConnected' ($ref, $firebase)->
+    myConnectionsRef = $ref.base.child "users/#{$ref.netid}/connections"
+    connectedRef = $ref.base.child '.info/connected'
+    connectedRef.on 'value' (snap)!->
+        if (snap.val!)
+            myConnectionsRef.push true
+            con.onDisconnect!remove!
+    return (netids)->
+        obj = {}
+        for netid in netids
+            obj[netid] = $firebase($ref.base.child("users/#{netid}/connections"))
+        return obj
 
 .config ($routeProvider, $FBProvider)->
     $FBProvider.setInitParams(appId: '644243232277907')
@@ -27,7 +40,7 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls',
 
 .controller 'MainCtrl', ($firebase, $scope, $ref, $modal)->
 
-    $scope.messages = $firebase($ref.base.child('messages'))
+    $scope.messages = $firebase($ref.base.child('groups/CPSC433/chat'))
     $scope.me = {}
 
     $scope.setupUser = ->
