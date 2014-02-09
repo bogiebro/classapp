@@ -2,8 +2,19 @@
     "rules": {
         ".read": true,
         ".write": "auth != null",
-        "group": {
+        "classes": {
+            ".read": "auth != null",
+            ".write": false
+        },
+        "users": {
+            "$userid": {
+                ".write": "auth.netid == $userid"
+            }
+        },
+        "groups": {
             "$groupid": {
+                ".read": "data.child('public').val() == true",
+                ".write": "data.child('members').hasChildren[auth.netid]",
                 "chat": {
                     "$chat": {
                         ".validate": "newData.hasChildren(['netid', 'body']) && newData.child('body').isString() && auth.netid == newData.child('netid').val()"
