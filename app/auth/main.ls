@@ -29,6 +29,11 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls',
 
 .controller 'InfoCtrl', ($scope, $modalInstance, $FB, me)->
     $scope.me = me
+    $scope.image = {}
+    $scope.$watch('image.unscaled', (newval, oldval)!-> rescale(newval) if newval)
+    rescale = (im)->
+        data <- Resample(im, 50, 50)
+        $scope.me.image = data
     $scope.fbLogin = ->
         $FB.login(((res)->
             if (res.authResponse)

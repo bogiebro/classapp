@@ -11,7 +11,7 @@ script(type="text/ng-template", id="askId")
         button(class="btn btn-primary", ng-click="fbLogin()") Connect with Facebook
         form(class="navbar-form", ng-submit="dismiss()")
             input(type="text", ng-model="me.name", placeholder="Full name", class="form-control")
-        div(file-dropzone="[image/png, image/jpeg, image/gif]", file="me.image", file-name="imageFileName", data-max-file-size="2")
+        div(file-dropzone="[image/png, image/jpeg, image/gif]", file="image.unscaled", file-name="imageFileName", data-max-file-size="2")
             span(ng-if="!me.image") Drop Image Here
             img(ng-if="me.image", ng-src="{{me.image}}")
     div.modal-footer
