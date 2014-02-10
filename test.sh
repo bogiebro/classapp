@@ -1,3 +1,4 @@
+set -e
 karma start --single-run
 foreman start &
 FOREMAN=$!
