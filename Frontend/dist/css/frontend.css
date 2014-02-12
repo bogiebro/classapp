@@ -1,0 +1,55 @@
+.nocolor_div {
+	background-color: #fff;
+}
+body, html {
+	height: 100%;
+}
+.fillscreen_div_1 {
+	height: 80%;
+}
+.fillscreen_div {
+	height: 100%;
+	padding: 50px;
+	padding-top: 100px;
+}
+
+.vcentered_element {
+	
+	margin-top: 20%;
+	text-align: center;
+}
+
+.hcentered_element {
+	text-align: center;
+}
+
+.thin_header {
+	font-family: 'Raleway', sans-serif;
+	font-size: 56px;
+}
+
+.medium_img {
+	align: middle;
+	max-height: 250px;
+	max-width: 250px;
+}
+
+.lower_red_div {
+	width: 100%;
+	margin: 0px;
+	display: block; 
+	background-color: #D8D8D8;
+	color: #000;
+	box-sizing: inherit;
+}
+
+.half-rule {
+	width: 50%;
+}
+
+.short_paragraph {
+	text-align: center;
+	margin-right: 20%;
+	margin-left: 20%;
+}
+
