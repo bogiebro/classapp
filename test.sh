@@ -1,4 +1,5 @@
 set -e
+export NODE_ENV=testing
 karma start --single-run
 foreman start &
 FOREMAN=$!

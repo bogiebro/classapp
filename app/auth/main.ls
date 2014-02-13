@@ -3,7 +3,7 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls',
 
 .factory '$ref' ($cookies)->
     cookieData = JSON.parse($cookies.casInfo)
-    firebase = new Firebase('https://torid-fire-3655.firebaseio.com')
+    firebase = new Firebase($PROCESS_ENV_FIREBASE)
     do
         error <- firebase.auth(cookieData.token)
         console.log("Login Failed!", error) if error
