@@ -1,3 +1,4 @@
+trap 'kill -HUP 0' EXIT
 export NODE_ENV=development
-brunch watch &
+./node_modules/.bin/brunch watch &
 foreman start

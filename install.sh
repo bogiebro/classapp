@@ -1,2 +1,2 @@
-./node_modules/bower/bin/bower install
-./node_modules/brunch/bin/brunch build --production
+./node_modules/.bin/bower install
+./node_modules/.bin/brunch build --production

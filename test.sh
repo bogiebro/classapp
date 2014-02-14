@@ -1,6 +1,7 @@
 trap 'kill -HUP 0' EXIT
 set -e
 export NODE_ENV=testing
+./node_modules/.bin/brunch build
 karma start --single-run
 foreman start &
 FOREMAN=$!
