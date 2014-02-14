@@ -3,7 +3,7 @@ FirebaseTokenGenerator = require("firebase-token-generator")
 
 # Express config
 app = express!
-development = 'development' == app.get('env')
+development = app.get('env') in ['testing', 'development']
 app.set('port', process.env.PORT || 3000)
 tokenGenerator = new FirebaseTokenGenerator(process.env.GENSECRET)
 
@@ -25,7 +25,7 @@ app.use _
   .. express.cookieParser!
   .. cas.checkCookie(generateToken)
 app.use('/auth', express.static(path.join(__dirname, 'build/auth')))
-app.use(express.errorHandler! if development)
+app.use(express.errorHandler!) if development
 
 # Get the root
 app.get '/' (req, res)!-> res.redirect '/static/index.html'
