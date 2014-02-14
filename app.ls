@@ -30,6 +30,15 @@ app.use(express.errorHandler!) if development
 # Get the root
 app.get '/' (req, res)!-> res.redirect '/static/index.html'
 
+# Give tests a login route
+if app.get('env') is 'testing'
+    app.get '/testlogin' (req, res)!-> 
+        data = JSON.stringify do
+            token: tokenGenerator.createToken(netid: 'tester')
+            netid: 'tester'
+        res.cookie('casInfo', data, {})
+        res.send 200
+
 # start the server
 http.createServer(app).listen(app.get('port'), ->
   console.log('Express server listening on port ' + app.get('port')))

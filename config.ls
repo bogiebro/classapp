@@ -1,13 +1,7 @@
 uuid = require('node-uuid')
-FirebaseTokenGenerator = require("firebase-token-generator")
 
 if process.env.NODE_ENV == 'testing'
     process.env.FIREBASE = "https://torid-fire-3655.firebaseio.com/tests/#{uuid.v4()}"
-    if process.env.GENSECRET?
-        tokenGenerator = new FirebaseTokenGenerator(process.env.GENSECRET)
-        process.env.AUTHCOOKIE = JSON.stringify do
-            token: tokenGenerator.createToken(netid: "tester")
-            netid: 'tester'
 else process.env.FIREBASE = "https://torid-fire-3655.firebaseio.com/"
 
 exports.config =
