@@ -19,7 +19,6 @@
     "bower": "1.2.7",
     "LiveScript": "*",
     "firebase-token-generator": "~0.1.4",
-    "node-uuid": "~1.4.1",
     "process-env-brunch": "~1.4.4-d"
   }
 }

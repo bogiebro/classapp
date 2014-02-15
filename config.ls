@@ -1,7 +1,5 @@
-uuid = require('node-uuid')
-
 if process.env.NODE_ENV == 'testing'
-    process.env.FIREBASE = "https://torid-fire-3655.firebaseio.com/tests/#{uuid.v4()}"
+    process.env.FIREBASE = "https://torid-fire-3655.firebaseio.com/tests/#{process.env.UUID}"
 else process.env.FIREBASE = "https://torid-fire-3655.firebaseio.com/"
 
 exports.config =
