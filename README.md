@@ -1,16 +1,14 @@
 classapp
 ========
-Push Test
 
 Study group project for Software Engineering (2014)
 
-Environment variable GENSECRET must be set before running. 
+The environment variable GENSECRET must be set before running (set it in your .env file).
+To build run `npm install`. For development, run the script `devel.sh`. This requires foreman (ie the Heroku Toolbelt).
+For tests run `test.sh`.
 
-To build run `npm install`. For development, run `brunch watch` to continuously compile static assets. You can also run the script `devel.sh` which does the same thing.
+The `app` directory contains front-end code. `auth` contains files that only authenticated users can see, which files in `static` are accessible to everyone.
+`resources` contains scripts from third parties. All javascript in these directories is concatenated and minified to either `build/js/main.js` during builds. All css is sent to `build/css/main.css`. Files named `index.jade` will retain their original directory structure inside the build directory. Other jade files will be compiled as javascript templates in `build/js`. Anything in `assets` is copied directly to the build directory. This process is specified in `config.ls`.
 
-To run the server, use foreman: `foreman start`.
-
-
-For unit tests run `karma start`. For end to end tests run `webdriver-manager start` to start the testing server and `protractor protractor.conf.js` to run the tests. The script `test.sh` runs both types of tests back to back.
 
 See the wiki for more details.
