@@ -26,8 +26,6 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
         $modalInstance.close($scope.me)
 
 .controller 'MainCtrl', ($firebase, $scope, $ref, $modal)->
-
-    $scope.messages = $firebase($ref.base.child('groups/CPSC433/chat'))
     $scope.me = {}
 
     $scope.setupUser = ->

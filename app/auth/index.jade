@@ -1,7 +1,7 @@
 doctype 5
 html(ng-app="App")
     head
-        title Test App
+        title Quipu
 
         script(src='/js/vendor.js')
         script(src='https://cdn.firebase.com/v0/firebase.js')
@@ -11,22 +11,25 @@ html(ng-app="App")
 
         link(rel='stylesheet', href="/css/main.css")
 
-    body
-        div(ng-controller="GroupCtrl")
+    body(ng-controller="MainCtrl")
+        div(ng-controller="GroupCtrl").leftbar
             include group.jade
-        div(ng-view)
-        div.options
-            button(class="btn", ng-click="setupUser()") Configure your Information
-            //- logout, preferences and about are here
+        .rightcontent
+            div(ng-view)
+        .options
+            //- need to add log out and about options
+            a.spaced About
+            a.spaced(ng-click="setupUser()") Preferences
+            a.spaced Log out
 
         script(type="text/ng-template", id="askId")
             div.modal-header
-                h3 This is where users configure stuff
+                h3 User Information
             div.modal-body
                 button(class="btn btn-primary", ng-click="fbLogin()") Connect with Facebook
                 form(class="navbar-form", ng-submit="dismiss()")
                     input(type="text", ng-model="me.name", placeholder="Full name", class="form-control")
-                div(file-dropzone="[image/png, image/jpeg, image/gif]", file="image.unscaled", file-name="imageFileName", data-max-file-size="2")
+                div.well(file-dropzone="[image/png, image/jpeg, image/gif]", file="image.unscaled", file-name="imageFileName", data-max-file-size="2")
                     span(ng-if="!me.image") Drop Image Here
                     img(ng-if="me.image", ng-src="{{me.image}}")
             div.modal-footer

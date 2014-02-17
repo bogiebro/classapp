@@ -1,12 +1,15 @@
-tabset
+tabset.leftcontent
     tab(heading="Chat")
         div(ng-controller="ChatCtrl")
-            include chat
+            .down
+                include chat
     tab(heading="Members")
         div(ng-controller="MembersCtrl")
-            include members
+            .down
+                include members
     tab(heading="Files")
         div(ng-controller="FilesCtrl")
-            include files
-div(ng-controller="EventsCtrl")
+            .down
+                include files
+.rightbar(ng-controller="EventsCtrl")
     include events
