@@ -1,12 +1,18 @@
 angular.module("app.auth", ['firebase', 'ngCookies'])
 
-.factory '$ref' ($cookies)->
+.factory '$ref' ($cookies, $rootScope, $firebase)->
+    refScope = $rootScope.$new()
     cookieData = JSON.parse($cookies.casInfo)
+    netid = cookieData.netid
     firebase = new Firebase($PROCESS_ENV_FIREBASE)
     do
         error <- firebase.auth(cookieData.token)
         console.log("Login Failed!", error) if error
-    return {base: firebase, netid: cookieData.netid}
+        $firebase(firebase.child("users/#{netid}")).$bind(refScope, "me").then (unbind)->
+            $rootScope.$broadcast('newuser') if not refScope.me.name?
+    refScope.base = firebase
+    refScope.netid = netid
+    return refScope
 
 .factory '$trackConnected' ($ref, $firebase)->
     myConnectionsRef = $ref.base.child "users/#{$ref.netid}/connections"

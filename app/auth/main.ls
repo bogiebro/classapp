@@ -9,37 +9,29 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
         .when('/help', {controller:'HelpCtrl', templateUrl:'app/auth/help.jade'})
         .when('/bigevents', {controller:'BigEventsCtrl', templateUrl:'app/auth/bigevents.jade'})
 
-.controller 'InfoCtrl', ($scope, $modalInstance, $FB, me)->
-    $scope.me = me
+.controller 'InfoCtrl', ($scope, $modalInstance, $FB, $ref)->
+    $scope.me = $ref.me
     $scope.image = {}
     $scope.$watch('image.unscaled', (newval, oldval)!-> rescale(newval) if newval)
     rescale = (im)->
         data <- Resample(im, 50, 50)
-        $scope.me.image = data
+        $ref.me.image = data
     $scope.fbLogin = ->
         $FB.login(((res)->
             if (res.authResponse)
                 api <- $FB.api('/me')
-                $scope.me <<< api
+                $ref.me <<< api
         ), {})
     $scope.dismiss = ->
-        $modalInstance.close($scope.me)
+        $modalInstance.close!
 
-.controller 'MainCtrl', ($firebase, $scope, $ref, $modal)->
-    $scope.me = {}
-
+.controller 'PrefCtrl', ($firebase, $scope, $ref, $modal)->
     $scope.setupUser = ->
         $modal.open(
             templateUrl: 'askId'
             controller: 'InfoCtrl'
-            resolve: {me: (-> $scope.me)}
-        ).result.then (val)->
-            $scope.me = val
+        )
+    $scope.$on 'newuser', !-> $scope.setupUser!
 
-    $scope.$on 'loggedin', ->
-        $firebase($ref.base.child("users/#{$ref.netid}")).$bind($scope, "me").then (unbind)->
-            $scope.setupUser! if not $scope.me.name?
-
-    $scope.submit = ->
-        $scope.messages.$add({netid: $ref.netid, body: $scope.message})
-        $scope.message = ''
+.controller 'MainCtrl', ($scope)->
+    # stuff here

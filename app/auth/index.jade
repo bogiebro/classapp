@@ -11,12 +11,12 @@ html(ng-app="App")
 
         link(rel='stylesheet', href="/css/main.css")
 
-    body(ng-controller="MainCtrl")
+    body
         div(ng-controller="GroupCtrl").leftbar
             include group.jade
         .rightcontent
             div(ng-view)
-        .options
+        .options(ng-controller="PrefCtrl")
             //- need to add log out and about options
             a.spaced About
             a.spaced(ng-click="setupUser()") Preferences
