@@ -18,9 +18,9 @@ html(ng-app="App")
             div(ng-view)
         .options(ng-controller="PrefCtrl")
             //- need to add log out and about options
-            a.spaced About
+            a.spaced(ng-click="about()") About
             a.spaced(ng-click="setupUser()") Preferences
-            a.spaced Log out
+            a.spaced(ng-click="logout()") Log out
 
         script(type="text/ng-template", id="askId")
             div.modal-header
@@ -32,4 +32,12 @@ html(ng-app="App")
                 div.well(file-dropzone="[image/png, image/jpeg, image/gif]", file="image.unscaled", file-name="imageFileName", data-max-file-size="2")
                     span(ng-if="!me.image") Drop Image Here
                     img(ng-if="me.image", ng-src="{{me.image}}")
+            div.modal-footer
+
+        script(type="text/ng-template", id="aboutId")
+            div.modal-header
+                h3 About Quipu
+            div.modal-body
+                p Quipu is awesome and made by us.
+                button(class="btn btn-default", ng-click="dismiss()") Cool
             div.modal-footer

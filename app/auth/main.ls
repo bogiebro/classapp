@@ -1,5 +1,5 @@
 window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.group',
-    'ngRoute', 'firebase', 'app.auth.templates', 'ezfb', 'omr.angularFileDnD',
+    'ngRoute', 'firebase', 'app.auth.templates', 'ezfb', 'omr.angularFileDnD', 'ngCookies',
     'app.auth', 'app.bigevents', 'app.help', 'app.chat', 'app.members', 'app.events', 'app.files'])
 
 .config ($routeProvider, $FBProvider)->
@@ -22,16 +22,23 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
                 api <- $FB.api('/me')
                 $ref.me <<< api
         ), {})
-    $scope.dismiss = ->
-        $modalInstance.close!
+    $scope.dismiss = !-> $modalInstance.close!
 
-.controller 'PrefCtrl', ($firebase, $scope, $ref, $modal)->
+.controller 'AboutCtrl', ($scope, $modalInstance)->
+    $scope.dismiss = !-> $modalInstance.close!
+
+.controller 'PrefCtrl', ($firebase, $scope, $ref, $modal, $window)->
     $scope.setupUser = ->
         $modal.open(
             templateUrl: 'askId'
-            controller: 'InfoCtrl'
-        )
+            controller: 'InfoCtrl')
     $scope.$on 'newuser', !-> $scope.setupUser!
+    $scope.logout = ->
+        $window.location.assign('/logout')
+    $scope.about = ->
+        $modal.open(
+            templateUrl: 'aboutId'
+            controller: 'AboutCtrl')
 
 .controller 'MainCtrl', ($scope)->
     # stuff here

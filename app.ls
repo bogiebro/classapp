@@ -30,6 +30,11 @@ app.use(express.errorHandler!) if development
 # Get the root
 app.get '/' (req, res)!-> res.redirect '/static/index.html'
 
+# log out
+app.get '/logout' (req, res)!-> 
+  res.clearCookie('casInfo')
+  res.redirect 'https://secure.its.yale.edu/cas/logout'
+
 # Give tests a login route
 if app.get('env') is 'testing'
     app.get '/testlogin' (req, res)!-> 
