@@ -6,7 +6,6 @@ makeUrl = (req)-> encodeURIComponent("http://#{req.get('host')}#{req.path}")
 
 exports.checkCookie = (makeToken, req, res, next)-->
     | req.cookies.casInfo? => next!
-    | req.cookies.casInfo is 'void' => next!
     | req.query.ticket? =>
         validateUrl = "#{casUrl}/validate?service=#{makeUrl req}&ticket=#{req.query.ticket}"
         https.get(validateUrl, (r)->
