@@ -15,14 +15,14 @@ describe "controller", ->
 
     it 'should have an InfoCtrl controller', inject ($rootScope, $controller)->
         scope = $rootScope.$new()
-        me = {}
         faceInstance = {}
-        ctrl = $controller('InfoCtrl', {$scope: scope, me: me, $modalInstance: faceInstance})
+        ctrl = $controller('InfoCtrl', {$scope: scope, $ref: refStub, $modalInstance: faceInstance})
         expect(ctrl).toBeDefined()
 
 refStub =
     netid: 'test23'
     base: jasmine.createSpyObj('base', ['set', 'child'])
+    me: jasmine.createSpyObj('me', ['name'])
 
 angFireStub = jasmine.createSpyObj('angFire', ['$add'])
 angFireStub['$add'] = jasmine.createSpyObj('adder', ['$then'])
