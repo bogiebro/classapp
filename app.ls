@@ -7,7 +7,7 @@ development = app.get('env') in ['testing', 'development']
 app.set('port', process.env.PORT || 3000)
 tokenGenerator = new FirebaseTokenGenerator(process.env.GENSECRET)
 
-# Firebase token generation
+# Generate a Firebase token
 generateToken = (netid)-> JSON.stringify do
   token: tokenGenerator.createToken(netid: netid)
   netid: netid

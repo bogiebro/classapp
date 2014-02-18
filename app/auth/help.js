@@ -1,5 +1,5 @@
 angular.module("app.help", ['app.auth'])
 
-.controller('HelpCtrl', function ($scope) {
-    // group controller goes here
+.controller('HelpCtrl', function ($scope, $location) {
+    $scope.done = function () { $location.path('/')}
 })
