@@ -1,5 +1,7 @@
 angular.module("app.bigevents", ['app.auth'])
 
-.controller('BigEventsCtrl', function ($scope) {
-    // bigtasks controller goes here
+.controller('BigEventsCtrl', function ($scope, $location) {
+    $scope.goBack = function() {
+        $location.path('/')
+    }
 })

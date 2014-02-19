@@ -1,5 +1,5 @@
 doctype 5
-html(ng-app="App", manifest="/manifest.appcache")
+html(ng-app="App", manifest=process.env.MANIFEST)
     head
         title Quipu
 

@@ -32,7 +32,8 @@ app.use(express.errorHandler!) if development
 app.get '/' (req, res)!-> res.redirect '/static/index.html'
 
 app.get '/manifest.appcache' (req, res)!->
-  res.sendfile(path.join(__dirname, 'build/manifest.appcache'));
+  if development then res.send 404 else
+    res.sendfile(path.join(__dirname, 'build/manifest.appcache'));
 
 # log out
 app.get '/logout' (req, res)!-> 
