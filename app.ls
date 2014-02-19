@@ -2,6 +2,7 @@ require! <[ express http path ./cas ]>
 FirebaseTokenGenerator = require("firebase-token-generator")
 
 # Express config
+express.static.mime.define({'text/cache-manifest': ['appcache']})
 app = express!
 development = app.get('env') in ['testing', 'development']
 app.set('port', process.env.PORT || 3000)
@@ -29,6 +30,9 @@ app.use(express.errorHandler!) if development
 
 # Get the root
 app.get '/' (req, res)!-> res.redirect '/static/index.html'
+
+app.get '/manifest.appcache' (req, res)!->
+  res.sendfile(path.join(__dirname, 'build/manifest.appcache'));
 
 # log out
 app.get '/logout' (req, res)!-> 

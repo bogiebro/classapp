@@ -19,6 +19,7 @@
     "bower": "1.2.7",
     "LiveScript": "*",
     "firebase-token-generator": "~0.1.4",
-    "process-env-brunch": "~1.4.4-d"
+    "process-env-brunch": "~1.4.4-d",
+    "appcache-brunch": "~1.7.1"
   }
 }
