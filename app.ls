@@ -24,6 +24,7 @@ mobilizer = (req, res, next)!->
 # Middleware
 app.use _
   .. if development then express.logger 'dev' else express.logger!
+  .. express.favicon(path.join(__dirname, 'favicon.ico'))
   .. express.compress!
   .. app.router
 app.use('/js', express.static(path.join(__dirname, 'build/js')))
