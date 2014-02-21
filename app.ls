@@ -1,5 +1,6 @@
 require! <[ express http path ./cas ]>
 FirebaseTokenGenerator = require("firebase-token-generator")
+MobileDetect = require('mobile-detect')
 
 # Express config
 express.static.mime.define({'text/cache-manifest': ['appcache']})
@@ -13,6 +14,13 @@ generateToken = (netid)-> JSON.stringify do
   token: tokenGenerator.createToken(netid: netid)
   netid: netid
 
+mobilizer = (req, res, next)!->
+  md = new MobileDetect(req.headers['user-agent'])
+  if md.phone!
+    express.static(path.join(__dirname, 'build/mobile'))(req,res,next)
+  else
+    express.static(path.join(__dirname, 'build/auth'))(req, res, next)
+
 # Middleware
 app.use _
   .. if development then express.logger 'dev' else express.logger!
@@ -25,7 +33,7 @@ app.use('/static', express.static(path.join(__dirname, 'build/static')))
 app.use _
   .. express.cookieParser!
   .. cas.checkCookie(generateToken)
-app.use('/auth', express.static(path.join(__dirname, 'build/auth')))
+app.use('/auth', mobilizer)
 app.use(express.errorHandler!) if development
 
 # Get the root
