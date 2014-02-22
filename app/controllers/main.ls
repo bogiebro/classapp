@@ -3,7 +3,7 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
     'app.auth', 'app.bigevents', 'app.help', 'app.chat', 'app.members', 'app.events', 'app.files'])
 
 .config ($routeProvider, $FBProvider)->
-    $FBProvider.setInitParams(appId: '644243232277907')
+    $FBProvider.setInitParams(appId: $PROCESS_ENV_FACEBOOK)
     $routeProvider
         .when('/', {controller:'MainCtrl', templateUrl:'app/auth/main.jade'})
         .when('/help', {controller:'HelpCtrl', templateUrl:'app/auth/help.jade'})

@@ -1,5 +1,5 @@
 doctype 5
-html(ng-app="App", manifest=process.env.MANIFEST)
+html(ng-app="App", manifest="/web.appcache")
     head
         title Quipu
 
@@ -17,7 +17,6 @@ html(ng-app="App", manifest=process.env.MANIFEST)
         .rightcontent
             div(ng-view)
         .options(ng-controller="PrefCtrl")
-            //- need to add log out and about options
             a.spaced(ng-click="about()") About
             a.spaced(ng-click="setupUser()") Preferences
             a.spaced(ng-click="logout()") Log out

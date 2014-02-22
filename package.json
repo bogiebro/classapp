@@ -20,7 +20,6 @@
     "LiveScript": "*",
     "firebase-token-generator": "~0.1.4",
     "process-env-brunch": "~1.4.4-d",
-    "appcache-brunch": "~1.7.1",
     "mobile-detect": "~0.1.0"
   }
 }
