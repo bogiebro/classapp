@@ -1,0 +1,22 @@
+CACHE MANIFEST
+
+NETWORK:
+*
+
+FALLBACK:
+
+
+CACHE:
+./auth/index.html
+./css/main.css
+./css/main.css.map
+./img/finals.jpg
+./img/get_work_done.jpg
+./img/students_studying_outside.jpg
+./js/app.auth.templates.js
+./js/main.js
+./js/main.js.map
+./js/vendor.js
+./js/vendor.js.map
+./mobile/index.html
+./static/index.html

@@ -26,5 +26,3 @@ exports.config =
             pretty: no
         uglify:
             mangle: false
-        appcache:
-            manifestFile: "manifest.appcache"
