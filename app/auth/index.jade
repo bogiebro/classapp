@@ -13,7 +13,7 @@ html(ng-app="App", manifest="/web.appcache")
 
     body
         div(ng-controller="GroupCtrl").leftbar
-            include group.jade
+            ng-include(src="'app/auth/group.jade'")
         .rightcontent
             div(ng-view)
         .options(ng-controller="PrefCtrl")

@@ -1,15 +1,12 @@
 tabset.leftcontent
     tab(heading="Chat")
         div(ng-controller="ChatCtrl")
-            .down
-                include chat
+            .down(ng-include="'app/auth/chat.jade'")
     tab(heading="Members")
         div(ng-controller="MembersCtrl")
-            .down
-                include members
+            .down(ng-include="'app/auth/members.jade'")
     tab(heading="Files")
         div(ng-controller="FilesCtrl")
-            .down
-                include files
+            .down(ng-include="'app/auth/files.jade'")
 .rightbar(ng-controller="EventsCtrl")
-    include events
+    ng-include(src="'app/auth/events.jade'")
