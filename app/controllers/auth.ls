@@ -18,7 +18,7 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
     return refScope
 
 # returns a function that takes a list of netid
-# and returns an auto-updating list of who is online
+# and returns an auto-updating map of users to online status
 .factory '$trackConnected' ($ref, $firebase)->
     myConnectionsRef = $ref.base.child "users/#{$ref.netid}/connections"
     connectedRef = $ref.base.child '.info/connected'
