@@ -1,1 +1,26 @@
-p group is here
+
+p
+  span.collapseBtn.glyphicon.glyphicon-circle-arrow-left(manipulate)
+  | Classes
+
+div.list-group
+    div.list-group-item.oneClass(href="#", ng-repeat="class in allClasses", manipulate)
+      a.list-group-item-heading
+        | {{class.name}}
+        br
+      a.list-group-item-text
+        | {{class.desc}}
+        br
+      .toolBarContainer.hiddenElement
+        .btn-group
+          a(href="#", id="toolIcon", ng-click="removeClass(class)", manipulte)
+            span.glyphicon.glyphicon-trash
+          a(href="#", id="toolIcon", ng-click="")
+            span.glyphicon.glyphicon-pencil
+          a(href="#", id="toolIcon", ng-click="")
+            span.glyphicon.glyphicon-th-list
+          a(href="#", id="toolIcon", ng-click="")
+            span.glyphicon.glyphicon-search
+
+form(class="addClassForm navbar-form", ng-submit="addClasses()", manipulate)
+  input(type="text", ng-model="newClassName", placeholder="+ New Class", class="form-control")

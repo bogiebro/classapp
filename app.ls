@@ -21,6 +21,7 @@ app.use('/js', express.static(path.join(__dirname, 'build/js')))
 app.use('/css', express.static(path.join(__dirname, 'build/css')))
 app.use('/img', express.static(path.join(__dirname, 'build/img')))
 app.use('/static', express.static(path.join(__dirname, 'build/static')))
+app.use('/fonts', express.static(path.join(__dirname, 'build/fonts')))
 app.use _
   .. express.cookieParser!
   .. cas.checkCookie(generateToken)

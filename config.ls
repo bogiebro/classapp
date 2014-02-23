@@ -19,10 +19,10 @@ exports.config =
                 "css/vendor.css": /^bower_components/
                 "css/main.css": /^app/
         templates:
-            joinTo: 
+            joinTo:
               '.compile-jade': /^app/
     plugins:
         jade:
-            pretty: no
+            pretty: yes
         uglify:
             mangle: false
