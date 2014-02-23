@@ -1,7 +1,9 @@
 require! <[ express http path ./cas ]>
 FirebaseTokenGenerator = require("firebase-token-generator")
+MobileDetect = require('mobile-detect')
 
 # Express config
+express.static.mime.define({'text/cache-manifest': ['appcache']})
 app = express!
 development = app.get('env') in ['testing', 'development']
 app.set('port', process.env.PORT || 3000)
@@ -12,9 +14,17 @@ generateToken = (netid)-> JSON.stringify do
   token: tokenGenerator.createToken(netid: netid)
   netid: netid
 
+mobilizer = (req, res, next)!->
+  md = new MobileDetect(req.headers['user-agent'])
+  if md.phone!
+    express.static(path.join(__dirname, 'build/mobile'))(req,res,next)
+  else
+    express.static(path.join(__dirname, 'build/auth'))(req, res, next)
+
 # Middleware
 app.use _
   .. if development then express.logger 'dev' else express.logger!
+  .. express.favicon(path.join(__dirname, 'favicon.ico'))
   .. express.compress!
   .. app.router
 app.use('/js', express.static(path.join(__dirname, 'build/js')))
@@ -25,11 +35,16 @@ app.use('/fonts', express.static(path.join(__dirname, 'build/fonts')))
 app.use _
   .. express.cookieParser!
   .. cas.checkCookie(generateToken)
-app.use('/auth', express.static(path.join(__dirname, 'build/auth')))
+app.use('/auth', mobilizer)
 app.use(express.errorHandler!) if development
 
 # Get the root
 app.get '/' (req, res)!-> res.redirect '/static/index.html'
+
+# Get an appcache
+app.get /^(\w+\.appcache)/ (req, res)!->
+  if development then res.send 404 else
+    res.sendfile(path.join(__dirname, req.params[0]));
 
 # log out
 app.get '/logout' (req, res)!-> 

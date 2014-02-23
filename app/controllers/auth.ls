@@ -9,7 +9,7 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
     do
         error <- firebase.auth(cookieData.token)
         console.log("Login Failed!", error) if error
-        firebase.child("users/#{netid}").set({exists: true})
+        firebase.child("users/#{netid}").update({exists: true})
         $firebase(firebase.child("users/#{netid}")).$bind(refScope, "me").then (unbind)->
             $rootScope.$broadcast('newuser') if not refScope.me.name?
     refScope.base = firebase
