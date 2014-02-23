@@ -23,6 +23,8 @@
     "mobile-detect": "~0.1.0"
   },
   "devDependencies": {
-    "foreman": "*"
+    "foreman": "*",
+    "karma": "*",
+    "protractor": "*"
   }
 }

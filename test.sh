@@ -8,17 +8,17 @@ echo "####### Building #######
 echo "
 ####### Running Unit Tests #######
 "
-karma start --single-run
+./node_modules/.bin/karma start --single-run
 echo "
 ####### Starting the server #######
 "
 foreman start &
-webdriver-manager start &
+./node_modules/.bin/webdriver-manager start &
 sleep 20
 echo "
 ####### Starting end to end tests #######
 "
-node_modules/.bin/protractor protractor.conf.js
+./node_modules/.bin/protractor protractor.conf.js
 echo "
 ####### Deleting test directory #######
 "
