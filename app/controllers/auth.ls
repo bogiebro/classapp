@@ -35,10 +35,12 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
 # $group.name gives the currently selected group name
 # $group.setGroup takes a group id to set as currently selected
 # call $group.clearGroup when back on the group page
-.factory '$group' ($ref)->
-    result =
-        name: null
-        setGroup: (groupid)->
-            result.name = $ref.base.child("groups/#{groupid}/name").val!
-        clearGroup: -> result.name = null
+.factory '$group' ($ref, $rootScope, $timeout)->
+    result = {}
+    result.props = $rootScope.$new()
+    result.setGroup = (groupid)!->
+        $timeout( (!->
+            $ref.base.child("group/#{groupid}/name").on 'value' (snapshot)->
+                result.props.$apply(->result.props.name = snapshot.val!)), 0)
+    result.clearGroup = !-> result.props.name = ''
     return result
