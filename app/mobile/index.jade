@@ -10,7 +10,7 @@ html(ng-app="MobileApp", manifest="mobile.appcache")
         script(src='/js/app.mobile.templates.js')
 
         link(rel='stylesheet', href="/css/main.css")
-    body(ng-controller="ToolbarCtrl")
-        div.toolbar
-            p(ng-if="title") {{title}} is selected currently
+    body
+        div(ng-controller="ToolbarCtrl")
+            p(ng-if="group.name") {{group.name}} is selected currently
         div(ng-view)

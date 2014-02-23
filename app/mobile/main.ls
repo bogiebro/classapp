@@ -13,6 +13,5 @@ window.MobileApp = angular.module("MobileApp", ['ui.bootstrap', 'ui.bootstrap.tp
         .when('/files', {controller:'FilesCtrl', templateUrl:'app/mobile/files.jade'})
         .when('/members', {controller:'MembersCtrl', templateUrl:'app/mobile/members.jade'})
 
-.controller 'ToolbarCtrl', ($scope)->
-    $scope.setTitle = (t)!->
-        $scope.title = t
+.controller 'ToolbarCtrl', ($scope, $group)->
+    $scope.group = $group

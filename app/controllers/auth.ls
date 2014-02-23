@@ -1,6 +1,7 @@
-/** This is a description of app.auth */
 angular.module("app.auth", ['firebase', 'ngCookies'])
 
+# gives you access to an authenticated firebase url ($ref.base)
+# the user's netid ($ref.netid) and the user's info ($ref.me)
 .factory '$ref' ($cookies, $rootScope, $firebase)->
     refScope = $rootScope.$new()
     cookieData = JSON.parse($cookies.casInfo)
@@ -16,6 +17,8 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
     refScope.netid = netid
     return refScope
 
+# returns a function that takes a list of netid
+# and returns an auto-updating list of who is online
 .factory '$trackConnected' ($ref, $firebase)->
     myConnectionsRef = $ref.base.child "users/#{$ref.netid}/connections"
     connectedRef = $ref.base.child '.info/connected'
@@ -28,3 +31,14 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
         for netid in netids
             obj[netid] = $firebase($ref.base.child("users/#{netid}/connections"))
         return obj
+
+# $group.name gives the currently selected group name
+# $group.setGroup takes a group id to set as currently selected
+# call $group.clearGroup when back on the group page
+.factory '$group' ($ref)->
+    result =
+        name: null
+        setGroup: (groupid)->
+            result.name = $ref.base.child("groups/#{groupid}/name").val!
+        clearGroup: -> result.name = null
+    return result
