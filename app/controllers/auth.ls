@@ -2,20 +2,24 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
 
 # gives you access to an authenticated firebase url ($ref.base)
 # the user's netid ($ref.netid) and the user's info ($ref.me)
-.factory '$ref' ($cookies, $rootScope, $firebase)->
+.factory '$ref' ($cookies, $rootScope, $firebase, $window)->
     refScope = $rootScope.$new()
     cookieData = JSON.parse($cookies.casInfo)
     netid = cookieData.netid
     firebase = new Firebase($PROCESS_ENV_FIREBASE)
     do
         error <- firebase.auth(cookieData.token)
-        console.log("Login Failed!", error) if error
-        firebase.child("users/#{netid}").update({exists: true})
-        $firebase(firebase.child("users/#{netid}")).$bind(refScope, "me").then (unbind)->
-            $rootScope.$broadcast('newuser') if not refScope.me.name?
+        if error.code? is "EXPIRED_TOKEN"
+            $window.location.assign("/refresh?url=#{encodeURIComponent $window.location}")
+        else
+            firebase.child("users/#{netid}").update({exists: true})
+            $firebase(firebase.child("users/#{netid}")).$bind(refScope, "me").then (unbind)->
+                $rootScope.$broadcast('newuser') if not refScope.me.name?
     refScope.base = firebase
     refScope.netid = netid
     return refScope
+
+# if the token has expired, just delete the cookie and refresh the page
 
 # returns a function that takes a list of netid
 # and returns an auto-updating map of users to online status

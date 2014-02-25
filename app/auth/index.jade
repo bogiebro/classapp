@@ -25,18 +25,33 @@ html(ng-app="App", manifest="/web.appcache")
             div.modal-header
                 h3 User Information
             div.modal-body
-                button(class="btn btn-primary", ng-click="fbLogin()") Connect with Facebook
-                form(class="navbar-form", ng-submit="dismiss()")
-                    input(type="text", ng-model="me.name", placeholder="Full name", class="form-control")
-                div.well(file-dropzone="[image/png, image/jpeg, image/gif]", file="image.unscaled", file-name="imageFileName", data-max-file-size="2")
-                    span(ng-if="!me.image") Drop Image Here
-                    img(ng-if="me.image", ng-src="{{me.image}}")
+                form(role="form", class="form-horizontal", ng-submit="dismiss()")
+                    p(class="text-right")
+                        a(ng-click="fbLogin()") Connect with Facebook
+                    div(class="form-group")
+                        label(class="col-sm-2 control-label") Full name
+                        div(class="col-sm-10")
+                            input(type="text", ng-model="me.name", placeholder="Full name", class="form-control")
+                    div(class="form-group")
+                        label(class="col-sm-2 control-label")  College
+                        div(class="col-sm-10")
+                            input(type="text", ng-model="me.college", placeholder="College", class="form-control")
+                    div(class="form-group")
+                        label(class="col-sm-2 control-label")  Picture
+                        div(class="col-sm-10 control-label")
+                            div(class="dropbox", file-dropzone="[image/png, image/jpeg, image/gif]", file="image.unscaled", file-name="imageFileName", data-max-file-size="2")
+                                span(ng-if="!me.image") Drop Image Here
+                                img(ng-if="me.image", ng-src="{{me.image}}")
             div.modal-footer
 
         script(type="text/ng-template", id="aboutId")
             div.modal-header
                 h3 About Quipu
             div.modal-body
-                p Quipu is awesome and made by us.
+                p Quipu is a tool to create study groups.
                 button(class="btn btn-default", ng-click="dismiss()") Cool
             div.modal-footer
+                p
+                    small (c) 2014 Sam Anklesaria, Iyob Gebremariam,
+                    | Isaac Reilly, James Batchelder, Peter Nguyen,
+                    | Jadon Montero

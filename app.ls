@@ -50,6 +50,11 @@ app.get '/logout' (req, res)!->
   res.clearCookie('casInfo')
   res.redirect 'https://secure.its.yale.edu/cas/logout'
 
+# clear the session
+app.get '/refresh' (req, res)!->
+  res.clearCookie 'casInfo'
+  res.redirect req.query.url
+
 # Give tests a login route
 if app.get('env') is 'testing'
     app.get '/testlogin' (req, res)!-> 
