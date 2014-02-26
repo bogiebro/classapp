@@ -9,8 +9,10 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
     firebase = new Firebase($PROCESS_ENV_FIREBASE)
     do
         error <- firebase.auth(cookieData.token)
-        if error.code? is "EXPIRED_TOKEN"
-            $window.location.assign("/refresh?url=#{encodeURIComponent $window.location}")
+        if error
+            if error.code is "EXPIRED_TOKEN"
+                $window.location.assign("/refresh?url=#{encodeURIComponent $window.location}")
+            else console.log('Cookie data corrupted', error)
         else
             firebase.child("users/#{netid}").update({exists: true})
             $firebase(firebase.child("users/#{netid}")).$bind(refScope, "me").then (unbind)->

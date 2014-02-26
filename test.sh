@@ -9,16 +9,18 @@ echo "
 ####### Running Unit Tests #######
 "
 ./node_modules/.bin/karma start --single-run
-echo "
-####### Starting the server #######
-"
-foreman start &
-./node_modules/.bin/webdriver-manager start &
-sleep 20
-echo "
-####### Starting end to end tests #######
-"
-./node_modules/.bin/protractor protractor.conf.js
+if [ $1 = "e2e" ]; then
+    echo "
+    ####### Starting the server #######
+    "
+    foreman start &
+    ./node_modules/.bin/webdriver-manager start &
+    sleep 20
+    echo "
+    ####### Starting end to end tests #######
+    "
+    ./node_modules/.bin/protractor protractor.conf.js
+fi
 echo "
 ####### Deleting test directory #######
 "

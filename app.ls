@@ -14,6 +14,7 @@ generateToken = (netid)-> JSON.stringify do
   token: tokenGenerator.createToken(netid: netid)
   netid: netid
 
+# Serve mobile content
 mobilizer = (req, res, next)!->
   md = new MobileDetect(req.headers['user-agent'])
   if md.phone!
@@ -21,24 +22,26 @@ mobilizer = (req, res, next)!->
   else
     express.static(path.join(__dirname, 'build/auth'))(req, res, next)
 
+
 # Middleware
 app.use _
   .. if development then express.logger 'dev' else express.logger!
   .. express.favicon(path.join(__dirname, 'favicon.ico'))
   .. express.compress!
-  .. app.router
 app.use('/js', express.static(path.join(__dirname, 'build/js')))
 app.use('/css', express.static(path.join(__dirname, 'build/css')))
 app.use('/img', express.static(path.join(__dirname, 'build/img')))
+app.use express.cookieParser!
+app.use app.router
 app.use('/static', express.static(path.join(__dirname, 'build/static')))
-app.use _
-  .. express.cookieParser!
-  .. cas.checkCookie(generateToken)
+app.use(cas.checkCookie(generateToken))
 app.use('/auth', mobilizer)
 app.use(express.errorHandler!) if development
 
 # Get the root
-app.get '/' (req, res)!-> res.redirect '/static/index.html'
+app.get '/' (req, res)!->
+  if req.cookies.casInfo? then res.redirect '/auth/index.html'
+  else res.redirect '/static/index.html'
 
 # Get an appcache
 app.get /^(\w+\.appcache)/ (req, res)!->
