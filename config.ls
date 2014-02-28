@@ -1,5 +1,10 @@
 if process.env.NODE_ENV == 'testing'
     process.env.FIREBASE = "https://torid-fire-3655.firebaseio.com/tests/#{process.env.UUID}"
+    FirebaseTokenGenerator = require("firebase-token-generator")
+    tokenGenerator = new FirebaseTokenGenerator(process.env.GENSECRET)
+    process.env.COOKIE = JSON.stringify do
+         token: tokenGenerator.createToken(netid: 'tester')
+         netid: 'tester'
 else process.env.FIREBASE = "https://torid-fire-3655.firebaseio.com/"
 
 exports.config =
@@ -12,8 +17,9 @@ exports.config =
     files:
         javascripts:
             joinTo:
-                "js/vendor.js": /^bower_components/
+                "js/vendor.js": /(^bower_components)|(^vendor)/
                 "js/main.js": /^app/
+                "js/params.js": /^test\/params/
         stylesheets:
             joinTo:
                 "css/vendor.css": /^bower_components/

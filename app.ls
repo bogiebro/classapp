@@ -22,7 +22,6 @@ mobilizer = (req, res, next)!->
   else
     express.static(path.join(__dirname, 'build/auth'))(req, res, next)
 
-
 # Middleware
 app.use _
   .. if development then express.logger 'dev' else express.logger!

@@ -19,6 +19,7 @@ module.exports = function(config) {
       'test/lib/angularfire.min.js',
       'build/js/app.auth.templates.js',
       'build/js/main.js',
+      'build/js/params.js',
       'test/**/*.coffee'
     ],
 
@@ -51,7 +52,7 @@ module.exports = function(config) {
     autoWatch: true,
 
     preprocessors: {
-      'test/unit/**/*.coffee': ['coffee'],
+      'test/unit/*.coffee': ['coffee'],
       'test/lib/*.coffee': ['coffee']
     },
 
