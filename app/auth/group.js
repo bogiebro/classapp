@@ -3,11 +3,19 @@ angular.module("app.group", ['app.auth'])
 .controller('GroupCtrl', function ($scope, $ref, $modal) {
     
 	//get net id
-    $scope.netid = $ref.netid;
-    $scope.userData = $ref.me;
-    $scope.allClasses = [{name : "CPSC 439", desc : "Software Engineering"},
+    //$scope.netid = $ref.netid;
+    //$scope.userData = $ref.me;
+    $scope.allUserClasses = [{name : "CPSC 439", desc : "Software Engineering"},
     					 {name : "CPSC 490", desc : "Advanced Projects"}];
-    $scope.newClassName = "";
+    $scope.newUserClassName = "";
+
+    $scope.allClassInfo = []
+    cChild = new Firebase("https://torid-fire-3655.firebaseio.com/classcodes/")
+    cChild.on('value', function(snapshot){
+    	alert("Found " + snapshot.val());
+    	$scope.allClassInfo.push(snapshot.val());
+    });
+
 
     //add classes
     $scope.addClasses = function() {
