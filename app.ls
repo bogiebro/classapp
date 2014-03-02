@@ -30,6 +30,7 @@ app.use _
 app.use('/js', express.static(path.join(__dirname, 'build/js')))
 app.use('/css', express.static(path.join(__dirname, 'build/css')))
 app.use('/img', express.static(path.join(__dirname, 'build/img')))
+app.use('/fonts', express.static(path.join(__dirname, 'build/fonts')))
 app.use express.cookieParser!
 app.use app.router
 app.use('/static', express.static(path.join(__dirname, 'build/static')))

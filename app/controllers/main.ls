@@ -41,4 +41,4 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
             controller: 'AboutCtrl')
 
 .controller 'MainCtrl', ($scope, $location)!->
-    $scope.$on 'newuser', !-> $location.path('/help')
+#    $scope.$on 'newuser', !-> $location.path('/help')

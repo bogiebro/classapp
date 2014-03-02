@@ -23,6 +23,12 @@ body, html {
 	font-size: 56px;
 }
 
+.thin_subheader {
+	font-family: 'Raleway', sans-serif;
+	font-size: 30px;
+}
+
+
 .medium_img {
 	align: middle;
 	max-height: 250px;

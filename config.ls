@@ -22,13 +22,13 @@ exports.config =
                 "js/params.js": /^test\/params/
         stylesheets:
             joinTo:
-                "css/vendor.css": /^bower_components/
+                "css/vendor.css": /(^bower_components)|(^vendor)/
                 "css/main.css": /^app/
         templates:
-            joinTo: 
+            joinTo:
               '.compile-jade': /^app/
     plugins:
         jade:
-            pretty: no
+            pretty: yes
         uglify:
             mangle: false
