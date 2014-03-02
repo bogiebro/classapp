@@ -1,5 +1,5 @@
 window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.group',
-    'ngRoute', 'firebase', 'app.auth.templates', 'ezfb', 'omr.angularFileDnD', 'ngCookies',
+    'ngRoute', 'firebase', 'app.auth.templates', 'ezfb', 'omr.angularFileDnD', 'ngCookies', 'app.editor',
     'app.auth', 'app.bigevents', 'app.help', 'app.chat', 'app.members', 'app.events', 'app.files'])
 
 .config ($routeProvider, $FBProvider)->

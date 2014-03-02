@@ -24,9 +24,6 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
     refScope.loggedin = false
     return refScope
 
-
-# if the token has expired, just delete the cookie and refresh the page
-
 # returns a function that takes a list of netid
 # and returns an auto-updating map of users to online status
 .factory '$trackConnected' ($ref, $firebase)->

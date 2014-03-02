@@ -22,7 +22,7 @@ exports.config =
                 "js/params.js": /^test\/params/
         stylesheets:
             joinTo:
-                "css/vendor.css": /^bower_components/
+                "css/vendor.css": /(^bower_components)|(^vendor)/
                 "css/main.css": /^app/
         templates:
             joinTo: 

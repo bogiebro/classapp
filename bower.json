@@ -19,7 +19,9 @@
     "angular-route": "*",
     "angular-easyfb": "*",
     "angular-mocks": "*",
-    "angular-cookies": "*"
+    "angular-cookies": "*",
+    "firepad": "*",
+    "codemirror": "*"
   },
   "resolutions": {
     "angular": "1.2.12"
