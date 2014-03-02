@@ -1,0 +1,41 @@
+html
+  head
+    meta(charset="utf-8")
+
+    title Quipu Editor
+    
+    script(src="https://cdn.firebase.com/v0/firebase.js")
+
+    script(src="/js/codemirror.js")
+    link(rel="stylesheet", href="/css/codemirror.css")
+
+    script(src="/js/firepad.js")
+    link(rel="stylesheet", href="/css/firepad.css")
+
+    script(src="/js/editor.js")
+    link(rel="stylesheet", href="/css/editor.css")
+
+    style.
+        html { height: 100%; }
+        body { margin: 0; height: 100%; }
+        .firepad-userlist {
+          position: absolute; left: 0; top: 0; bottom: 0; height: auto;
+          width: 175px;
+        }
+        .firepad {
+          position: absolute; left: 175px; top: 0; bottom: 0; right: 0; height: auto;
+        }
+
+  body
+    #userlist
+    #firepad
+    script.
+      var firepadRef = new Firebase('#{process.env.FIREBASE}/firepad');
+      var codeMirror = CodeMirror(document.getElementById('firepad'), { lineWrapping: true });
+      var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror,
+        { richTextToolbar: true, richTextShortcuts: true });
+      var userId = Math.floor(Math.random() * 9999999999).toString(); // change this eventually
+      var firepadUserList = FirepadUserList.fromDiv(firepadRef.child('users'), document.getElementById('userlist'), userId);
+      
+      
+

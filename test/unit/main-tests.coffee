@@ -3,6 +3,7 @@
 # http://nathanleclaire.com/blog/2013/12/13/how-to-unit-test-controllers-in-angularjs-without-setting-your-hair-on-fire/
 # http://www.sitepoint.com/unit-and-e2e-testing-in-angularjs/
 # https://github.com/angular/protractor/blob/master/docs/getting-started.md
+# use dotenv. That way foreman isn't required
 
 describe "controller", ->
     beforeEach(module('App'))
