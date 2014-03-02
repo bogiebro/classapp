@@ -1,6 +1,9 @@
-span.collapseBtn.glyphicon.glyphicon-circle-arrow-left(manipulate) Classes
+p
+  span.collapseBtn.glyphicon.glyphicon-circle-arrow-left(manipulate) 
+  | Classes
 hr
 div.list-group
+    img.loadingImg(src="/img/loading_classes.gif", ng-show="classLoadWaiting")
     div.list-group-item.oneClass(href="#", ng-repeat="class in user.classes", manipulate)
       a.list-group-item-heading
         b
@@ -24,6 +27,7 @@ div.list-group
             span.glyphicon.glyphicon-search
 
 div.addClassDiv
+
   div.suggestions(ng-show="searchText")
     div.suggestedClass(ng-repeat="class in allClasses | filter : searchText", id="{{class.code}} {{class.name}}", ng-click="addClass(class)")
       p.list-group-item-heading()
@@ -34,7 +38,7 @@ div.addClassDiv
       p.list-group-item-text.redText
         | {{class.prof}}
   form(class="addClassForm navbar-form")
-    input.liveSearch(type="text", placeholder="+ New Class", class="form-control", ng-model="searchText")
+    input.liveSearch(type="text", placeholder="+ New Class", class="form-control", ng-model="searchText", ng-click="getAllClasses()")
 
 script(type="text/ng-template", id="simpleModal.html")
   div.modal-body
