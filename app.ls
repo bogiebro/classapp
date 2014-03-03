@@ -20,7 +20,7 @@ mobilizer = (req, res, next)!->
   if md.phone!
     express.static(path.join(__dirname, 'build/mobile'))(req,res,next)
   else
-    express.static(path.join(__dirname, 'build/auth'))(req, res, next)
+    express.static(path.join(__dirname, 'build/main'))(req, res, next)
 
 # Middleware
 app.use _
@@ -33,15 +33,15 @@ app.use('/img', express.static(path.join(__dirname, 'build/img')))
 app.use('/editor', express.static(path.join(__dirname, 'build/editor')))
 app.use express.cookieParser!
 app.use app.router
-app.use('/static', express.static(path.join(__dirname, 'build/static')))
+app.use('/splash', express.static(path.join(__dirname, 'build/splash')))
 app.use(cas.checkCookie(generateToken))
-app.use('/auth', mobilizer)
+app.use('/main', mobilizer)
 app.use(express.errorHandler!) if development
 
 # Get the root
 app.get '/' (req, res)!->
-  if req.cookies.casInfo? then res.redirect '/auth/index.html'
-  else res.redirect '/static/index.html'
+  if req.cookies.casInfo? then res.redirect '/main/index.html'
+  else res.redirect '/splash/index.html'
 
 # Get an appcache
 app.get /^(\w+\.appcache)/ (req, res)!->

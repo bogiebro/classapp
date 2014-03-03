@@ -20,7 +20,7 @@ exports.config =
             joinTo:
                 "js/vendor.js": /(^bower_components)|(^vendor)/
                 "js/main.js": /^app\/(?!editor)/
-                "js/editor.js": /^app\/editor/
+                "js/editor.js": /^app\/(editor|shared)/
                 "js/params.js": /^test\/params/
         stylesheets:
             joinTo:

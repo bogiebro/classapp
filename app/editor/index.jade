@@ -4,7 +4,9 @@ html
 
     title Quipu Editor
     
+    script(src="/js/vendor.js")
     script(src="https://cdn.firebase.com/v0/firebase.js")
+    script(src='https://cdn.firebase.com/libs/angularfire/0.6.0/angularfire.min.js')
 
     script(src="/js/codemirror.js")
     link(rel="stylesheet", href="/css/codemirror.css")
@@ -12,7 +14,6 @@ html
     script(src="/js/firepad.js")
     link(rel="stylesheet", href="/css/firepad.css")
 
-    script(src="/js/editor.js")
     link(rel="stylesheet", href="/css/editor.css")
 
     style.
@@ -27,15 +28,16 @@ html
         }
 
   body
-    #userlist
+
+    div(class="firepad-userlist", ng-app="Editor")
+      div(ng-controller='EditorCtrl')
+        .firepad-userlist-heading
+          span ONLINE
+        .firepad-userlist-users
+          div.firepad-userlist-user(ng-repeat="(netid, user) in users")
+            .firepad-userlist-name {{user.name}}
+            
     #firepad
-    script.
-      var firepadRef = new Firebase('#{process.env.FIREBASE}/firepad');
-      var codeMirror = CodeMirror(document.getElementById('firepad'), { lineWrapping: true });
-      var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror,
-        { richTextToolbar: true, richTextShortcuts: true });
-      var userId = Math.floor(Math.random() * 9999999999).toString(); // change this eventually
-      var firepadUserList = FirepadUserList.fromDiv(firepadRef.child('users'), document.getElementById('userlist'), userId);
-      
-      
+
+    script(src="/js/editor.js")
 

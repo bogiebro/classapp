@@ -1,13 +1,13 @@
 window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.group',
-    'ngRoute', 'firebase', 'app.auth.templates', 'ezfb', 'omr.angularFileDnD', 'ngCookies',
+    'ngRoute', 'firebase', 'app.main.templates', 'ezfb', 'omr.angularFileDnD', 'ngCookies',
     'app.auth', 'app.bigevents', 'app.help', 'app.chat', 'app.members', 'app.events', 'app.files'])
 
 .config ($routeProvider, $FBProvider)->
     $FBProvider.setInitParams(appId: $PROCESS_ENV_FACEBOOK)
     $routeProvider
-        .when('/', {controller:'MainCtrl', templateUrl:'app/auth/main.jade'})
-        .when('/help', {controller:'HelpCtrl', templateUrl:'app/auth/help.jade'})
-        .when('/bigevents', {controller:'BigEventsCtrl', templateUrl:'app/auth/bigevents.jade'})
+        .when('/', {controller:'MainCtrl', templateUrl:'app/main/main.jade'})
+        .when('/help', {controller:'HelpCtrl', templateUrl:'app/main/help.jade'})
+        .when('/bigevents', {controller:'BigEventsCtrl', templateUrl:'app/main/bigevents.jade'})
 
 .controller 'InfoCtrl', ($scope, $modalInstance, $FB, $ref)->
     $scope.me = $ref.me
@@ -27,14 +27,12 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
 .controller 'AboutCtrl', ($scope, $modalInstance)->
     $scope.dismiss = !-> $modalInstance.close!
 
-.controller 'PrefCtrl', ($firebase, $scope, $ref, $modal, $window)->
+.controller 'PrefCtrl', ($firebase, $scope, $ref, $modal)->
     $scope.setupUser = ->
         $modal.open(
             templateUrl: 'askId'
             controller: 'InfoCtrl')
     $scope.$on 'newuser', !-> $scope.setupUser!
-    $scope.logout = ->
-        $window.location.assign('/logout')
     $scope.about = ->
         $modal.open(
             templateUrl: 'aboutId'
