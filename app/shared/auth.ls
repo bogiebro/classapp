@@ -24,23 +24,16 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
     refScope.loggedin = false
     return refScope
 
-
-# if the token has expired, just delete the cookie and refresh the page
-
 # returns a function that takes a list of netid
-# and returns an auto-updating map of users to online status
-.factory '$trackConnected' ($ref, $firebase)->
-    myConnectionsRef = $ref.base.child "users/#{$ref.netid}/connections"
-    connectedRef = $ref.base.child '.info/connected'
-    connectedRef.on 'value' (snap)!->
+# and returns an auto-updating map of netids to users
+.factory '$trackConnected' ($ref)->
+    (connections)!-> 
+      conRef = $ref.base.root!child '.info/connected'
+      childRef = connections.child($ref.netid)
+      conRef.on 'value' (snap)!->
         if (snap.val!)
-            myConnectionsRef.push true
-            con.onDisconnect!remove!
-    return (netids)->
-        obj = {}
-        for netid in netids
-            obj[netid] = $firebase($ref.base.child("users/#{netid}/connections"))
-        return obj
+          childRef.set {name: $ref.me.name}
+          childRef.onDisconnect!remove!
 
 # $group.name gives the currently selected group name
 # $group.setGroup takes a group id to set as currently selected

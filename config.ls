@@ -1,3 +1,4 @@
+# use BRUNCH_ENV instead
 if process.env.NODE_ENV == 'testing'
     process.env.FIREBASE = "https://torid-fire-3655.firebaseio.com/tests/#{process.env.UUID}"
     FirebaseTokenGenerator = require("firebase-token-generator")
@@ -18,12 +19,14 @@ exports.config =
         javascripts:
             joinTo:
                 "js/vendor.js": /(^bower_components)|(^vendor)/
-                "js/main.js": /^app/
+                "js/main.js": /^app\/(?!editor)/
+                "js/editor.js": /^app\/(editor|shared)/
                 "js/params.js": /^test\/params/
         stylesheets:
             joinTo:
                 "css/vendor.css": /(^bower_components)|(^vendor)/
-                "css/main.css": /^app/
+                "css/main.css": /^app\/(?!editor)/
+                "css/editor.css": /^app\/editor/
         templates:
             joinTo:
               '.compile-jade': /^app/

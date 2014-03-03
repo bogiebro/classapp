@@ -1,0 +1,3 @@
+- separate the services js file (or just compile it into both main.js and editor.js)
+- incorperate codemirror, firepad, editor into bower; use config to treat them differently
+- do all the things in the ticket

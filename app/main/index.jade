@@ -1,6 +1,5 @@
 doctype 5
-//- manifest="/web.appcache"
-html(ng-app="App")
+html(ng-app="App", manifest="/web.appcache")
     head
         title Quipu
 
@@ -10,20 +9,20 @@ html(ng-app="App")
         script(src='https://cdn.firebase.com/v0/firebase.js')
         script(src='https://cdn.firebase.com/libs/angularfire/0.6.0/angularfire.min.js')
         script(src='/js/main.js')
-        script(src='/js/app.auth.templates.js')
+        script(src='/js/app.main.templates.js')
 
         link(rel="stylesheet", href="/css/vendor.css")
         link(rel='stylesheet', href="/css/main.css")
 
     body
         div(ng-controller="GroupCtrl").leftbar
-            ng-include(src="'app/auth/group.jade'")
+            ng-include(src="'app/main/group.jade'")
         .rightcontent
             div(ng-view)
-        .options(ng-controller="PrefCtrl")
+        .options(ng-controller="PrefCtrl") 
             a.spaced(ng-click="about()") About
             a.spaced(ng-click="setupUser()") Preferences
-            a.spaced(ng-click="logout()") Log out
+            a.spaced(href='/logout') Log out
 
         script(type="text/ng-template", id="askId")
             div.modal-header
