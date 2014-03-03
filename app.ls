@@ -1,6 +1,8 @@
 require! <[ express http path ./cas ]>
+Firebase = require('firebase')
 FirebaseTokenGenerator = require("firebase-token-generator")
 MobileDetect = require('mobile-detect')
+firebase = new Firebase('https://torid-fire-3655.firebaseio.com')
 
 # Express config
 express.static.mime.define({'text/cache-manifest': ['appcache']})
@@ -22,7 +24,7 @@ mobilizer = (req, res, next)!->
   else
     express.static(path.join(__dirname, 'build/main'))(req, res, next)
 
-# Middleware
+# Middlewcodese
 app.use _
   .. if development then express.logger 'dev' else express.logger!
   .. express.favicon(path.join(__dirname, 'favicon.ico'))
@@ -38,13 +40,18 @@ app.use(cas.checkCookie(generateToken))
 app.use('/main', mobilizer)
 app.use(express.errorHandler!) if development
 
+# Get JSON
+app.get '/classcodes.json' (req, res)!->
+  firebase.child('classcodes').on 'value' (snapshot)->
+    res.send(snapshot.val!)
+
 # Get the root
 app.get '/' (req, res)!->
   if req.cookies.casInfo? then res.redirect '/main/index.html'
   else res.redirect '/splash/index.html'
 
 # Get an appcache
-app.get /^(\w+\.appcache)/ (req, res)!->
+app.get /^\/(\w+\.appcache)/ (req, res)!->
   if development then res.send 404 else
     res.sendfile(path.join(__dirname, req.params[0]));
 
