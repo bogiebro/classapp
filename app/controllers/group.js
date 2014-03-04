@@ -7,6 +7,7 @@ angular.module("app.group", ['app.auth', 'firebase'])
   }
 
   $scope.allClasses = [];
+  $scope.classLoadWaiting = true;
     
   // Get all class objects
 	$ref.base.child('classcodes').on('value', function(snapshot){
@@ -14,8 +15,10 @@ angular.module("app.group", ['app.auth', 'firebase'])
 			obj = snapshot.val()[obj];
 			$scope.allClasses.push(obj);
     }
+    $scope.classLoadWaiting = false;
   });
 
+  // Get the user
 	$ref.base.child('users/' + $ref.netid).on('value', function(snapshot){
 		$scope.user = snapshot.val();
 	});
@@ -151,7 +154,15 @@ angular.module("app.group", ['app.auth', 'firebase'])
 
 		if(element.hasClass('collapseBtn')) {
 			element.click(function() {
-				element.parent().parent().css("width", 50);
+        if($(".leftbar").css("width") == "60px") {
+          $(".leftbar").css("width", "15%");
+          element.removeClass("glyphicon-circle-arrow-right");
+          element.addClass("glyphicon-circle-arrow-left");
+        } else {
+				  $(".leftbar").css("width", "60px");
+          element.removeClass("glyphicon-circle-arrow-left");
+          element.addClass("glyphicon-circle-arrow-right");
+        }
 			});
 		}
 

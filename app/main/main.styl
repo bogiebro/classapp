@@ -14,17 +14,16 @@
     position relative
     text-align center
     overflow hidden
+    -webkit-transition-duration: 0.5s
 
 .rightcontent
-    float right
     position relative
     width 85%
     min-height 500px
+    float left
 
 .rightbar
-    position absolute
-    right 0px
-    top 0px
+    float left
     bottom 0px
     width 20%
 
@@ -65,9 +64,9 @@
   color #000000
 
 .leftbar .collapseBtn
-  float right
-  margin-right 10px
   cursor pointer
+  margin-right 10px
+  float right
 
 .leftbar .list-group
   -webkit-border-radius 0px !important
@@ -145,6 +144,9 @@
   margin 0px
   padding 0px
 
+.oneClass
+  overflow scroll
+  
 .blockDiv
   display block
 
@@ -215,3 +217,8 @@
   width 100%
   margin 0px
   padding 0px
+
+.loadingImg
+  height 60px
+  width 60px
+  margin-top 100px
