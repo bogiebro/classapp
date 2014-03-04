@@ -18,13 +18,15 @@ exports.config =
     files:
         javascripts:
             joinTo:
-                "js/vendor.js": /(^bower_components)|(^vendor)/
+                "js/vendor.js": /^bower_components\/(?!(firepad|codemirror))/
+                "js/edit-vendor.js": /^bower_components\/(firepad|codemirror)/
                 "js/main.js": /^app\/(?!editor)/
                 "js/editor.js": /^app\/(editor|shared)/
                 "js/params.js": /^test\/params/
         stylesheets:
             joinTo:
-                "css/vendor.css": /(^bower_components)|(^vendor)/
+                "css/vendor.css": /^bower_components\/(?!(firepad|codemirror))/
+                "css/edit-vendor.css": /^bower_components\/(firepad|codemirror)/
                 "css/main.css": /^app\/(?!editor)/
                 "css/editor.css": /^app\/editor/
         templates:
