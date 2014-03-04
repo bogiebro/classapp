@@ -1,6 +1,6 @@
 angular.module("app.group", ['app.auth', 'firebase'])
 
-.controller('GroupCtrl', function ($scope, $ref, $modal, $location, $firebase) {
+.controller('GroupCtrl', function ($scope, $ref, $modal, $location, $firebase, $http) {
  
   $scope.goBig = function() {
       $location.path('/bigevents');
@@ -10,11 +10,8 @@ angular.module("app.group", ['app.auth', 'firebase'])
   $scope.classLoadWaiting = true;
     
   // Get all class objects
-	$ref.base.child('classcodes').on('value', function(snapshot){
-		for(obj in snapshot.val()) {
-			obj = snapshot.val()[obj];
-			$scope.allClasses.push(obj);
-    }
+  $http.get('/classcodes.json').then(function(result) {
+    $scope.allClasses = Object.keys(result.data);
     $scope.classLoadWaiting = false;
   });
 
