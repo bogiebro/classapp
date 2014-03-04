@@ -24,6 +24,7 @@
     "mobile-detect": "~0.1.0"
   },
   "devDependencies": {
+    "dotenv": "*",
     "foreman": "*",
     "karma": "*",
     "protractor": "*"
