@@ -11,7 +11,11 @@ angular.module("app.group", ['app.auth', 'firebase'])
     
   // Get all class objects
   $http.get('/classcodes.json').then(function(result) {
-    $scope.allClasses = Object.keys(result.data);
+    arr = []
+    for (var key in result.data) {
+      arr.push(result.data[key]);
+    }
+    $scope.allClasses = arr;
     $scope.classLoadWaiting = false;
   });
 
