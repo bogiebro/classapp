@@ -13,5 +13,9 @@ window.MobileApp = angular.module("MobileApp", ['ui.bootstrap', 'ui.bootstrap.tp
         .when('/files', {controller:'FilesCtrl', templateUrl:'app/main/files.jade'})
         .when('/members', {controller:'MembersCtrl', templateUrl:'app/main/members.jade'})
 
-.controller 'ToolbarCtrl', ($scope, $group)->
+.controller 'ToolbarCtrl', ($scope, $group, $location)->
     $scope.group = $group
+    $scope.goEvents = -> $location.path('/events')
+    $scope.goMembers = -> $location.path('/members')
+    $scope.goChat = -> $location.path('/chat')
+    $scope.goFiles = -> $location.path('/files')
