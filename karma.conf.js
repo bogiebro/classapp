@@ -17,7 +17,7 @@ module.exports = function(config) {
       'build/js/vendor.js',
       'test/lib/firebase.js',
       'test/lib/angularfire.min.js',
-      'build/js/app.auth.templates.js',
+      'build/js/app.main.templates.js',
       'build/js/main.js',
       'build/js/params.js',
       'test/**/*.coffee'

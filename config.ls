@@ -1,6 +1,4 @@
 if process.env.NODE_ENV == 'testing'
-    require! <[ dotenv ]>
-    dotenv.load!
     process.env.FIREBASE = "https://torid-fire-3655.firebaseio.com/tests/#{process.env.UUID}"
     FirebaseTokenGenerator = require("firebase-token-generator")
     tokenGenerator = new FirebaseTokenGenerator(process.env.GENSECRET)

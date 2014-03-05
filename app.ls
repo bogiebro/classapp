@@ -7,8 +7,8 @@ firebase = new Firebase('https://torid-fire-3655.firebaseio.com')
 # Express config
 express.static.mime.define({'text/cache-manifest': ['appcache']})
 app = express!
-development = app.get('env') in ['testing', 'development']
-app.set('port', process.env.PORT || 3000)
+development = process.env.NODE_ENV in ['testing', 'development']
+app.set('port', process.env.PORT || 5000)
 tokenGenerator = new FirebaseTokenGenerator(process.env.GENSECRET)
 
 # Generate a Firebase token
@@ -67,13 +67,13 @@ app.get '/refresh' (req, res)!->
   res.redirect req.query.url
 
 # Give tests a login route
-if app.get('env') is 'testing'
-    app.get '/testlogin' (req, res)!-> 
-        data = JSON.stringify do
-            token: tokenGenerator.createToken(netid: 'tester')
-            netid: 'tester'
-        res.cookie('casInfo', data, {})
-        res.send 200
+if process.env.NODE_ENV is 'testing'
+  app.get '/testlogin' (req, res)!-> 
+      data = JSON.stringify do
+          token: tokenGenerator.createToken(netid: 'tester')
+          netid: 'tester'
+      res.cookie('casInfo', data, {})
+      res.send 200
 
 # start the server
 http.createServer(app).listen(app.get('port'), ->
