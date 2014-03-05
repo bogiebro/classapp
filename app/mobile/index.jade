@@ -7,7 +7,18 @@ html(ng-app="MobileApp", manifest="mobile.appcache")
         link(rel='stylesheet', href="/css/main.css")
     body
         div(ng-controller="ToolbarCtrl")
-            p(ng-if="group.name") {{group.name}} is selected currently
+          div(ng-if="group.name").toolbar
+            .back &lt;
+            .title {{group.name}}
+            .btn-group
+              button(type="button", class="btn btn-default") // events
+                span(class="glyphicon glyphicon-th-list")
+              button(type="button", class="btn btn-default") // members
+                span(class="glyphicon glyphicon-user")
+              button(type="button", class="btn btn-default") // chat
+                span(class="glyphicon glyphicon-comment")
+              button(type="button", class="btn btn-default") // files
+                span(class="glyphicon glyphicon-folder-open")
         div(ng-view)
 
         script(src='http://code.jquery.com/jquery-1.11.0.min.js')
