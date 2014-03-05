@@ -57,7 +57,7 @@ app.get /^\/(\w+\.appcache)/ (req, res)!->
     res.sendfile(path.join(__dirname, req.params[0]));
 
 # log out
-app.get '/logout' (req, res)!-> 
+app.get '/logout' (req, res)!->
   res.clearCookie('casInfo')
   res.redirect 'https://secure.its.yale.edu/cas/logout'
 
@@ -68,7 +68,7 @@ app.get '/refresh' (req, res)!->
 
 # Give tests a login route
 if process.env.NODE_ENV is 'testing'
-  app.get '/testlogin' (req, res)!-> 
+  app.get '/testlogin' (req, res)!->
       data = JSON.stringify do
           token: tokenGenerator.createToken(netid: 'tester')
           netid: 'tester'

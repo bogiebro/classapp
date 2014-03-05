@@ -3,22 +3,24 @@ html(ng-app="MobileApp", manifest="mobile.appcache")
     head
         title Quipu
 
-        link(rel='styesheet', href="/css/vendor.css")
+        link(rel='stylesheet', href="/css/vendor.css")
         link(rel='stylesheet', href="/css/main.css")
     body
         div(ng-controller="ToolbarCtrl")
-          div(ng-if="group.name").toolbar
-            .back &lt;
-            .title {{group.name}}
-            .btn-group
-              button(type="button", ng-click='goEvents()', class="btn btn-default") // events
-                span(class="glyphicon glyphicon-th-list")
-              button(type="button", ng-clock='goMembers()', class="btn btn-default") // members
-                span(class="glyphicon glyphicon-user")
-              button(type="button", ng-click='goChat()', class="btn btn-default") // chat
-                span(class="glyphicon glyphicon-comment")
-              button(type="button", ng-click='goFiles()', class="btn btn-default") // files
-                span(class="glyphicon glyphicon-folder-open")
+          div(ng-if="group.props.name", class="navbar navbar-default navbar-fixed-top")
+            .container-fluid
+                  span.vcenter
+                    span(class="glyphicon glyphicon-chevron-left").back
+                    span(class="bigger navar-text") {{group.props.name}}
+                  span.btn-group.leftbuttons
+                    button(type="button", ng-click='goEvents()', class="btn navbar-btn btn-sm")
+                      span(class="glyphicon glyphicon-th-list")
+                    button(type="button", ng-clock='goMembers()', class="btn navbar-btn btn-sm") 
+                      span(class="glyphicon glyphicon-user")
+                    button(type="button", ng-click='goChat()', class="btn navbar-btn btn-sm") 
+                      span(class="glyphicon glyphicon-comment")
+                    button(type="button", ng-click='goFiles()', class="btn navbar-btn btn-sm")
+                      span(class="glyphicon glyphicon-folder-open")
         div(ng-view)
 
         script(src='http://code.jquery.com/jquery-1.11.0.min.js')

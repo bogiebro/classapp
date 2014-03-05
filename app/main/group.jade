@@ -1,93 +1,94 @@
-p
-  span.collapseBtn.glyphicon.glyphicon-circle-arrow-left(manipulate) 
-  | Classes
-hr
-div.list-group
-    img.loadingImg(src="/img/loading_classes.gif", ng-show="classLoadWaiting")
-    div.list-group-item.oneClass(href="#", ng-repeat="class in user.classes", manipulate)
-      a.list-group-item-heading
-        b
-          | {{class.code}}
-        br
-      a.list-group-item-text.greenText
-        | {{class.name}}
-        br
-      a.list-group-item-text.redText
-        | {{class.prof}}
-        br
-      .toolBarContainer.hiddenElement
-        .btn-group
-          a(href="#", id="toolIcon", ng-click="openRemoveClassModal(class)", manipulte)
-            span.glyphicon.glyphicon-trash
-          a(href="#", id="toolIcon", ng-click="openAddGroupModal(class)")
-            span.glyphicon.glyphicon-plus
-          a(href="#", id="toolIcon", ng-click="")
-            span.glyphicon.glyphicon-th-list
-          a(href="#", id="toolIcon", ng-click="")
-            span.glyphicon.glyphicon-search
-
-div.addClassDiv
-
-  div.suggestions(ng-show="searchText")
-    div.suggestedClass(ng-repeat="class in allClasses | filter : searchText", id="{{class.code}} {{class.name}}", ng-click="addClass(class)")
-      p.list-group-item-heading()
-        b
-          | {{class.code}}
-      p.list-group-item-text.greenText
-        | {{class.name}}
-      p.list-group-item-text.redText
-        | {{class.prof}}
-  form(class="addClassForm navbar-form")
-    input.liveSearch(type="text", placeholder="+ New Class", class="form-control", ng-model="searchText", ng-click="getAllClasses()")
-
-script(type="text/ng-template", id="simpleModal.html")
-  div.modal-body
-    p
-      | {{msg}}
-  div.modal-footer
-    button.btn.btn-primary(ng-click="ok(class)")
-      | Yes
-    button.btn.btn-primary(ng-click="cancel()")
-      | Cancel
-
-script(type="text/ng-template", id="groupModal.html")
-  div.modal-header
-    h3
-      | {{msg}}
-  div.modal-body(id="groupModal")
-    div.groupModalDiv1
-      div.groupModalMiddleDiv.panel.panel-default
-        div.oneMember(ng-repeat="member in newGroupMembers")
-          a
-            | {{member.name}}
-      div.groupModalBottomDiv1
-        div.input-group-btn
-          input.shortInput(class="form-control", type="text", placeholder="{{groupName}}")
-          input.longInput(class="form-control", type="text", placeholder="Some Description(Optional)")
-          button(type="button", class="btn btn-default dropdown-toggle", data-toggle="dropdown")
-            | Type
-            span.caret
-          ul.dropdown-menu
-            li
-              a
-                | Open
-            li
-              a
-                | Closed
-
-    div.groupModalDiv2
-      div.groupModalMiddleDiv.panel.panel-default
-        div.suggestedClass(ng-repeat="member in classMembers", id="{{member.name}}")
-          a.list-group-item-heading
-            span.glyphicon.glyphicon-plus(ng-click="addMemberToGroup(member)")
-            b
-              | {{member.name}}
-      div.groupModalBottomDiv2
-        form.navbar-form
-          input.liveSearch(class="form-control", type="text", placeholder="Search Classmates", manipulate)
-    
-  div.modal-footer
-    button.btn.btn-primary(ng-click="ok(class)")
-      | Done
-    button.btn.btn-primary(ng-click="cancel()")
-      | Cancel
+a(ng-click='goEvents()') Go to events
+//- p
+//-   span.collapseBtn.glyphicon.glyphicon-circle-arrow-left(manipulate) 
+//-   | Classes
+//- hr
+//- div.list-group
+//-     img.loadingImg(src="/img/loading_classes.gif", ng-show="classLoadWaiting")
+//-     div.list-group-item.oneClass(href="#", ng-repeat="class in user.classes", manipulate)
+//-       a.list-group-item-heading
+//-         b
+//-           | {{class.code}}
+//-         br
+//-       a.list-group-item-text.greenText
+//-         | {{class.name}}
+//-         br
+//-       a.list-group-item-text.redText
+//-         | {{class.prof}}
+//-         br
+//-       .toolBarContainer.hiddenElement
+//-         .btn-group
+//-           a(href="#", id="toolIcon", ng-click="openRemoveClassModal(class)", manipulte)
+//-             span.glyphicon.glyphicon-trash
+//-           a(href="#", id="toolIcon", ng-click="openAddGroupModal(class)")
+//-             span.glyphicon.glyphicon-plus
+//-           a(href="#", id="toolIcon", ng-click="")
+//-             span.glyphicon.glyphicon-th-list
+//-           a(href="#", id="toolIcon", ng-click="")
+//-             span.glyphicon.glyphicon-search
+//- 
+//- div.addClassDiv
+//- 
+//-   div.suggestions(ng-show="searchText")
+//-     div.suggestedClass(ng-repeat="class in allClasses | filter : searchText", id="{{class.code}} {{class.name}}", ng-click="addClass(class)")
+//-       p.list-group-item-heading()
+//-         b
+//-           | {{class.code}}
+//-       p.list-group-item-text.greenText
+//-         | {{class.name}}
+//-       p.list-group-item-text.redText
+//-         | {{class.prof}}
+//-   form(class="addClassForm navbar-form")
+//-     input.liveSearch(type="text", placeholder="+ New Class", class="form-control", ng-model="searchText", ng-click="getAllClasses()")
+//- 
+//- script(type="text/ng-template", id="simpleModal.html")
+//-   div.modal-body
+//-     p
+//-       | {{msg}}
+//-   div.modal-footer
+//-     button.btn.btn-primary(ng-click="ok(class)")
+//-       | Yes
+//-     button.btn.btn-primary(ng-click="cancel()")
+//-       | Cancel
+//- 
+//- script(type="text/ng-template", id="groupModal.html")
+//-   div.modal-header
+//-     h3
+//-       | {{msg}}
+//-   div.modal-body(id="groupModal")
+//-     div.groupModalDiv1
+//-       div.groupModalMiddleDiv.panel.panel-default
+//-         div.oneMember(ng-repeat="member in newGroupMembers")
+//-           a
+//-             | {{member.name}}
+//-       div.groupModalBottomDiv1
+//-         div.input-group-btn
+//-           input.shortInput(class="form-control", type="text", placeholder="{{groupName}}")
+//-           input.longInput(class="form-control", type="text", placeholder="Some Description(Optional)")
+//-           button(type="button", class="btn btn-default dropdown-toggle", data-toggle="dropdown")
+//-             | Type
+//-             span.caret
+//-           ul.dropdown-menu
+//-             li
+//-               a
+//-                 | Open
+//-             li
+//-               a
+//-                 | Closed
+//- 
+//-     div.groupModalDiv2
+//-       div.groupModalMiddleDiv.panel.panel-default
+//-         div.suggestedClass(ng-repeat="member in classMembers", id="{{member.name}}")
+//-           a.list-group-item-heading
+//-             span.glyphicon.glyphicon-plus(ng-click="addMemberToGroup(member)")
+//-             b
+//-               | {{member.name}}
+//-       div.groupModalBottomDiv2
+//-         form.navbar-form
+//-           input.liveSearch(class="form-control", type="text", placeholder="Search Classmates", manipulate)
+//-     
+//-   div.modal-footer
+//-     button.btn.btn-primary(ng-click="ok(class)")
+//-       | Done
+//-     button.btn.btn-primary(ng-click="cancel()")
+//-       | Cancel
