@@ -1,13 +1,29 @@
-p Events for group {{group.name}}
+h2 Events for group {{group.name}}
 body
-	p EVENTS
+	p 
 		li(ng-repeat="event in eventsList")
-			h4 Date: {{event.date}}
+			h4 {{event.date.toUTCString()}}
 			h4 Event: {{event.message}}
 			h4 Location: {{event.location}}
+		h2 {{testing}}	{{dayobject.dt}}
+		div
+			pre Selected date is: 
+				em {{dayobject.dt | date:"fullDate" }}
+			
+			h4 Inline
+		
+			div( style="display:inline-block; min-height:290px;")
+				div( class="well well-sm", ng-model="dayobject.dt")
+					datepicker(min="minDate", show-weeks="showWeeks")
+				
+			div( class="row")
+				div( class="col-md-6")
+					label Format:
+						select( class="form-control", ng-model="format", ng-options="f for f in formats")
+							option
 
 		form(ng-submit="newEvent()")
-			input(type='text', ng-model='form.dateInput', palceholder='date', size='10')
 			input(type='text', ng-model='form.messageInput', placeholder='title...')
 			input(type='text', ng-model='form.locationInput', placeholder='location')
 			input(class="btn-primary",  type="submit", value="Make Event!")
+			input(type="button",  ng-click="displaydate()", value="display date")
