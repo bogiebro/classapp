@@ -32,7 +32,7 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
       childRef = connections.child($ref.netid)
       conRef.on 'value' (snap)!->
         if (snap.val!)
-          childRef.set {name: $ref.me.name}
+          childRef.set {name: $ref.me?.name or $ref.netid}
           childRef.onDisconnect!remove!
 
 # $group.name gives the currently selected group name

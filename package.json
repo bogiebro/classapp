@@ -17,7 +17,7 @@
     "stylus-brunch": "*",
     "jade-angularjs-brunch": "*",
     "brunch": "1.x",
-    "bower": "1.2.7",
+    "bower": "*",
     "LiveScript": "*",
     "firebase": "*",
     "firebase-token-generator": "~0.1.4",
@@ -26,6 +26,12 @@
   },
   "devDependencies": {
     "karma": "*",
+    "karma-cli": "*",
+    "karma-jasmine": "~0.2.0",
+    "karma-chrome-launcher": "*",
+    "karma-phantomjs-launcher": "*",
+    "karma-firefox-launcher": "*",
+    "karma-coffee-preprocessor": "*",
     "protractor": "*"
   }
 }
