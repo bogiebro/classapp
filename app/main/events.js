@@ -1,43 +1,54 @@
 angular.module("app.events", ['app.auth'])
 //to do 
+
 //tie to firebase
 //pop out event edit/ creation
 //member addtion/ removal button and access control 
 //ref.me use refrence delay possible
 //ref.group ish
-.controller('EventsCtrl', function ($scope, $group, $ref) {
+.controller('EventsCtrl', function ($scope, $firebase, $group, $ref) {
+        
+      //var myApp = angular.module("MyApp", ["firebase"]);
     $scope.group = $group.props;
     $scope.form = {}
     $scope.dayobject = {}
+    $scope.dp={}
+    $scope.dp.Date = new Date(2014, 4, 3, 4);
+   
+    $scope.eventsList={}
     $scope.testing  = "James";
-    $scope.eventsList = [{date:new Date(2014, 4, 2), message:"Presentation prep", location:"Swing Space", members:""},
-         {date: new Date (2014, 4, 3), message:"Presentation", location:"DL220", members:""}];
-     
+    var eventref = new Firebase('https://myfirstbase.firebaseio.com/');
+    $scope.eventFire = $firebase(eventref);
+
+    //$scope.eventsList.push({message:"Presentation", date:$scope.dp.Date.toUTCString(),  location:"DL 220", members:""});
+
      $scope.newEvent = function(){
         $scope.eventMessage = "TBA";
         $scope.eventLocation = "TBA";
-        
+       
         if ( $scope.form.messageInput !=="" ) {eventMessage = $scope.form.messageInput;}
         if ( $scope.form.locationInput !== "")  eventLocation = $scope.form.locationInput;
         var index =0;
        
-        for ( var E in $scope.eventsList ){
+        //for ( var E in $scope.eventsList ){
            // $scope.testing = $scope.eventsList[E].date;
-             if ($scope.dayobject.dt < $scope.eventsList[index].date) {
-                break;
-             } 
-             index = index +1;
-        }
+          //   if ($scope.dayobject.dt < $scope.eventsList[index].date) {
+           //     break;
+           //  } 
+        //     index = index +1;
+        //}
         //$scope.testing = index;
-        $scope.eventsList.splice(index, 0, {date:$scope.dayobject.dt, message:$scope.eventMessage,
-                                   location:$scope.eventLocation, members:"" });
-       
+        //$scope.eventsList.splice(index, 0, {date:$scope.dayobject.dt, message:$scope.eventMessage,
+          //                         location:$scope.eventLocation, members:"" });
+        $scope.eventFire.$add({date:$scope.dayobject.dt.toUTCString(), message:$scope.form.messageInput,
+                                   location:$scope.form.locationInput, members:""});
+
         //$scope.testing = index;
          $scope.form.locationInput = "";
          $scope.form.messageInput = "";
      }
 
-
+     
     $scope.archiveEvents = function(){
         // remove passed events
     }
@@ -99,6 +110,7 @@ angular.module("app.events", ['app.auth'])
     $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'shortDate'];
     $scope.format = $scope.formats[0];
    
+
 
 
 })

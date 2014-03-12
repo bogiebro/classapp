@@ -1,8 +1,8 @@
 h2 Events for group {{group.name}}
 body
 	p 
-		li(ng-repeat="event in eventsList")
-			h4 {{event.date.toUTCString()}}
+		li(ng-repeat="event in eventFire")
+			h4 {{event.date}}
 			h4 Event: {{event.message}}
 			h4 Location: {{event.location}}
 		h2 {{testing}}	{{dayobject.dt}}
@@ -27,3 +27,4 @@ body
 			input(type='text', ng-model='form.locationInput', placeholder='location')
 			input(class="btn-primary",  type="submit", value="Make Event!")
 			input(type="button",  ng-click="displaydate()", value="display date")
+		p {{eventFire}}
