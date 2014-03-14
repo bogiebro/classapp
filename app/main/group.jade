@@ -16,7 +16,7 @@ div.list-group
         | {{class.prof}}
         br
       div.allGroups
-        div.group(ng-repeat="group in class.groups", ng-class="{'highlight':highlighted == group.name}", ng-click="highlighted = group.name")
+        div.group(ng-repeat="group in class.groups", ng-class="groupClass(group)", ng-click="selectGroup(group)")
           span.glyphicon.glyphicon-lock(ng-show="group.type == 'closed'")
           a
             |  {{group.name}}
@@ -30,7 +30,7 @@ div.list-group
             span.glyphicon.glyphicon-plus
           a(href="#", id="toolIcon", ng-click="")
             span.glyphicon.glyphicon-th-list
-          a(href="#", id="toolIcon", ng-click="")
+          a(href="#", id="toolIcon", ng-click="openSearchGroupModal(class)")
             span.glyphicon.glyphicon-search
 
 div.addClassDiv()
@@ -71,7 +71,7 @@ script(type="text/ng-template", id="groupModal.html")
             | {{member.name}}
       div.groupModalBottomDiv1
         div.input-group-btn
-          input.shortInput(class="form-control", type="text", placeholder="{{group.name}}", ng-model='group.name')
+          input.shortInput(class="form-control", type="text", placeholder="{{group.name}}", ng-model='group.name', ng-class='isNameValid(group.name)')
           input.longInput(class="form-control", type="text", placeholder="{{group.desc}}", ng-model='group.desc')
           select(ng-model="group.type", ng-options="opt for opt in group.options")
 
@@ -88,6 +88,30 @@ script(type="text/ng-template", id="groupModal.html")
         form.navbar-form
           input.liveSearch(class="form-control", type="text", placeholder="Search Classmates", ng-model="memSearch")
     
+  div.modal-footer
+    button.btn.btn-primary(ng-click="ok()")
+      | Done
+    button.btn.btn-primary(ng-click="cancel()")
+      | Cancel
+
+script(type="text/ng-template", id="searchGroupModal.html")
+  div.modal-header
+    h3
+      | {{msg}}
+  div.modal-body(id="searchModal")
+    div.searchBar
+      input(class="form-control", type="text", placeholder="Group Name, Member Name", ng-model="groupSearchText")
+      select(ng-model="groupType", ng-options="op for op in groupTypeOptions")
+      select(ng-model="groupSize", ng-options="opt for opt in groupSizeOptions")
+      br
+    div.resultBar(ng-repeat="group in groups | filter : groupSearchText")
+      div.groupBar.suggestedClass
+        span.glyphicon.glyphicon-lock(ng-show="group.type == 'closed'")
+        b
+          {{group.name}} Created by {{group.creator}} on {{group.date}}
+          br
+        div.groupMember(ng-repeat="mem in group.members")
+          a {{mem.name}}
   div.modal-footer
     button.btn.btn-primary(ng-click="ok()")
       | Done

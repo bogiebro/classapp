@@ -22,9 +22,6 @@ angular.module("app.group", ['app.auth', 'firebase'])
   $scope.searchText = new Object();
   $scope.searchText.txt = '';
 
-  // Group highlighting
-  $scope.highlight = false;
-
   // Function to close the search suggestions
   $scope.closeClassList = function(strg) {
     strg.txt = '';
@@ -92,8 +89,13 @@ angular.module("app.group", ['app.auth', 'firebase'])
   }
 
   // to toggle between highlighted groups
-  $scope.highlighted = new Object();
-  $scope.highlighted.value = '';
+  $scope.selectedGroup = null;
+  $scope.selectGroup = function(group) {
+    $scope.selectedGroup = group;
+  }
+  $scope.groupClass = function(group) {
+    return group == $scope.selectedGroup ? 'activeGroup' : undefined;
+  }
 
   // Load modal window for deleting class
   $scope.openRemoveClassModal = function(clickedClass) {
@@ -130,14 +132,22 @@ angular.module("app.group", ['app.auth', 'firebase'])
   // Open modal for creating groups
   $scope.openAddGroupModal = function(clickedClass) {
 
+    // Get members of the class
     var members = $scope.data.classcodes[clickedClass.code]['members'];
     var classMembers = new Array();
 
-    // Determine what number this group is
-    var groups = $scope.data.users[$ref.netid]['classes'][clickedClass.code]['groups'];
+    // Determine what number this group is in the class
+    var groups = $scope.data.classcodes[clickedClass.code]['groups'];
     var groupNum = 0;
     if(groups != undefined)
       groupNum = Object.keys(groups).length + 1;
+
+    // Get list of unavailable names
+    var nonAvailNames = new Array();
+    for(key in groups){
+      console.log('Group name ' + key)
+      nonAvailNames.push(key)
+    }
 
     for(i = 0; i < Object.keys(members).length; i++) {
       var nid = Object.keys(members)[i];
@@ -166,13 +176,19 @@ angular.module("app.group", ['app.auth', 'firebase'])
         },
         groupNum: function() {
           return groupNum;
+        },
+        nonAvailNames : function() {
+          return nonAvailNames;
+        },
+        studentName : function() {
+          return $scope.data.users[$ref.netid]['name'];
         }
       }
     });
   }
 
   // The group creation modal
-  var GroupModalInstanceCtrl = function ($scope, $modalInstance, msg, members, classCode, groupNum) {
+  var GroupModalInstanceCtrl = function ($scope, $modalInstance, msg, members, classCode, groupNum, nonAvailNames, studentName) {
     $scope.msg = msg;
     $scope.newGroupMembers = [];
     $scope.classMembers = members;
@@ -182,21 +198,42 @@ angular.module("app.group", ['app.auth', 'firebase'])
     $scope.group.options = ['open', 'closed']
     $scope.group.type = 'open';
     $scope.group.desc = 'Some Description(Optional)';
+    $scope.nonAvailNames = nonAvailNames;
+    console.log('Non avail names ' + $scope.nonAvailNames)
 
     $scope.ok = function() {
       console.log($scope.newGroupMembers);
+      if($scope.nonAvailNames.indexOf($scope.group.name) == -1) {
+        // Get today's data
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1;
+        var yyyy = today.getFullYear();
+        var todayDate = mm+'/'+dd+'/'+yyyy;
+        var groupCreator = studentName + "(" + $ref.netid + ")";
 
-      // Create the group in firebase
-      setFB("users/" + $ref.netid + "/classes/" + classCode + "/groups/" + $scope.group.name,
-          {name:$scope.group.name, type:$scope.group.type, desc:$scope.group.desc});
+        // Create the group under the class
+        setFB("classcodes/" + classCode + "/groups/" + $scope.group.name,
+            {name:$scope.group.name, 
+             type:$scope.group.type, 
+             desc:$scope.group.desc, 
+             size:$scope.newGroupMembers.length,
+             date:todayDate,
+             creator:groupCreator});
 
-      // Add the members to the group
-      for(i = 0; i < $scope.newGroupMembers.length; i++) {
-        setFB("users/" + $ref.netid + "/classes/" + classCode + 
-              "/groups/" + $scope.group.name + "/members/" + $scope.newGroupMembers[i].netid,
-              {member:true});
-      }
-     $modalInstance.close();
+        // Add the members to the group
+        for(i = 0; i < $scope.newGroupMembers.length; i++) {
+          setFB("classcodes/" + classCode + "/groups/" + $scope.group.name +
+                "/members/" + $scope.newGroupMembers[i].netid,
+                {member:true, name:$scope.newGroupMembers[i].name});
+        }
+
+        // Create the group name under the user
+        setFB("users/" + $ref.netid + "/classes/" + classCode + "/groups/" + $scope.group.name,
+            {name:$scope.group.name});
+
+       $modalInstance.close();
+     }
     }
 
     $scope.cancel = function() {
@@ -217,9 +254,65 @@ angular.module("app.group", ['app.auth', 'firebase'])
     $scope.removeGroupMember = function(member) {
       transferMember($scope.newGroupMembers, $scope.classMembers, member);
     }
+    $scope.isNameValid = function(name) {
+      return $scope.nonAvailNames.indexOf(name) != -1 ? 'invalidInput' : undefined
+    }
+  }
+
+  // Group search modal
+  $scope.openSearchGroupModal = function(clickedClass) {
+
+    // All groups under this class
+    var groupArr = new Array();
+    var groups = $scope.data.classcodes[clickedClass.code]['groups'];
+    for(g in groups) {
+      groupArr.push(groups[g]);
+    }
+
+    var modalInstance = $modal.open({
+      templateUrl: 'searchGroupModal.html',
+      controller: GroupSearchModalInstanceCtrl,
+      resolve: {
+        msg: function () {
+          return "Search groups in " + clickedClass.code;
+        },
+        classCode: function() {
+          return clickedClass.code;
+        }, 
+        groups: function() {
+          return groupArr;
+        }
+       }
+    });
+
+  }
+
+  // The group creation modal
+  var GroupSearchModalInstanceCtrl = function ($scope, $modalInstance, msg, classCode, groups) {
+    console.log('Passed groups ' + groups);
+    $scope.groups = groups;
+    $scope.msg = msg;
+    $scope.groupTypeOptions = ['open', 'closed'];
+    $scope.groupType = 'open';
+    $scope.groupSizeOptions = ['small', 'medium', 'large'];
+    $scope.groupSize = 'small';
+
+    $scope.ok = function() {
+      $modalInstance.dismiss();
+    }
+
+    $scope.cancel = function() {
+      $modalInstance.dismiss();
+    }
+
+
   }
 
 })
+
+//   // Open modal for creating group
+
+// })
 
 
 .directive("manipulate", function(){

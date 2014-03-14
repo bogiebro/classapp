@@ -253,8 +253,8 @@
   padding 2px
   cursor pointer
   font-size 10px
-  -webkit-transition-duration 0.2s
-  background-color #424242
+  -webkit-transition-duration 0.3s
+  background-color #A4A4A4
   margin-bottom 2px
   margin-right 2px
   width 47%
@@ -263,11 +263,46 @@
 .group:hover
   background-color #DF0101
 
-.group a, group span
+.group a, .group span
   color #fff !important
 
-.allGroups .highlight
-  background-color #8181F7
+.allGroups .activeGroup
+  background-color #DF0101
+  width 100%
+
+#searchModal .searchBar
+  width 100%
+  height 70px
+  display block
+  margin 0
+  margin-top 5px
+  margin-bottom 5px
+
+#searchModal .resultBar
+  width 100%
+  height 75%
+  margin 0
+
+#searchModal input
+  width 70%
+  display inline
+  float left
+  margin-right 5px
+
+#searchModal select
+  display inline
+  float left
+  margin-right 10px
+
+#searchModal .groupBar
+  margin-bottom 2px
+
+#searchModal .groupMember
+  border 1px
+  margin 2px
+
+.invalidInput
+  background-color red
 
 .back
   margin-right 5px
