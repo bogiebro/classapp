@@ -14,17 +14,16 @@
     position relative
     text-align center
     overflow hidden
+    -webkit-transition-duration: 0.5s
 
 .rightcontent
-    float right
     position relative
     width 85%
     min-height 500px
+    float left
 
 .rightbar
-    position absolute
-    right 0px
-    top 0px
+    float left
     bottom 0px
     width 20%
 
@@ -32,7 +31,7 @@
     float left
     position relative
     width 80%
-    padding-top 10px
+    padding-top 15px
 
 .down
     padding-top 10px
@@ -57,24 +56,27 @@
   width 39px !important
   margin 0px
 
-.leftbar p
-  margin-top 15px
+.leftbar .classesTitle
   width 85%
   margin-left auto
   margin-right auto
+  margin-top 15px
+  margin-bottom 0px
+  height 42px
   color #000000
 
 .leftbar .collapseBtn
-  float right
-  margin-right 10px
   cursor pointer
+  margin-right 10px
+  float right
 
 .leftbar .list-group
   -webkit-border-radius 0px !important
   -moz-border-radius 0px !important
   border-radius 0px !important
   margin 0
-  height 88%
+  margin-bottom 30px
+  height 85%
   overflow auto !important
 
 .leftbar .list-group-item
@@ -110,6 +112,7 @@
 
 .leftbar .tallClass
   height 500px
+  background-color white
 
 .hiddenElement
   visibility hidden
@@ -126,11 +129,13 @@
   margin-bottom 0px
 
 .leftbar .suggestions
+  padding-top 15px
   width 100%
   overflow-y scroll
   max-height 250px
 
-.suggestedClass
+
+.suggestedClass, .suggestedMember
   padding 2px
   cursor pointer
   font-size 10px
@@ -138,12 +143,16 @@
   border-radius 4px
   -webkit-transition-duration: 0.2s;
 
-.suggestedClass:hover
+.suggestedClass:hover, .suggestedMember:hover
   background-color #8181F7
 
 .suggestions p
   margin 0px
   padding 0px
+
+.oneClass
+  padding 0px
+  overflow scroll
 
 .blockDiv
   display block
@@ -170,6 +179,18 @@
   position absolute
   bottom 0
   right 0
+  border-top 1px solid
+  border-radius 4px
+
+.closeIcon
+  cursor pointer
+  color gray
+  position absolute
+  top 0
+  right 0
+
+.closeIcon:hover
+  color black
 
 #groupModal
   height 350px
@@ -215,3 +236,39 @@
   width 100%
   margin 0px
   padding 0px
+
+.loadingImg
+  height 60px
+  width 60px
+  margin-top 100px
+
+.allGroups
+  margin 0px
+  padding-top 5px
+  margin-top 53px
+  border-top 1px dashed
+  border-color #D8D8D8
+
+.group
+  padding 2px
+  cursor pointer
+  font-size 10px
+  -webkit-transition-duration 0.2s
+  background-color #424242
+  margin-bottom 2px
+  margin-right 2px
+  width 47%
+  float left
+
+
+.group:hover
+  background-color #DF0101
+
+.group a, group span
+  color #fff !important
+
+.allGroups .highlight
+  background-color #8181F7
+
+
+

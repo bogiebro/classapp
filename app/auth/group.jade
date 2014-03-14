@@ -1,20 +1,30 @@
-span.collapseBtn.glyphicon.glyphicon-circle-arrow-left(manipulate) Classes
+p.classesTitle
+  span.collapseBtn.glyphicon.glyphicon-circle-arrow-left(manipulate)
+  | Classes
 hr
 div.list-group
-    div.list-group-item.oneClass(href="#", ng-repeat="class in user.classes", manipulate)
-      a.list-group-item-heading
+    img.loadingImg(src="/img/loading_classes_.gif", ng-show="classLoadWaiting")
+    div.list-group-item.oneClass(href="#", ng-repeat="class in user.classes")
+      a.list-group-item-heading.oneClassHeading(manipulate)
         b
           | {{class.code}}
         br
-      a.list-group-item-text.greenText
+      a.list-group-item-text.greenText.oneClassHeading(manipulate)
         | {{class.name}}
         br
-      a.list-group-item-text.redText
+      a.list-group-item-text.redText.oneClassHeading(manipulate)
         | {{class.prof}}
         br
+      div.allGroups
+        div.group(ng-repeat="group in class.groups", ng-class="{'highlight':highlighted == group.name}", ng-click="highlighted = group.name")
+          span.glyphicon.glyphicon-lock(ng-show="group.type == 'closed'")
+          a
+            |  {{group.name}}
+
+
       .toolBarContainer.hiddenElement
         .btn-group
-          a(href="#", id="toolIcon", ng-click="openRemoveClassModal(class)", manipulte)
+          a(href="#", id="toolIcon", ng-click="ClassModal(class)", manipulte)
             span.glyphicon.glyphicon-trash
           a(href="#", id="toolIcon", ng-click="openAddGroupModal(class)")
             span.glyphicon.glyphicon-plus
@@ -23,9 +33,10 @@ div.list-group
           a(href="#", id="toolIcon", ng-click="")
             span.glyphicon.glyphicon-search
 
-div.addClassDiv
-  div.suggestions(ng-show="searchText")
-    div.suggestedClass(ng-repeat="class in allClasses | filter : searchText", id="{{class.code}} {{class.name}}", ng-click="addClass(class)")
+div.addClassDiv()
+  div.suggestions(ng-show="searchText.txt")
+    span.closeIcon.glyphicon.glyphicon-remove(ng-click="closeClassList(searchText)")
+    div.suggestedClass(ng-repeat="class in allClasses | filter : searchText.txt | limitTo : 100", id="{{class.code}} {{class.name}}", ng-click="addClass(class)")
       p.list-group-item-heading()
         b
           | {{class.code}}
@@ -34,7 +45,7 @@ div.addClassDiv
       p.list-group-item-text.redText
         | {{class.prof}}
   form(class="addClassForm navbar-form")
-    input.liveSearch(type="text", placeholder="+ New Class", class="form-control", ng-model="searchText")
+    input.liveSearch(type="text", placeholder="+ New Class", class="form-control", ng-model="searchText.txt", ng-click="getAllClasses()")
 
 script(type="text/ng-template", id="simpleModal.html")
   div.modal-body
@@ -53,37 +64,32 @@ script(type="text/ng-template", id="groupModal.html")
   div.modal-body(id="groupModal")
     div.groupModalDiv1
       div.groupModalMiddleDiv.panel.panel-default
-        div.oneMember(ng-repeat="member in newGroupMembers")
+        div.oneMember.suggestedClass(ng-repeat="member in newGroupMembers", ng-click="removeGroupMember(member)")
+          span.glyphicon.glyphicon-minus(ng-click="removeMemberFromGroup(member)")
+          img(src="/img/anonymous.jpeg", height="20", width="20")
           a
             | {{member.name}}
       div.groupModalBottomDiv1
         div.input-group-btn
-          input.shortInput(class="form-control", type="text", placeholder="{{groupName}}")
-          input.longInput(class="form-control", type="text", placeholder="Some Description(Optional)")
-          button(type="button", class="btn btn-default dropdown-toggle", data-toggle="dropdown")
-            | Type
-            span.caret
-          ul.dropdown-menu
-            li
-              a
-                | Open
-            li
-              a
-                | Closed
+          input.shortInput(class="form-control", type="text", placeholder="{{group.name}}", ng-model='group.name')
+          input.longInput(class="form-control", type="text", placeholder="{{group.desc}}", ng-model='group.desc')
+          select(ng-model="group.type", ng-options="opt for opt in group.options")
+
 
     div.groupModalDiv2
       div.groupModalMiddleDiv.panel.panel-default
-        div.suggestedClass(ng-repeat="member in classMembers", id="{{member.name}}")
+        div.suggestedMember(ng-repeat="member in classMembers | filter : memSearch", id="{{member.name}}", ng-click="addMemberToGroup(member)")
           a.list-group-item-heading
-            span.glyphicon.glyphicon-plus(ng-click="addMemberToGroup(member)")
+            span.glyphicon.glyphicon-plus
+            img(src="/img/anonymous.jpeg", height="20", width="20")
             b
               | {{member.name}}
       div.groupModalBottomDiv2
         form.navbar-form
-          input.liveSearch(class="form-control", type="text", placeholder="Search Classmates", manipulate)
+          input.liveSearch(class="form-control", type="text", placeholder="Search Classmates", ng-model="memSearch")
     
   div.modal-footer
-    button.btn.btn-primary(ng-click="ok(class)")
+    button.btn.btn-primary(ng-click="ok()")
       | Done
     button.btn.btn-primary(ng-click="cancel()")
       | Cancel
