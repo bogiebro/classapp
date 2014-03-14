@@ -1,0 +1,13 @@
+p Events for group {{group.name}}
+body
+	p EVENTS
+		li(ng-repeat="event in eventsList")
+			h4 Date: {{event.date}}
+			h4 Event: {{event.message}}
+			h4 Location: {{event.location}}
+
+		form(ng-submit="newEvent()")
+			input(type='text', ng-model='form.dateInput', palceholder='date', size='10')
+			input(type='text', ng-model='form.messageInput', placeholder='title...')
+			input(type='text', ng-model='form.locationInput', placeholder='location')
+			input(class="btn-primary",  type="submit", value="Make Event!")

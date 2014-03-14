@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "postinstall": "sh install.sh"
+    "postinstall": "sh install.sh",
+    "start": "./node_modules/LiveScript/bin/livescript app.ls"
   },
   "dependencies": {
     "LiveScript-brunch": "1.5.x",
@@ -16,15 +17,21 @@
     "stylus-brunch": "*",
     "jade-angularjs-brunch": "*",
     "brunch": "1.x",
-    "bower": "1.2.7",
+    "bower": "*",
     "LiveScript": "*",
+    "firebase": "*",
     "firebase-token-generator": "~0.1.4",
     "process-env-brunch": "*",
     "mobile-detect": "~0.1.0"
   },
   "devDependencies": {
-    "foreman": "*",
     "karma": "*",
+    "karma-cli": "*",
+    "karma-jasmine": "~0.2.0",
+    "karma-chrome-launcher": "*",
+    "karma-phantomjs-launcher": "*",
+    "karma-firefox-launcher": "*",
+    "karma-coffee-preprocessor": "*",
     "protractor": "*"
   }
 }

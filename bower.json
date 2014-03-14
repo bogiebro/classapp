@@ -1,5 +1,5 @@
 {
-  "name": "wybcx",
+  "name": "quipu",
   "version": "0.0.0",
   "homepage": "http://github.com/bogiebro/classapp",
   "description": "Easy study groups for Yalies",
@@ -15,13 +15,31 @@
   ],
   "dependencies": {
     "angular": "*",
-    "angular-bootstrap": ">= 0.9",
+    "angular-bootstrap": "*",
     "angular-route": "*",
     "angular-easyfb": "*",
     "angular-mocks": "*",
-    "angular-cookies": "*"
+    "angular-cookies": "*",
+    "firepad": "*",
+    "angular-file-dnd": "*",
+    "codemirror": "*",
+    "bootstrap": "*"
   },
-  "resolutions": {
-    "angular": "1.2.12"
+  "overrides": {
+    "bootstrap": {
+      "main": [
+        "./dist/css/bootstrap.css",
+        "./dist/css/bootstrap-theme.css",
+        "./dist/fonts/glyphicons-halflings-regular.eot",
+        "./dist/fonts/glyphicons-halflings-regular.svg",
+        "./dist/fonts/glyphicons-halflings-regular.ttf",
+        "./dist/fonts/glyphicons-halflings-regular.woff"
+      ],
+      "dependencies": []
+    },
+    "angular-file-dnd": {
+      "main": ["./dist/angular-file-dnd.min.js"]
+    }
+
   }
 }

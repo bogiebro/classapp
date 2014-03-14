@@ -3,8 +3,9 @@
 # http://nathanleclaire.com/blog/2013/12/13/how-to-unit-test-controllers-in-angularjs-without-setting-your-hair-on-fire/
 # http://www.sitepoint.com/unit-and-e2e-testing-in-angularjs/
 # https://github.com/angular/protractor/blob/master/docs/getting-started.md
+# use dotenv. That way foreman isn't required
 
-describe "controller", ->
+describe "auth", ->
     beforeEach(module('App'))
     beforeEach(module(($provide)->
       $provide.constant('$cookies', {casInfo: params.cookieData})))
@@ -21,3 +22,11 @@ describe "controller", ->
       $group.props.$apply($group.props.name = 'testgroup')
       expect(scopea.group.name).toBeDefined()
       expect(scopea.group.name).toBe(scopeb.group.name)
+
+    it 'should track the user himself', (done)->
+      inject ($ref, $trackConnected)->
+        $trackConnected($ref.base.child('online'))
+        $ref.base.child('online').on 'value', (snap)->
+          done()
+
+

@@ -3,14 +3,30 @@ html(ng-app="MobileApp", manifest="mobile.appcache")
     head
         title Quipu
 
+        link(rel='stylesheet', href="/css/vendor.css")
+        link(rel='stylesheet', href="/css/main.css")
+    body
+        div(ng-controller="ToolbarCtrl")
+          div(ng-if="group.props.name", class="navbar navbar-default navbar-fixed-top")
+            .container-fluid
+                  span.vcenter
+                    span(class="glyphicon glyphicon-chevron-left").back
+                    span(class="bigger navar-text") {{group.props.name}}
+                  span.btn-group.leftbuttons
+                    button(type="button", ng-click='goEvents()', class="btn navbar-btn btn-sm")
+                      span(class="glyphicon glyphicon-th-list")
+                    button(type="button", ng-clock='goMembers()', class="btn navbar-btn btn-sm") 
+                      span(class="glyphicon glyphicon-user")
+                    button(type="button", ng-click='goChat()', class="btn navbar-btn btn-sm") 
+                      span(class="glyphicon glyphicon-comment")
+                    button(type="button", ng-click='goFiles()', class="btn navbar-btn btn-sm")
+                      span(class="glyphicon glyphicon-folder-open")
+        div(ng-view)
+
+        script(src='http://code.jquery.com/jquery-1.11.0.min.js')
+        script(src='http://code.jquery.com/jquery-migrate-1.2.1.min.js')
         script(src='/js/vendor.js')
         script(src='https://cdn.firebase.com/v0/firebase.js')
         script(src='https://cdn.firebase.com/libs/angularfire/0.6.0/angularfire.min.js')
         script(src='/js/main.js')
-        script(src='/js/app.mobile.templates.js')
-
-        link(rel='stylesheet', href="/css/main.css")
-    body
-        div(ng-controller="ToolbarCtrl")
-            p(ng-if="group.name") {{group.name}} is selected currently
-        div(ng-view)
+        script(src='/js/app.main.templates.js')

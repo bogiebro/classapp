@@ -17,13 +17,17 @@ exports.config =
     files:
         javascripts:
             joinTo:
-                "js/vendor.js": /(^bower_components)|(^vendor)/
-                "js/main.js": /^app/
+                "js/vendor.js": /^bower_components\/(?!(firepad|codemirror))/
+                "js/edit-vendor.js": /^bower_components\/(firepad|codemirror)/
+                "js/main.js": /^app\/(?!editor)/
+                "js/editor.js": /^app\/(editor|shared)/
                 "js/params.js": /^test\/params/
         stylesheets:
             joinTo:
-                "css/vendor.css": /(^bower_components)|(^vendor)/
-                "css/main.css": /^app/
+                "css/vendor.css": /^bower_components\/(?!(firepad|codemirror))/
+                "css/edit-vendor.css": /^bower_components\/(firepad|codemirror)/
+                "css/main.css": /^app\/(?!editor)/
+                "css/editor.css": /^app\/editor/
         templates:
             joinTo:
               '.compile-jade': /^app/
@@ -32,3 +36,7 @@ exports.config =
             pretty: yes
         uglify:
             mangle: false
+    overrides:
+      production:
+        conventions:
+          ignored: /angular-mocks/

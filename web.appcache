@@ -7,16 +7,15 @@ FALLBACK:
 
 
 CACHE:
-./auth/index.html
+./splash/index.html
+./main/index.html
+./editor/index.html
 ./css/main.css
-./css/main.css.map
-./img/finals.jpg
-./img/get_work_done.jpg
-./img/students_studying_outside.jpg
-./js/app.auth.templates.js
+./css/vendor.css
+./js/app.main.templates.js
 ./js/main.js
-./js/main.js.map
+./js/editor.js
+./js/codemirror.js
+./js/firepad.js
 ./js/vendor.js
-./js/vendor.js.map
-./mobile/index.html
-./static/index.html
+./classcodes.json

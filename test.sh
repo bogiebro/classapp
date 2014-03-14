@@ -4,7 +4,7 @@ export NODE_ENV=testing
 export UUID=$(uuidgen)
 echo "####### Building #######
 "
-foreman run ./node_modules/.bin/brunch build
+eval $(cat .env) ./node_modules/.bin/brunch build
 echo "
 ####### Running Unit Tests #######
 "
@@ -14,9 +14,9 @@ then
     echo "
     ####### Starting the server #######
     "
-    foreman start &
+    eval $(cat .env) npm start &
     ./node_modules/.bin/webdriver-manager start &
-    sleep 20
+    sleep 12
     echo "
     ####### Starting end to end tests #######
     "
