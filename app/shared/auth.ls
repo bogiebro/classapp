@@ -24,8 +24,8 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
     refScope.loggedin = false
     return refScope
 
-# returns a function that takes a list of netid
-# and returns an auto-updating map of netids to users
+# returns a function that takes a firebase ref
+# and stores at that ref a map from netids to person objects
 .factory '$trackConnected' ($ref)->
     (connections)!-> 
       conRef = $ref.base.root!child '.info/connected'
@@ -35,6 +35,21 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
           childRef.set {name: $ref.me?.name or $ref.netid}
           childRef.onDisconnect!remove!
 
+# $users.list() will give the users for the current group
+# along with their current rankings
+.factory '$users' ($group, $ref)->
+  result = {}
+  $group.props.$watch 'id' (oldval, val)->
+    result.list = -> result[val]
+    # unwatch $ref.base.child("groups/#{oldval}")
+    $ref.base.child("groups/#{val}/users").on 'child_added' (user)!->
+        netid = user.val!
+        result[val][netid] = {}
+        $ref.base.child("users/#{netid}").on 'value' (snap)!->
+          result[val][netid] <<< snap.val!
+        $ref.base.child("ratings/" + ratingRef([$ref.netid, netid])).on 'value' (snap)!->
+          result[val][netid] <<< snap.val!
+
 # $group.name gives the currently selected group name
 # $group.setGroup takes a group id to set as currently selected
 # call $group.clearGroup when back on the group page
@@ -42,8 +57,12 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
     result = {}
     result.props = $rootScope.$new()
     result.setGroup = (groupid)!->
+        result.props.id = groupid
         $timeout( (!->
             $ref.base.child("group/#{groupid}/name").on 'value' (snapshot)->
                 result.props.$apply(->result.props.name = snapshot.val!)), 0)
     result.clearGroup = !-> result.props.name = ''
     return result
+
+# create the identifier for compatibility between people
+ratingRef = (l)-> l.sort!join('')
