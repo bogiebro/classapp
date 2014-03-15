@@ -54,7 +54,7 @@ app.post '/extendToken', json, (req, res)!->
     access_token: req.body.token,
     client_id: process.env.FBID,
     client_secret: process.env.FBSECRET}, (err, fbres)->
-      firebase.child("/users/#{req.body.netid}").update(longToken: fbres.access_token) if (!err))
+      firebase.child("/users/#{req.body.netid}").update(token: fbres.access_token) if (!err))
   res.send 200
 
 # Get the root

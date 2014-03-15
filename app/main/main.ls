@@ -16,15 +16,18 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
     rescale = (im)->
         data <- Resample(im, 50, 50)
         $ref.me.image = data
+    fillFBData = (token)->
+      $http.post('/extendToken', {token: token, netid: $ref.netid})
+      api <- $FB.api('/me?fields=id,name,picture')
+      $ref.me <<< api
     $scope.fbLogin = ->
-        # only log in when they're not already connected
-        $FB.login(((res)->
-            if (res.authResponse)
-                $ref.me.token = res.authResponse.accessToken
-                $http.post('/extendToken', {token: res.authResponse.accessToken, netid: $ref.netid})
-                api <- $FB.api('/me?fields=id,name,picture')
-                $ref.me <<< api
-        ), {})
+        $FB.getLoginStatus (sres)->
+          if sres.status != 'connected'
+            $FB.login(((res)->
+                if (res.authResponse)
+                    fillFBData(res.authResponse.accessToken)
+            ), {})
+          else fillFBData(sres.authResponse.accessToken)
     $scope.dismiss = !-> $modalInstance.close!
 
 .controller 'AboutCtrl', ($scope, $modalInstance)->
