@@ -35,20 +35,28 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
           childRef.set {name: $ref.me?.name or $ref.netid}
           childRef.onDisconnect!remove!
 
-# $users.list() will give the users for the current group
-# along with their current rankings
-.factory '$users' ($group, $ref)->
+# $users.list will give the users for the current group
+# this is not always the same reference: you'll need the following
+#
+# $users.props.$watch 'list' (val, oldval)-> $scope.users = val
+#
+# TODO: should pull it once, then pull just the updates
+.factory '$users' ($group, $ref, $rootScope, $timeout)->
   result = {}
-  $group.props.$watch 'id' (oldval, val)->
-    result.list = -> result[val]
-    # unwatch $ref.base.child("groups/#{oldval}")
-    $ref.base.child("groups/#{val}/users").on 'child_added' (user)!->
-        netid = user.val!
-        result[val][netid] = {}
-        $ref.base.child("users/#{netid}").on 'value' (snap)!->
-          result[val][netid] <<< snap.val!
-        $ref.base.child("ratings/" + ratingRef([$ref.netid, netid])).on 'value' (snap)!->
-          result[val][netid] <<< snap.val!
+  result.props = $rootScope.$new()
+  $group.props.$watch 'id' (val, oldval)->
+    result.props[val] = {} if !result[val]
+    result.props.list = result.props[val]
+    $timeout( (!->
+      $ref.base.child("group/#{val}/users").once 'value' (users)!->
+          for key, netid of users.val!
+            result.props[val][netid] = {}
+            $ref.base.child("users/#{netid}").once 'value' (snap)!->
+              result.props.$apply(-> result.props[val][netid] <<< snap.val!)
+            $ref.base.child("ratings/" + ratingRef([$ref.netid, netid])).once 'value' (snap)!->
+              result.props.$apply(-> result.props[val][netid] <<< snap.val!))
+      , 0)
+  return result
 
 # $group.name gives the currently selected group name
 # $group.setGroup takes a group id to set as currently selected
