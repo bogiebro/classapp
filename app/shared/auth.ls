@@ -35,24 +35,27 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
           childRef.set {name: $ref.me?.name or $ref.netid}
           childRef.onDisconnect!remove!
 
-# map from groupid to map from netid to person object (with ratings)
-# what about same people in multiple groups? doing more work than you need to
-# cache group members separately. always lookup before checking another
-# group just stored mapping to ids
+# $users.props.users is a map from netid to user info
+# $users.props.groups is a map from group id to a list of netids
+# see members.js for an example of use
 .factory '$users' ($ref, $rootScope, $timeout)->
   result = {}
   result.props = $rootScope.$new()
+  result.props.groups = {}
+  result.props.users = {}
   $ref.base.child("users/#{$ref.netid}/groups").on 'child_added' (gsnap)!->
     val = gsnap.val!
-    result.props[val] = {}
+    result.props.groups[val] = []
     $timeout( (!->
       $ref.base.child("group/#{val}/users").on 'child_added' (user)!->
           netid = user.val!
-          result.props[val][netid] = {}
-          $ref.base.child("users/#{netid}").once 'value' (snap)!->
-            result.props.$apply(-> result.props[val][netid] <<< snap.val!)
-          $ref.base.child("ratings/" + ratingRef([$ref.netid, netid])).once 'value' (snap)!->
-            result.props.$apply(-> result.props[val][netid] <<< snap.val!))
+          result.props.$apply(-> result.props.groups[val].push(netid))
+          if (!result.props.users[netid])
+            result.props.users[netid] = {}
+            $ref.base.child("users/#{netid}").once 'value' (snap)!->
+              result.props.$apply(-> result.props.users[netid] <<< snap.val!)
+            $ref.base.child("ratings/" + ratingRef([$ref.netid, netid])).once 'value' (snap)!->
+              result.props.$apply(-> result.props.users[netid] <<< snap.val!))
       , 0)
   return result
 
