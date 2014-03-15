@@ -24,26 +24,50 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
     refScope.loggedin = false
     return refScope
 
-# returns a function that takes a list of netid
-# and returns an auto-updating map of netids to users
+# returns a function that takes a firebase ref
+# and stores at that ref a map from netids to person objects
 .factory '$trackConnected' ($ref)->
     (connections)!-> 
       conRef = $ref.base.root!child '.info/connected'
       childRef = connections.child($ref.netid)
       conRef.on 'value' (snap)!->
         if (snap.val!)
-          childRef.set {name: $ref.me.name}
+          childRef.set {name: $ref.me?.name or $ref.netid}
           childRef.onDisconnect!remove!
+
+# $users.users is a map from netid to user info
+# $users.groups is a map from group id to a list of netids
+# see members.js for an example of use
+.factory '$users' ($ref)->
+  result = {}
+  result.groups = {}
+  result.users = {}
+  $ref.base.child("users/#{$ref.netid}/groups").on 'child_added' (gsnap)!->
+    val = gsnap.val!
+    result.groups[val] = []
+    $ref.base.child("group/#{val}/users").on 'child_added' (user)!->
+        netid = user.val!
+        result.groups[val].push(netid)
+        if (!result.users[netid])
+          result.users[netid] = {}
+          $ref.base.child("users/#{netid}").once 'value' (snap)!->
+            result.users[netid] <<< snap.val!
+          $ref.base.child("ratings/" + ratingRef([$ref.netid, netid])).once 'value' (snap)!->
+            result.users[netid] <<< snap.val!
+  return result
 
 # $group.name gives the currently selected group name
 # $group.setGroup takes a group id to set as currently selected
 # call $group.clearGroup when back on the group page
-.factory '$group' ($ref, $rootScope, $timeout)->
+.factory '$group' ($ref)->
     result = {}
-    result.props = $rootScope.$new()
+    result.props = {}
     result.setGroup = (groupid)!->
-        $timeout( (!->
-            $ref.base.child("group/#{groupid}/name").on 'value' (snapshot)->
-                result.props.$apply(->result.props.name = snapshot.val!)), 0)
+        result.props.id = groupid
+        $ref.base.child("group/#{groupid}/name").on 'value' (snapshot)->
+            result.props.name = snapshot.val!
     result.clearGroup = !-> result.props.name = ''
     return result
+
+# create the identifier for compatibility between people
+ratingRef = (l)-> l.sort!join('')

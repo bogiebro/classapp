@@ -1,5 +1,6 @@
 require! <[ express http path ./cas ]>
 Firebase = require('firebase')
+graph = require('fbgraph')
 FirebaseTokenGenerator = require("firebase-token-generator")
 MobileDetect = require('mobile-detect')
 firebase = new Firebase('https://torid-fire-3655.firebaseio.com')
@@ -45,6 +46,16 @@ app.use(express.errorHandler!) if development
 app.get '/classcodes.json' (req, res)!->
   firebase.child('classcodes').on 'value' (snapshot)->
     res.send(snapshot.val!)
+
+# Extend a facebook access token
+json = express.json!
+app.post '/extendToken', json, (req, res)!->
+  graph.extendAccessToken({
+    access_token: req.body.token,
+    client_id: process.env.FBID,
+    client_secret: process.env.FBSECRET}, (err, fbres)->
+      firebase.child("/users/#{req.body.netid}").update(token: fbres.access_token) if (!err))
+  res.send 200
 
 # Get the root
 app.get '/' (req, res)!->

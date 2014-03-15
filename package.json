@@ -17,15 +17,22 @@
     "stylus-brunch": "*",
     "jade-angularjs-brunch": "*",
     "brunch": "1.x",
-    "bower": "1.2.7",
+    "bower": "*",
     "LiveScript": "*",
     "firebase": "*",
+    "fbgraph": "*",
     "firebase-token-generator": "~0.1.4",
     "process-env-brunch": "*",
     "mobile-detect": "~0.1.0"
   },
   "devDependencies": {
     "karma": "*",
+    "karma-cli": "*",
+    "karma-jasmine": "~0.2.0",
+    "karma-chrome-launcher": "*",
+    "karma-phantomjs-launcher": "*",
+    "karma-firefox-launcher": "*",
+    "karma-coffee-preprocessor": "*",
     "protractor": "*"
   }
 }

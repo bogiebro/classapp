@@ -3,25 +3,31 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
     'app.auth', 'app.bigevents', 'app.help', 'app.chat', 'app.members', 'app.events', 'app.files'])
 
 .config ($routeProvider, $FBProvider)->
-    $FBProvider.setInitParams(appId: $PROCESS_ENV_FACEBOOK)
+    $FBProvider.setInitParams(appId: $PROCESS_ENV_FBID)
     $routeProvider
         .when('/', {controller:'MainCtrl', templateUrl:'app/main/main.jade'})
         .when('/help', {controller:'HelpCtrl', templateUrl:'app/main/help.jade'})
         .when('/bigevents', {controller:'BigEventsCtrl', templateUrl:'app/main/bigevents.jade'})
 
-.controller 'InfoCtrl', ($scope, $modalInstance, $FB, $ref)->
+.controller 'InfoCtrl', ($scope, $modalInstance, $FB, $ref, $http)->
     $scope.me = $ref.me
     $scope.image = {}
     $scope.$watch('image.unscaled', (newval, oldval)!-> rescale(newval) if newval)
     rescale = (im)->
         data <- Resample(im, 50, 50)
         $ref.me.image = data
+    fillFBData = (token)->
+      $http.post('/extendToken', {token: token, netid: $ref.netid})
+      api <- $FB.api('/me?fields=id,name,picture')
+      $ref.me <<< api
     $scope.fbLogin = ->
-        $FB.login(((res)->
-            if (res.authResponse)
-                api <- $FB.api('/me')
-                $ref.me <<< api
-        ), {})
+        $FB.getLoginStatus (sres)->
+          if sres.status != 'connected'
+            $FB.login(((res)->
+                if (res.authResponse)
+                    fillFBData(res.authResponse.accessToken)
+            ), {})
+          else fillFBData(sres.authResponse.accessToken)
     $scope.dismiss = !-> $modalInstance.close!
 
 .controller 'AboutCtrl', ($scope, $modalInstance)->
