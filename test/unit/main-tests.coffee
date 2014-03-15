@@ -19,7 +19,8 @@ describe "auth", ->
       scopeb = $rootScope.$new()
       scopea.group = $group.props
       scopeb.group = $group.props
-      $group.props.$apply($group.props.name = 'testgroup')
+      $group.props.name = 'testgroup'
+      $rootScope.$digest()
       expect(scopea.group.name).toBeDefined()
       expect(scopea.group.name).toBe(scopeb.group.name)
 

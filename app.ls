@@ -3,7 +3,7 @@ Firebase = require('firebase')
 graph = require('fbgraph')
 FirebaseTokenGenerator = require("firebase-token-generator")
 MobileDetect = require('mobile-detect')
-firebase = new Firebase('https://torid-fire-3655.firebaseio.com')
+firebase = new Firebase(process.env.BASE)
 
 # Express config
 express.static.mime.define({'text/cache-manifest': ['appcache']})

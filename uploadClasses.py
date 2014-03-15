@@ -2,6 +2,7 @@
 
 import sys
 import re
+import os
 import httplib, urllib
 from firebase import firebase
 
@@ -15,7 +16,7 @@ f = open(classesFile, 'r')
 # establixh firebase connection
 print "Autheticating...\n"
 fb = firebase.FirebaseApplication('https://torid-fire-3655.firebaseio.com/', authentication=None)
-authentication = firebase.FirebaseAuthentication('xhOZrGZjXih7wn9VWUcFILfAAtiyw0MFupbXv8wL', 'iyob.gm@gmail.com', extra={})
+authentication = firebase.FirebaseAuthentication(os.environ['GENSECRET'], 'iyob.gm@gmail.com', extra={})
 fb.authentication = authentication
 user = authentication.get_user()
 

@@ -4,7 +4,7 @@ export NODE_ENV=testing
 export UUID=$(uuidgen)
 echo "####### Building #######
 "
-eval $(cat .env) ./node_modules/.bin/brunch build
+eval $(cat publicvars .env) ./node_modules/.bin/brunch build
 echo "
 ####### Running Unit Tests #######
 "
@@ -14,7 +14,7 @@ then
     echo "
     ####### Starting the server #######
     "
-    eval $(cat .env) npm start &
+    eval $(cat publicvars .env) npm start &
     ./node_modules/.bin/webdriver-manager start &
     sleep 12
     echo "

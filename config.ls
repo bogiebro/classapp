@@ -1,11 +1,11 @@
 if process.env.NODE_ENV == 'testing'
-    process.env.FIREBASE = "https://torid-fire-3655.firebaseio.com/tests/#{process.env.UUID}"
+    process.env.FIREBASE = "#{process.env.BASE}tests/#{process.env.UUID}"
     FirebaseTokenGenerator = require("firebase-token-generator")
     tokenGenerator = new FirebaseTokenGenerator(process.env.GENSECRET)
     process.env.COOKIE = JSON.stringify do
          token: tokenGenerator.createToken(netid: 'tester')
          netid: 'tester'
-else process.env.FIREBASE = "https://torid-fire-3655.firebaseio.com/"
+else process.env.FIREBASE = process.env.BASE
 
 exports.config =
     paths:

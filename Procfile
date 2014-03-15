@@ -1,1 +1,1 @@
-web: npm start 
+web: eval $(cat publicvars) npm start 

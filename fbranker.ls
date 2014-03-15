@@ -1,6 +1,6 @@
 graph = require('fbgraph')
 Firebase = require('firebase')
-firebase = new Firebase('https://torid-fire-3655.firebaseio.com')
+firebase = new Firebase(process.env.BASE)
 cronJob = require('cron').CronJob
 
 # create identifier for compatibility.
