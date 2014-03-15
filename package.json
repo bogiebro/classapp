@@ -20,6 +20,7 @@
     "bower": "*",
     "LiveScript": "*",
     "firebase": "*",
+    "fbgraph": "*",
     "firebase-token-generator": "~0.1.4",
     "process-env-brunch": "*",
     "mobile-detect": "~0.1.0"

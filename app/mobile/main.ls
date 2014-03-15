@@ -3,7 +3,7 @@ window.MobileApp = angular.module("MobileApp", ['ui.bootstrap', 'ui.bootstrap.tp
     'app.auth', 'app.bigevents', 'app.help', 'app.chat', 'app.members', 'app.events', 'app.files'])
 
 .config ($routeProvider, $FBProvider)->
-    $FBProvider.setInitParams(appId: $PROCESS_ENV_FACEBOOK)
+    $FBProvider.setInitParams(appId: $PROCESS_ENV_FBID)
     $routeProvider
         .when('/', {controller:'GroupCtrl', templateUrl:'app/main/group.jade'})
         .when('/help', {controller:'HelpCtrl', templateUrl:'app/main/help.jade'})
