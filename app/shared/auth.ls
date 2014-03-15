@@ -35,26 +35,24 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
           childRef.set {name: $ref.me?.name or $ref.netid}
           childRef.onDisconnect!remove!
 
-# $users.list will give the users for the current group
-# this is not always the same reference: you'll need the following
-#
-# $users.props.$watch 'list' (val, oldval)-> $scope.users = val
-#
-# TODO: should pull it once, then pull just the updates
-.factory '$users' ($group, $ref, $rootScope, $timeout)->
+# map from groupid to map from netid to person object (with ratings)
+# what about same people in multiple groups? doing more work than you need to
+# cache group members separately. always lookup before checking another
+# group just stored mapping to ids
+.factory '$users' ($ref, $rootScope, $timeout)->
   result = {}
   result.props = $rootScope.$new()
-  $group.props.$watch 'id' (val, oldval)->
-    result.props[val] = {} if !result[val]
-    result.props.list = result.props[val]
+  $ref.base.child("users/#{$ref.netid}/groups").on 'child_added' (gsnap)!->
+    val = gsnap.val!
+    result.props[val] = {}
     $timeout( (!->
-      $ref.base.child("group/#{val}/users").once 'value' (users)!->
-          for key, netid of users.val!
-            result.props[val][netid] = {}
-            $ref.base.child("users/#{netid}").once 'value' (snap)!->
-              result.props.$apply(-> result.props[val][netid] <<< snap.val!)
-            $ref.base.child("ratings/" + ratingRef([$ref.netid, netid])).once 'value' (snap)!->
-              result.props.$apply(-> result.props[val][netid] <<< snap.val!))
+      $ref.base.child("group/#{val}/users").on 'child_added' (user)!->
+          netid = user.val!
+          result.props[val][netid] = {}
+          $ref.base.child("users/#{netid}").once 'value' (snap)!->
+            result.props.$apply(-> result.props[val][netid] <<< snap.val!)
+          $ref.base.child("ratings/" + ratingRef([$ref.netid, netid])).once 'value' (snap)!->
+            result.props.$apply(-> result.props[val][netid] <<< snap.val!))
       , 0)
   return result
 

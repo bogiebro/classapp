@@ -1,23 +1,2 @@
-body
-	p Current members of {{group.name}}:
-		li(ng-repeat="member in membersList")
-			{{member.name}}
-
-	p
-		form(ng-submit="inviteMember()")
-			input(type='text', ng-model='form.memberNameInput', palceholder='person')
-			input(class="btn-primary",  type="submit", value="Invite new member")
-
-
-	p
-		form(ng-submit="inviteGroupMembers()")
-			input(type='text', ng-model='form.groupInput', palceholder='group')
-			input(class="btn-primary",  type="submit", value="Invite all from group")
-
-	p todo:
-		ul
-			li work with backend
-			li display pictures
-			li display with grid not list
-			li view "all in class"
-			li drag and drop to invite
+ul(ng-repeat="usr in users[group.id]")
+  li {{usr.name}}
