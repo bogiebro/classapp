@@ -35,28 +35,25 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
           childRef.set {name: $ref.me?.name or $ref.netid}
           childRef.onDisconnect!remove!
 
-# $users.props.users is a map from netid to user info
-# $users.props.groups is a map from group id to a list of netids
+# $users.users is a map from netid to user info
+# $users.groups is a map from group id to a list of netids
 # see members.js for an example of use
-.factory '$users' ($ref, $rootScope, $timeout)->
+.factory '$users' ($ref)->
   result = {}
-  result.props = $rootScope.$new()
-  result.props.groups = {}
-  result.props.users = {}
+  result.groups = {}
+  result.users = {}
   $ref.base.child("users/#{$ref.netid}/groups").on 'child_added' (gsnap)!->
     val = gsnap.val!
-    result.props.groups[val] = []
-    $timeout( (!->
-      $ref.base.child("group/#{val}/users").on 'child_added' (user)!->
-          netid = user.val!
-          result.props.$apply(-> result.props.groups[val].push(netid))
-          if (!result.props.users[netid])
-            result.props.users[netid] = {}
-            $ref.base.child("users/#{netid}").once 'value' (snap)!->
-              result.props.$apply(-> result.props.users[netid] <<< snap.val!)
-            $ref.base.child("ratings/" + ratingRef([$ref.netid, netid])).once 'value' (snap)!->
-              result.props.$apply(-> result.props.users[netid] <<< snap.val!))
-      , 0)
+    result.groups[val] = []
+    $ref.base.child("group/#{val}/users").on 'child_added' (user)!->
+        netid = user.val!
+        result.groups[val].push(netid)
+        if (!result.users[netid])
+          result.users[netid] = {}
+          $ref.base.child("users/#{netid}").once 'value' (snap)!->
+            result.users[netid] <<< snap.val!
+          $ref.base.child("ratings/" + ratingRef([$ref.netid, netid])).once 'value' (snap)!->
+            result.users[netid] <<< snap.val!
   return result
 
 # $group.name gives the currently selected group name
