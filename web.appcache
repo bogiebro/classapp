@@ -16,6 +16,5 @@ CACHE:
 ./js/main.js
 ./js/editor.js
 ./js/codemirror.js
-./js/firepad.js
 ./js/vendor.js
 ./classnames.json
