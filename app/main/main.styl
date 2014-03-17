@@ -9,12 +9,14 @@
 .leftbar
     float left
     width 15%
-    background-color #f8f8f8
+    // background-color #f8f8f8
     height 100%
     position relative
-    text-align center
-    overflow hidden
-    -webkit-transition-duration: 0.5s
+    padding-left 5px
+    // margin-left 5px
+    // text-align center
+    // overflow hidden
+    // -webkit-transition-duration: 0.5s
 
 .rightcontent
     position relative
@@ -32,289 +34,302 @@
     position relative
     width 80%
     padding-top 15px
+    padding-left 10px
 
 .down
     padding-top 10px
 
-.dropbox
-    border 1px dashed
-    padding 7px
-    text-align center
-    color gray
+.searcher
+  width 95%
 
-.smaller
-    font-size small
+.classesBody
+  margin-top 10px
 
+.classItem
+  margin-left 10px
 
-.toolBarContainer div
-  width 100%
-  padding 0px
+.subgroup
+  margin-left 30px
 
-
-.toolBarContainer button
-  background-color #f8f8f8
-  width 39px !important
-  margin 0px
-
-.leftbar .classesTitle
-  width 85%
-  margin-left auto
-  margin-right auto
-  margin-top 15px
-  margin-bottom 0px
-  height 42px
-  color #000000
-
-.leftbar .collapseBtn
-  cursor pointer
-  margin-right 10px
-  float right
-
-.leftbar .list-group
-  -webkit-border-radius 0px !important
-  -moz-border-radius 0px !important
-  border-radius 0px !important
-  margin 0
-  margin-bottom 30px
-  height 85%
-  overflow auto !important
-
-.leftbar .list-group-item
-  height 100px
-  border-top-right-radius 0px
-  border-top-left-radius 0px
-  -webkit-border-radius 0px !important
-  -moz-border-radius 0px !important
-  border-radius 0px !important
-  background-color #f8f8f8
-  position relative
-  -webkit-transition-duration: 0.5s;
-  font-size 11px
-
-.leftbar .list-group-item:hover
-  background-color #ffffff
-  cursor pointer
-
-.leftbar .list-group-item .toolBarContainer
-  position absolute
-  bottom 5px
-  right 0px
-  width 100%
-  padding 0px
-
-.leftbar #toolIcon
-  color gray
-  size 9px
-  margin-right 15px
-
-.leftbar #toolIcon:hover
-  color black
-
-.leftbar .tallClass
-  height 500px
-  background-color white
-
-.hiddenElement
-  visibility hidden
-
-.leftbar form
-  padding 0px
-  margin-bottom 0px
-  margin-top 0px
-  width 100%
-  
-
-.leftbar input
-  width 100%
-  margin-bottom 0px
-
-.leftbar .suggestions
-  padding-top 15px
-  width 100%
-  overflow-y scroll
-  max-height 250px
-
-
-.suggestedClass, .suggestedMember
-  padding 2px
-  cursor pointer
-  font-size 10px
-  border 1px solid
-  border-radius 4px
-  -webkit-transition-duration: 0.2s;
-
-.suggestedClass:hover, .suggestedMember:hover
-  background-color #8181F7
-
-.suggestions p
-  margin 0px
-  padding 0px
-
-.oneClass
-  padding 0px
-  overflow scroll
-
-.blockDiv
-  display block
-
-.noneDiv
-  display none
-
-.greenText
-  color #0B610B
-
-.redText
-  color #8A0808
-
-.leftbar hr
-  margin 0px
-
-.leftbar .addClassDiv
-  width 100%
-  max-height 50%
-  background-color white
-  margin 0
-  margin 0
-  padding 0
-  position absolute
-  bottom 0
-  right 0
-  border-top 1px solid
-  border-radius 4px
-
-.closeIcon
-  cursor pointer
-  color gray
-  position absolute
-  top 0
-  right 0
-
-.closeIcon:hover
-  color black
-
-#groupModal
-  height 350px
-  padding 2px
-
-.groupModalDiv1
-  width 69%
-  margin 2px
-  padding 2px
-  height 330px
-  float left
-  display inline-block
-
-.groupModalDiv2
-  width 29%
-  margin 2px
-  padding 2px
-  height 330px
-  float left
-  display inline-block
-
-.groupModalMiddleDiv
-  width 100%
-  height 88%
-  margin-bottom 5px !important
-  
-.groupModalBottomDiv1
-  width 100%
-
-.groupModalBottomDiv1 .shortInput
-  width 30%
-  display inline
-
-.groupModalBottomDiv1 .longInput
-  width 50%
-  display inline
-
-.groupModalDiv2 .groupModalBottomDiv2
-  width 100%
-  margin-bottom 0
-
-.groupModalDiv2 .groupModalBottomDiv2 form
-  width 100%
-  margin 0px
-  padding 0px
-
-.loadingImg
-  height 60px
-  width 60px
-  margin-top 100px
-
-.allGroups
-  margin 0px
-  padding-top 5px
-  margin-top 53px
-  border-top 1px dashed
-  border-color #D8D8D8
-
-.group
-  padding 2px
-  cursor pointer
-  font-size 10px
-  -webkit-transition-duration 0.3s
-  background-color #A4A4A4
-  margin-bottom 2px
-  margin-right 2px
-  width 47%
-  float left
-
-.group:hover
-  background-color #DF0101
-
-.group a, .group span
-  color #fff !important
-
-.allGroups .activeGroup
-  background-color #DF0101
-  width 100%
-
-#searchModal .searchBar
-  width 100%
-  height 70px
-  display block
-  margin 0
-  margin-top 5px
-  margin-bottom 5px
-
-#searchModal .resultBar
-  width 100%
-  height 75%
-  margin 0
-
-#searchModal input
-  width 70%
-  display inline
-  float left
-  margin-right 5px
-
-#searchModal select
-  display inline
-  float left
-  margin-right 10px
-
-#searchModal .groupBar
-  margin-bottom 2px
-
-#searchModal .groupMember
-  border 1px
-  margin 2px
-
-.invalidInput
-  background-color red
-
-.back
-  margin-right 5px
-  
-.leftbuttons
-  float right
-
-.bigger
-  font-size large
-
-.vcenter
-  display inline-block
-  padding-top 10px
-
-
+// .dropbox
+//     border 1px dashed
+//     padding 7px
+//     text-align center
+//     color gray
+//
+// .smaller
+//     font-size small
+//
+//
+// .toolBarContainer div
+//   width 100%
+//   padding 0px
+//
+//
+// .toolBarContainer button
+//   background-color #f8f8f8
+//   width 39px !important
+//   margin 0px
+//
+// .leftbar .classesTitle
+//   width 85%
+//   margin-left auto
+//   margin-right auto
+//   margin-top 15px
+//   margin-bottom 0px
+//   height 42px
+//   color #000000
+//
+// .leftbar .collapseBtn
+//   cursor pointer
+//   margin-right 10px
+//   float right
+//
+// .leftbar .list-group
+//   -webkit-border-radius 0px !important
+//   -moz-border-radius 0px !important
+//   border-radius 0px !important
+//   margin 0
+//   margin-bottom 30px
+//   height 85%
+//   overflow auto !important
+//
+// .leftbar .list-group-item
+//   height 100px
+//   border-top-right-radius 0px
+//   border-top-left-radius 0px
+//   -webkit-border-radius 0px !important
+//   -moz-border-radius 0px !important
+//   border-radius 0px !important
+//   background-color #f8f8f8
+//   position relative
+//   -webkit-transition-duration: 0.5s;
+//   font-size 11px
+//
+// .leftbar .list-group-item:hover
+//   background-color #ffffff
+//   cursor pointer
+//
+// .leftbar .list-group-item .toolBarContainer
+//   position absolute
+//   bottom 5px
+//   right 0px
+//   width 100%
+//   padding 0px
+//
+// .leftbar #toolIcon
+//   color gray
+//   size 9px
+//   margin-right 15px
+//
+// .leftbar #toolIcon:hover
+//   color black
+//
+// .leftbar .tallClass
+//   height 500px
+//   background-color white
+//
+// .hiddenElement
+//   visibility hidden
+//
+// .leftbar form
+//   padding 0px
+//   margin-bottom 0px
+//   margin-top 0px
+//   width 100%
+//   
+//
+// .leftbar input
+//   width 100%
+//   margin-bottom 0px
+//
+// .leftbar .suggestions
+//   padding-top 15px
+//   width 100%
+//   overflow-y scroll
+//   max-height 250px
+//
+//
+// .suggestedClass, .suggestedMember
+//   padding 2px
+//   cursor pointer
+//   font-size 10px
+//   border 1px solid
+//   border-radius 4px
+//   -webkit-transition-duration: 0.2s;
+//
+// .suggestedClass:hover, .suggestedMember:hover
+//   background-color #8181F7
+//
+// .suggestions p
+//   margin 0px
+//   padding 0px
+//
+// .oneClass
+//   padding 0px
+//   overflow scroll
+//
+// .blockDiv
+//   display block
+//
+// .noneDiv
+//   display none
+//
+// .greenText
+//   color #0B610B
+//
+// .redText
+//   color #8A0808
+//
+// .leftbar hr
+//   margin 0px
+//
+// .leftbar .addClassDiv
+//   width 100%
+//   max-height 50%
+//   background-color white
+//   margin 0
+//   margin 0
+//   padding 0
+//   position absolute
+//   bottom 0
+//   right 0
+//   border-top 1px solid
+//   border-radius 4px
+//
+// .closeIcon
+//   cursor pointer
+//   color gray
+//   position absolute
+//   top 0
+//   right 0
+//
+// .closeIcon:hover
+//   color black
+//
+// #groupModal
+//   height 350px
+//   padding 2px
+//
+// .groupModalDiv1
+//   width 69%
+//   margin 2px
+//   padding 2px
+//   height 330px
+//   float left
+//   display inline-block
+//
+// .groupModalDiv2
+//   width 29%
+//   margin 2px
+//   padding 2px
+//   height 330px
+//   float left
+//   display inline-block
+//
+// .groupModalMiddleDiv
+//   width 100%
+//   height 88%
+//   margin-bottom 5px !important
+//   
+// .groupModalBottomDiv1
+//   width 100%
+//
+// .groupModalBottomDiv1 .shortInput
+//   width 30%
+//   display inline
+//
+// .groupModalBottomDiv1 .longInput
+//   width 50%
+//   display inline
+//
+// .groupModalDiv2 .groupModalBottomDiv2
+//   width 100%
+//   margin-bottom 0
+//
+// .groupModalDiv2 .groupModalBottomDiv2 form
+//   width 100%
+//   margin 0px
+//   padding 0px
+//
+// .loadingImg
+//   height 60px
+//   width 60px
+//   margin-top 100px
+//
+// .allGroups
+//   margin 0px
+//   padding-top 5px
+//   margin-top 53px
+//   border-top 1px dashed
+//   border-color #D8D8D8
+//
+// .group
+//   padding 2px
+//   cursor pointer
+//   font-size 10px
+//   -webkit-transition-duration 0.3s
+//   background-color #A4A4A4
+//   margin-bottom 2px
+//   margin-right 2px
+//   width 47%
+//   float left
+//
+// .group:hover
+//   background-color #DF0101
+//
+// .group a, .group span
+//   color #fff !important
+//
+// .allGroups .activeGroup
+//   background-color #DF0101
+//   width 100%
+//
+// #searchModal .searchBar
+//   width 100%
+//   height 70px
+//   display block
+//   margin 0
+//   margin-top 5px
+//   margin-bottom 5px
+//
+// #searchModal .resultBar
+//   width 100%
+//   height 75%
+//   margin 0
+//
+// #searchModal input
+//   width 70%
+//   display inline
+//   float left
+//   margin-right 5px
+//
+// #searchModal select
+//   display inline
+//   float left
+//   margin-right 10px
+//
+// #searchModal .groupBar
+//   margin-bottom 2px
+//
+// #searchModal .groupMember
+//   border 1px
+//   margin 2px
+//
+// .invalidInput
+//   background-color red
+//
+// .back
+//   margin-right 5px
+//   
+// .leftbuttons
+//   float right
+//
+// .bigger
+//   font-size large
+//
+// .vcenter
+//   display inline-block
+//   padding-top 10px
+//
+//

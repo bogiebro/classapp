@@ -43,9 +43,16 @@ app.use('/main', mobilizer)
 app.use(express.errorHandler!) if development
 
 # Get JSON
-app.get '/classcodes.json' (req, res)!->
-  firebase.child('classcodes').on 'value' (snapshot)->
-    res.send(snapshot.val!)
+classnames = []
+app.get '/classnames.json' (req, res)!->
+  if classnames.length != 0
+    res.send(classnames)
+  else
+    firebase.child('classnames').once 'value' (snapshot)->
+      data = snapshot.val!
+      for ,val of data
+        classnames.push(val) if val.code
+      res.send(classnames)
 
 # Extend a facebook access token
 json = express.json!

@@ -10,7 +10,6 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
     do
         error <- firebase.auth(cookieData.token)
         if error
-            console.log('got an error')
             if error.code is "EXPIRED_TOKEN"
                 $window.location.assign("/refresh?url=#{encodeURIComponent $window.location}")
             else console.log('Cookie data corrupted', error)
@@ -38,34 +37,36 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
 # $users.users is a map from netid to user info
 # $users.groups is a map from group id to a list of netids
 # see members.js for an example of use
-.factory '$users' ($ref)->
+.factory '$users' ($ref, $rootScope, $timeout)->
   result = {}
-  result.groups = {}
-  result.users = {}
+  result.groups = $rootScope.$new!
+  result.users = $rootScope.$new!
   $ref.base.child("users/#{$ref.netid}/groups").on 'child_added' (gsnap)!->
     val = gsnap.val!
     result.groups[val] = []
-    $ref.base.child("group/#{val}/users").on 'child_added' (user)!->
+    $timeout((->$ref.base.child("group/#{val}/users").on 'child_added' (user)!->
         netid = user.val!
-        result.groups[val].push(netid)
+        result.groups.$apply(result.groups[val].push(netid))
         if (!result.users[netid])
           result.users[netid] = {}
           $ref.base.child("users/#{netid}").once 'value' (snap)!->
-            result.users[netid] <<< snap.val!
+            result.users.$apply(result.users[netid] <<< snap.val!)
           $ref.base.child("ratings/" + ratingRef([$ref.netid, netid])).once 'value' (snap)!->
-            result.users[netid] <<< snap.val!
+            result.users.$apply(result.users[netid] <<< snap.val!))
+      , 0)
   return result
 
 # $group.name gives the currently selected group name
 # $group.setGroup takes a group id to set as currently selected
 # call $group.clearGroup when back on the group page
-.factory '$group' ($ref)->
+.factory '$group' ($ref, $timeout, $rootScope)->
     result = {}
-    result.props = {}
+    result.props = $rootScope.$new!
     result.setGroup = (groupid)!->
         result.props.id = groupid
-        $ref.base.child("group/#{groupid}/name").on 'value' (snapshot)->
-            result.props.name = snapshot.val!
+        $timeout((-> $ref.base.child("group/#{groupid}/name").on 'value' (snapshot)->
+            result.props.$apply(-> result.props.name = snapshot.val!))
+          , 0)
     result.clearGroup = !-> result.props.name = ''
     return result
 

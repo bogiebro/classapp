@@ -4,5 +4,4 @@ angular.module("app.members", ['app.auth'])
   $scope.users = $users.groups;
   $scope.info = $users.users;
   $scope.group = $group.props;
-  $group.setGroup('testgroup');
 })
