@@ -15,6 +15,5 @@ CACHE:
 ./js/app.main.templates.js
 ./js/main.js
 ./js/editor.js
-./js/codemirror.js
 ./js/vendor.js
 ./classnames.json
