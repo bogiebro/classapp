@@ -26,10 +26,10 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
 
   // Get class data
   $http.get('/classnames.json').then(function(result) {
-      $scope.classLoadWaiting = false;
-      $scope.classes = result.data;
-      $scope.classLoadWaiting
-    });
+    $scope.classLoadWaiting = false;
+    $scope.classes = result.data;
+    $scope.classLoadWaiting
+  });
 
   // Add the user to a class
   $scope.chooseClass = function(model) {

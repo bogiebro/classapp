@@ -5,9 +5,12 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
 .config ($routeProvider, $FBProvider)->
     $FBProvider.setInitParams(appId: $PROCESS_ENV_FBID)
     $routeProvider
-        .when('/', {controller:'MainCtrl', templateUrl:'app/main/main.jade'})
+        .when('/chat', {controller:'ChatCtrl', templateUrl:'app/main/chat.jade'})
+        .when('/members', {controller:'MembersCtrl', templateUrl:'app/main/members.jade'})
+        .when('/files', {controller:'FilesCtrl', templateUrl:'app/main/files.jade'})
         .when('/help', {controller:'HelpCtrl', templateUrl:'app/main/help.jade'})
         .when('/bigevents', {controller:'BigEventsCtrl', templateUrl:'app/main/bigevents.jade'})
+        .otherwise({redirectTo: '/members'})
 
 .controller 'InfoCtrl', ($scope, $modalInstance, $FB, $ref, $http)->
     $scope.me = $ref.me
@@ -45,4 +48,11 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
             controller: 'AboutCtrl')
 
 .controller 'MainCtrl', ($scope, $location)!->
-    $scope.$on 'newuser', !-> $location.path('/help')
+  $scope.loc = {path: !-> console.log('hi')}
+  $scope.big = false
+  $scope.$on 'newuser', !-> $location.path('/help')
+  # $scope.$on '$locationChangeSuccess', !->
+    # if $location.path! is '/bigevents' then $scope.big = true else $scope.big = false
+
+.controller 'NavCtrl', ($scope, $location)!->
+  $scope.go = (x)-> $location.path(x)
