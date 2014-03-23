@@ -7,7 +7,7 @@ html(ng-app="App", manifest="/web.appcache")
         link(rel='stylesheet', href="/css/main.css")
 
     body
-      nav.navbar.navbar-default.navbar-fixed-top(role="navigation", ng-controller="NavCtrl")
+      nav.navbar.navbar-default.navbar-fixed-top.navbar-inverse(role="navigation", ng-controller="NavCtrl")
         .container-fluid.hidden-xs
           .navbar-header
             a.navbar-brand(href ng-click="go('/bigevents')") Quipu
