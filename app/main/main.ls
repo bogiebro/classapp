@@ -51,8 +51,8 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
   $scope.loc = {path: !-> console.log('hi')}
   $scope.big = false
   $scope.$on 'newuser', !-> $location.path('/help')
-  # $scope.$on '$locationChangeSuccess', !->
-    # if $location.path! is '/bigevents' then $scope.big = true else $scope.big = false
+  $scope.$on '$locationChangeSuccess', !->
+    if $location.path! is '/bigevents' then $scope.big = true else $scope.big = false
 
 .controller 'NavCtrl', ($scope, $location)!->
   $scope.go = (x)-> $location.path(x)

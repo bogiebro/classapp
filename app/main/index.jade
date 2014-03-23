@@ -7,15 +7,15 @@ html(ng-app="App", manifest="/web.appcache")
         link(rel='stylesheet', href="/css/main.css")
 
     body
-      nav.navbar.navbar-default.navbar-fixed-top(role="navigation")
+      nav.navbar.navbar-default.navbar-fixed-top(role="navigation", ng-controller="NavCtrl")
         .container
           .navbar-header
-            a.navbar-brand(href="#") Quipu
+            a.navbar-brand(href ng-click="go('/bigevents')") Quipu
           .collapse.navbar-collapse
-            ul.nav.navbar-nav.navbar-right(ng-controller="NavCtrl")
-              li <a ng-click="go('/members')">Members</a>
-              li <a ng-click="go('/chat')">Chat</a>
-              li <a ng-click="go('/files')">Files</a>
+            ul.nav.navbar-nav.navbar-right
+              li <a href ng-click="go('/members')">Members</a>
+              li <a href ng-click="go('/chat')">Chat</a>
+              li <a href ng-click="go('/files')">Files</a>
       .container-fluid
         .row(ng-controller="MainCtrl")
           .col-sm-2(ng-controller="GroupCtrl")

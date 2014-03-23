@@ -10,6 +10,12 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
 
   // Bind to the classes
   $scope.myclasses = $firebase($ref.base.child('users/' + $ref.netid + '/classes'));
+  $scope.myclasses.$on("loaded", function() {
+    $scope.myclasses.$getIndex().some(function(key, i) {
+      $group.setGroup($scope.myclasses[key].maingroup);
+      return true;
+    });
+  });
 
   // Link to big events view
   $scope.goBig = function() {
@@ -28,7 +34,6 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
   $http.get('/classnames.json').then(function(result) {
     $scope.classLoadWaiting = false;
     $scope.classes = result.data;
-    $scope.classLoadWaiting
   });
 
   // Add the user to a class
