@@ -8,21 +8,35 @@ html(ng-app="App", manifest="/web.appcache")
 
     body
       nav.navbar.navbar-default.navbar-fixed-top(role="navigation", ng-controller="NavCtrl")
-        .container
+        .container-fluid.hidden-xs
           .navbar-header
             a.navbar-brand(href ng-click="go('/bigevents')") Quipu
-          .collapse.navbar-collapse
-            ul.nav.navbar-nav.navbar-right
-              li <a href ng-click="go('/members')">Members</a>
-              li <a href ng-click="go('/chat')">Chat</a>
-              li <a href ng-click="go('/files')">Files</a>
+          ul.nav.navbar-nav.navbar-right.hidden-xs
+            li <a href ng-click="go('/members')">Members</a>
+            li <a href ng-click="go('/chat')">Chat</a>
+            li <a href ng-click="go('/files')">Files</a>
+        .container-fluid.visible-xs
+          span.vcenter(ng-show="group.name")
+            span.pointer(ng-click='clearGroup()', class="glyphicon glyphicon-chevron-left").back
+            span.bigger.navbar-text Tester
+          span.vcenter(ng-show="!group.name")
+            a.bigger.navbar-text(href ng-click="go('/bigevents')") Quipu
+          span.btn-group.leftbuttons
+            button(type="button", ng-click='goEvents()', class="btn navbar-btn btn-sm")
+              span(class="glyphicon glyphicon-th-list")
+            button(type="button", ng-clock='goMembers()', class="btn navbar-btn btn-sm") 
+              span(class="glyphicon glyphicon-user")
+            button(type="button", ng-click='goChat()', class="btn navbar-btn btn-sm") 
+              span(class="glyphicon glyphicon-comment")
+            button(type="button", ng-click='goFiles()', class="btn navbar-btn btn-sm")
+              span(class="glyphicon glyphicon-folder-open")
       .container-fluid
         .row(ng-controller="MainCtrl")
-          .col-sm-2(ng-controller="GroupCtrl")
+          .col-sm-2(ng-controller="GroupCtrl", ng-class="{'hidden-xs': group.id}")
             ng-include(src="'app/main/group.jade'")
-          div(ng-class="{'col-sm-8': !big, 'col-sm-10': big}")
+          div(ng-class="{'col-sm-8': !big, 'col-sm-10': big, 'hidden-xs': !group.id}")
             div(ng-view)
-          div.events(ng-class="{'col-sm-2': !big, hidden: big}", ng-controller="EventsCtrl")
+          div.events.hidden-xs(ng-class="{'col-sm-2': !big, hidden: big}", ng-controller="EventsCtrl")
             ng-include(src="'app/main/events.jade'")
       .options(ng-controller="PrefCtrl") 
           a.spaced(ng-click="about()") About

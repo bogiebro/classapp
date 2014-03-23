@@ -67,7 +67,9 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
         $timeout((-> $ref.base.child("group/#{groupid}/name").on 'value' (snapshot)->
             result.props.$apply(-> result.props.name = snapshot.val!))
           , 0)
-    result.clearGroup = !-> result.props.name = ''
+    result.clearGroup = !->
+      result.props.name = ''
+      result.props.id = ''
     return result
 
 # create the identifier for compatibility between people

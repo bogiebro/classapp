@@ -2,10 +2,12 @@ input.form-control.input-sm(type="text", ng-disabled="classLoadWaiting || !mycla
   ng-model="model.pickedClass", placeholder="Search for a class",
   typeahead="class as class.code for class in classes | filter:$viewValue | filter:notIn | limitTo:8",
   typeahead-template-url="classTemplate.html", typeahead-on-select="chooseClass($model)")
-img.center-block.vcenter(src="/img/loader.gif", ng-if="classLoadWaiting")
+
+img.center-block.loading(src="/img/loader.gif", ng-if="classLoadWaiting")
+
 ul.classesBody.nav.nav-pills.nav-stacked(ng-if="!classLoadWaiting", ng-repeat="class in myclasses")
   li(ng-class="{active: group.id == class.maingroup}")
-    a(href="#", ng-click='changeGroup(class.maingroup)') {{class.code}}
+    a(href, ng-click='changeGroup(class.maingroup)') {{class.code}}
   ul.nav.nav-pills.nav-stacked.subgroup(ng-repeat="subgroup in class.subgroups")
     li(ng-class="{active: subgroup.groupid == group.id}", ng-click="changeGroup(subgroup.groupid)")
       a {{subgroup.name}}

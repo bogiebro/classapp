@@ -10,7 +10,7 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
         .when('/files', {controller:'FilesCtrl', templateUrl:'app/main/files.jade'})
         .when('/help', {controller:'HelpCtrl', templateUrl:'app/main/help.jade'})
         .when('/bigevents', {controller:'BigEventsCtrl', templateUrl:'app/main/bigevents.jade'})
-        .otherwise({redirectTo: '/members'})
+        .otherwise({redirectTo: '/bigevents'})
 
 .controller 'InfoCtrl', ($scope, $modalInstance, $FB, $ref, $http)->
     $scope.me = $ref.me
@@ -47,12 +47,14 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
             templateUrl: 'aboutId'
             controller: 'AboutCtrl')
 
-.controller 'MainCtrl', ($scope, $location)!->
-  $scope.loc = {path: !-> console.log('hi')}
+.controller 'MainCtrl', ($scope, $location, $group)!->
+  $scope.group = $group.props
   $scope.big = false
   $scope.$on 'newuser', !-> $location.path('/help')
   $scope.$on '$locationChangeSuccess', !->
     if $location.path! is '/bigevents' then $scope.big = true else $scope.big = false
 
-.controller 'NavCtrl', ($scope, $location)!->
+.controller 'NavCtrl', ($scope, $location, $group)!->
+  $scope.clearGroup = $group.clearGroup
+  $scope.group = $group.props
   $scope.go = (x)-> $location.path(x)

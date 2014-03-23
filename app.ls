@@ -2,7 +2,6 @@ require! <[ express http path ./cas ]>
 Firebase = require('firebase')
 graph = require('fbgraph')
 FirebaseTokenGenerator = require("firebase-token-generator")
-MobileDetect = require('mobile-detect')
 firebase = new Firebase(process.env.BASE)
 
 # Express config
@@ -17,15 +16,7 @@ generateToken = (netid)-> JSON.stringify do
   token: tokenGenerator.createToken(netid: netid)
   netid: netid
 
-# Serve mobile content
-mobilizer = (req, res, next)!->
-  md = new MobileDetect(req.headers['user-agent'])
-  if md.phone!
-    express.static(path.join(__dirname, 'build/mobile'))(req,res,next)
-  else
-    express.static(path.join(__dirname, 'build/main'))(req, res, next)
-
-# Middlewcodese
+# Middleware
 app.use _
   .. if development then express.logger 'dev' else express.logger!
   .. express.favicon(path.join(__dirname, 'favicon.ico'))
@@ -39,7 +30,7 @@ app.use app.router
 app.use('/splash', express.static(path.join(__dirname, 'build/splash')))
 app.use(cas.checkCookie(generateToken))
 app.use('/editor', express.static(path.join(__dirname, 'build/editor')))
-app.use('/main', mobilizer)
+app.use('/main', express.static(path.join(__dirname, 'build/main')))
 app.use(express.errorHandler!) if development
 
 # Get JSON
