@@ -1,0 +1,26 @@
+<div ng-controller="ChatCtrl">
+    <div  class="list-group" ng-repeat="cmtchain in chains" style="width : 200px; float: left" ng-click="focus.chain = cmtchain">
+        <em><strong>
+        <a href="#" class="list-group-item">{{cmtchain.head.content}}</a>
+        <a href="#" class="list-group-item">{{cmtchain.head.user}}</a>
+        <a href="#" class="list-group-item">{{cmtchain.head.date}}</a>
+        </strong></em>
+        
+        <div ng-repeat="tail in cmtchain.tail  | filter: commentSearch()">
+          <a href="#" class="list-group-item">{{tail.content}}</a>
+          <div><a href="#" class="list-group-item">{{tail.user}}</a></div>
+          <a href="#" class="list-group-item">{{tail.date}}</a>
+        </div>
+    </div>
+    <hr style="clear: both">
+
+    <form>
+        <input type="text" ng-model="textBox" size="100" placeholder={{placeholder()}}>
+        <input type="checkbox" ng-model="toggled"><span>Toggle Search</span>
+        <input type="button" class="btn btn-primary" type="submit" value="add comment" ng-click="addComment()">
+        <input type="button" class="btn btn-primary" type="submit" value="new comment" ng-click="newComment()">
+    </form>
+    <div class="error" ng-model="error">{{error}}</div>
+    <div>{{focus.chain}}</div>
+
+</div>
