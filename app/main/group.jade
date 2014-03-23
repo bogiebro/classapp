@@ -1,20 +1,105 @@
-input.form-control.input-sm(type="text", ng-disabled="classLoadWaiting || !myclasses",
+h3 Classes
+input.form-control.input-sm.classSearchBar(type="text", ng-disabled="classLoadWaiting || !myclasses",
   ng-model="model.pickedClass", placeholder="Search for a class",
   typeahead="class as class.code for class in classes | filter:$viewValue | filter:notIn | limitTo:8",
   typeahead-template-url="classTemplate.html", typeahead-on-select="chooseClass($model)")
+div.classList
+    img.loadingImg(src="/img/loading_classes_.gif", ng-if="classLoadWaiting")
+    div.list-group-item.oneClass(href="#", ng-repeat="class in myclasses", ng-mouseover="showIcons = class.name", ng-mouseleave="showIcons = ''")
+      a.list-group-item-heading.oneClassHeading()
+        b
+          | {{class.code}}
+        br
+      a.list-group-item-text.greenText.oneClassHeading()
+        | {{class.name}}
+        br
+      a.list-group-item-text.redText.oneClassHeading()
+        | {{class.prof}}
+        br
+      div.allGroups
+        div.group(ng-repeat="group in class.groups", ng-class="groupClass(group)", ng-click="selectGroup(group)")
+          span.glyphicon.glyphicon-lock(ng-show="group.type == 'closed'")
+          a
+            |  {{group.name}}
+      .toolBarContainer(ng-show="showIcons == class.name")
+        .btn-group
+          a(href="#", id="toolIcon", ng-click="openRemoveClassModal(class)")
+            span.glyphicon.glyphicon-trash
+          a(href="#", id="toolIcon", ng-click="openAddGroupModal(class)")
+            span.glyphicon.glyphicon-plus  
+          a(href="#", id="toolIcon", ng-click="openSearchGroupModal(class)")
+            span.glyphicon.glyphicon-search
 
-img.center-block.loading(src="/img/loader.gif", ng-if="classLoadWaiting")
+script(type="text/ng-template", id="removeClassModal.html")
+  div.modal-body
+    p
+      | {{msg}}
+  div.modal-footer
+    button.btn.btn-primary(ng-click="ok(class)")
+      | Yes
+    button.btn.btn-primary(ng-click="cancel()")
+      | Cancel
 
-h3.helptext(ng-show="showHelpText", ng-if="!classLoadWaiting")
-  small Search for a class to join study groups
+script(type="text/ng-template", id="groupModal.html")
+  div.modal-header
+    h3
+      | {{msg}}
+  div.modal-body(id="groupModal")
+    div.groupModalDiv1
+      div.groupModalMiddleDiv.panel.panel-default
+        div.oneMember.suggestedClass(ng-repeat="member in newGroupMembers", ng-click="removeGroupMember(member)")
+          span.glyphicon.glyphicon-minus(ng-click="removeMemberFromGroup(member)")
+          img(src="/img/anonymous.jpeg", height="20", width="20")
+          a
+            | {{member.name}}
+      div.groupModalBottomDiv1
+        div.input-group-btn
+          input.shortInput(class="form-control", type="text", placeholder="{{group.name}}", ng-model='group.name', ng-class='isNameValid(group.name)')
+          input.longInput(class="form-control", type="text", placeholder="{{group.desc}}", ng-model='group.desc')
+          select(ng-model="group.type", ng-options="opt for opt in group.options")
 
-ul.classesBody.nav.nav-pills.nav-stacked(ng-if="!classLoadWaiting", ng-repeat="class in myclasses")
-  li(ng-class="{active: group.id == class.maingroup}")
-    a(href, ng-click='changeGroup(class.maingroup)') {{class.code}}
-  ul.nav.nav-pills.nav-stacked.subgroup(ng-repeat="subgroup in class.subgroups")
-    li(ng-class="{active: subgroup.groupid == group.id}", ng-click="changeGroup(subgroup.groupid)")
-      a {{subgroup.name}}
 
+    div.groupModalDiv2
+      div.groupModalMiddleDiv.panel.panel-default
+        div.suggestedMember(ng-repeat="member in classMembers | filter : memSearch", id="{{member.name}}", ng-click="addMemberToGroup(member)")
+          a.list-group-item-heading
+            span.glyphicon.glyphicon-plus
+            img(src="/img/anonymous.jpeg", height="20", width="20")
+            b
+              | {{member.name}}
+      div.groupModalBottomDiv2
+        form.navbar-form
+          input.liveSearch(class="form-control", type="text", placeholder="Search Classmates", ng-model="memSearch")
+    
+  div.modal-footer
+    button.btn.btn-primary(ng-click="ok()")
+      | Done
+    button.btn.btn-primary(ng-click="cancel()")
+      | Cancel
+
+script(type="text/ng-template", id="searchGroupModal.html")
+  div.modal-header
+    h3
+      | {{msg}}
+  div.modal-body(id="searchModal")
+    div.searchBar
+      input(class="form-control", type="text", placeholder="Group Name, Member Name", ng-model="groupSearchText")
+      select(ng-model="groupType", ng-options="op for op in groupTypeOptions")
+      select(ng-model="groupSize", ng-options="opt for opt in groupSizeOptions")
+      br
+    div.resultBar(ng-repeat="group in groups | filter : groupSearchText")
+      div.groupBar.suggestedClass
+        span.glyphicon.glyphicon-lock(ng-show="group.type == 'closed'")
+        b
+          {{group.name}} Created by {{group.creator}} on {{group.date}}
+          br
+        div.groupMember(ng-repeat="mem in group.members")
+          a {{mem.name}}
+  div.modal-footer
+    button.btn.btn-primary(ng-click="ok()")
+      | Done
+    button.btn.btn-primary(ng-click="cancel()")
+      | Cancel
 
 script(type="text/ng-template", id="classTemplate.html")
   a
