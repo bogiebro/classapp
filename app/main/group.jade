@@ -5,6 +5,9 @@ input.form-control.input-sm(type="text", ng-disabled="classLoadWaiting || !mycla
 
 img.center-block.loading(src="/img/loader.gif", ng-if="classLoadWaiting")
 
+h3.helptext(ng-show="showHelpText", ng-if="!classLoadWaiting")
+  small Search for a class to join study groups
+
 ul.classesBody.nav.nav-pills.nav-stacked(ng-if="!classLoadWaiting", ng-repeat="class in myclasses")
   li(ng-class="{active: group.id == class.maingroup}")
     a(href, ng-click='changeGroup(class.maingroup)') {{class.code}}

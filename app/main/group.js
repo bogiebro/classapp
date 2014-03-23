@@ -10,6 +10,15 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
 
   // Bind to the classes
   $scope.myclasses = $firebase($ref.base.child('users/' + $ref.netid + '/classes'));
+  $scope.showHelpText = true;
+  $scope.myclasses.$on('change', function() {
+    console.log('got called');
+    if ($scope.myclasses.$getIndex().length == 0) {
+      $scope.showHelpText = true;
+    } else {
+      $scope.showHelpText = false;
+    }
+  });
 
   // Link to big events view
   $scope.goBig = function() {
