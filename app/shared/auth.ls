@@ -14,7 +14,6 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
                 $window.location.assign("/refresh?url=#{encodeURIComponent $window.location}")
             else console.log('Cookie data corrupted', error)
         else
-            firebase.child("users/#{netid}").update({exists: true})
             firebase.child("users/#{netid}/name").once 'value' (snap)!->
               $rootScope.$broadcast('newuser') if not snap.val!
     refScope.base = firebase

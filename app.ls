@@ -44,42 +44,42 @@ app.use('/main', express.static(path.join(__dirname, 'build/main')))
 app.use(express.errorHandler!) if development
 
 # setup s3
-# s3 = knox.createClient do
-#     key: process.env.S3ID
-#     secret: process.env.S3SECRET
-#     bucket: 'wybcsite'
+s3 = knox.createClient do
+    key: process.env.S3ID
+    secret: process.env.S3SECRET
+    bucket: 'wybcsite'
 
 # return from an s3 storage command
-# s3result = (res, err, r)-->
-#   console.error err if err
-#   console.error r.statusCode if r.statusCode != 200
-#   res.send 200
+s3result = (res, err, r)-->
+  console.error err if err
+  console.error r.statusCode if r.statusCode != 200
+  res.send 200
 
 # upload a picture
-# app.post '/upload', netidparse, (req, res)!->
-#   form = new multiparty.Form!
-#   form.on 'part', (part)!->
-#     if part.filename is /png|jpg|jpeg|pdf/i
-#       uploadName = "/pics/#{req.netid}.jpg"
-#       im(part, n).resize(250).setFormat('jpeg').toBuffer (err, buffer)!->
-#         if err then console.error err else
-#           s3.putBuffer(buffer, loc, {}, s3result res)
-#           $ref.base.child("/users/#{req.netid}/pic").set(process.env.S3URL + uploadName)
-#     else
-#       header = 'Content-Length': part.byteCount
-#       s3.putStream part, "/docs/#{req.netid}/#{part.filename}", header, (s3result res)
-#   form.parse(req)
+app.post '/upload', netidparse, (req, res)!->
+  form = new multiparty.Form!
+  form.on 'part', (part)!->
+    if part.filename is /png|jpg|jpeg|pdf/i
+      uploadName = "/pics/#{req.netid}.jpg"
+      im(part, part.filename).resize(50).setFormat('jpeg').toBuffer (err, buffer)!->
+        if err then console.error err else
+          s3.putBuffer(buffer, uploadName, {}, s3result res)
+          firebase.child("/users/#{req.netid}/pic").set(process.env.S3URL + uploadName)
+    else
+      header = 'Content-Length': part.byteCount
+      s3.putStream part, "/docs/#{req.netid}/#{part.filename}", header, (s3result res)
+  form.parse(req)
 
 # the usual compatibility creator
 ratingRef = (l)-> l.sort!join('')
 
 # update shared classes/ groups
-# app.post '/joinGroup/:type/:group', netidparse, (req, res)!->
-#   res.send 200
-#   $ref.base.child("/groups/#{req.params.group}/members").once 'value' (snapshot)!->
+app.post '/joinGroup/:type/:group', netidparse, (req, res)!->
+  res.send 200
+#   firebase.child("/groups/#{req.params.group}/members").once 'value' (snapshot)!->
 #     data = snapshot.val!
 #     for ,val of data
-#       $ref.base.child("ratings/#{ratingRef [req.netid, val]}/#{type}").increment!
+#       firebase.child("ratings/#{ratingRef [req.netid, val]}/#{type}").increment!
 
 # get JSON
 classnames = []

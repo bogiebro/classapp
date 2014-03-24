@@ -41,8 +41,12 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
     $scope.dismiss = !-> $modalInstance.close!
 
     # drag and drop image uploading with progress support
+    $ref.base.child("/users/#{$ref.netid}/pic").once 'value' (snap)->
+        $scope.me.image = snap.val!
     $scope.image = {}
+    $scope.image.progress = 0
     $scope.onImgSelect = ($files)->
+      console.log('hi there')
       if $scope.image.progress == 0
         $upload.upload(
           url: '/upload'
@@ -51,7 +55,7 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
           fileFormDataName: 'myFile'
         ).then((response)->
           $scope.image.progress = 0
-          $scope.me.image = "$PROCESS_ENV_S3URL/#{$ref.netid}.jpg" + '?a=' + new Date!.getTime!
+          $scope.me.image = "#{$PROCESS_ENV_S3URL}/pics/#{$ref.netid}.jpg" + '?a=' + new Date!.getTime!
         , null, (evt)->
           $scope.image.progress = parseInt(100.0 * evt.loaded / evt.total))
 
