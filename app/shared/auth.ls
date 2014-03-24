@@ -1,9 +1,9 @@
 angular.module("app.auth", ['firebase', 'ngCookies'])
 
 # gives you access to an authenticated firebase url ($ref.base)
-# the user's netid ($ref.netid) and the user's info ($ref.me)
+# and the user's netid ($ref.netid) 
 .factory '$ref' ($cookies, $rootScope, $firebase, $window)->
-    refScope = $rootScope.$new()
+    refScope = {}
     cookieData = JSON.parse($cookies.casInfo)
     netid = cookieData.netid
     firebase = new Firebase($PROCESS_ENV_FIREBASE)
@@ -15,12 +15,10 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
             else console.log('Cookie data corrupted', error)
         else
             firebase.child("users/#{netid}").update({exists: true})
-            $firebase(firebase.child("users/#{netid}")).$bind(refScope, "me").then (unbind)->
-                $rootScope.$broadcast('newuser') if not refScope.me.name?
-                $rootScope.$broadcast('loggedin')
+            firebase.child("users/#{netid}/name").once 'value' (snap)!->
+              $rootScope.$broadcast('newuser') if not snap.val!
     refScope.base = firebase
     refScope.netid = netid
-    refScope.loggedin = false
     return refScope
 
 # returns a function that takes a firebase ref
@@ -29,10 +27,11 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
     (connections)!-> 
       conRef = $ref.base.root!child '.info/connected'
       childRef = connections.child($ref.netid)
-      conRef.on 'value' (snap)!->
-        if (snap.val!)
-          childRef.set {name: $ref.me?.name or $ref.netid}
-          childRef.onDisconnect!remove!
+      namesnap <- $ref.base.child("users/#{$ref.netid}/name").once 'value'
+      snap <- conRef.on 'value'
+      if (snap.val!)
+        childRef.set {name: namesnap.val! or $ref.netid}
+        childRef.onDisconnect!remove!
 
 # $users.users is a map from netid to user info
 # $users.groups is a map from group id to a list of netids

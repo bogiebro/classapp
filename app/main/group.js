@@ -12,7 +12,6 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
   $scope.myclasses = $firebase($ref.base.child('users/' + $ref.netid + '/classes'));
   $scope.showHelpText = true;
   $scope.myclasses.$on('change', function() {
-    console.log('got called');
     if ($scope.myclasses.$getIndex().length == 0) {
       $scope.showHelpText = true;
     } else {
@@ -49,6 +48,7 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
     $scope.model = {};
     $ref.base.child('group/' + model.maingroup + '/users').push($ref.netid);
     $ref.base.child('users/' + $ref.netid + '/groups').push(model.maingroup);
+    $http.post('/joinGroup/sharedClasses/' + model.maingroup);
   }
   
   // Set the group to what the user clicks on
