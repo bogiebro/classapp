@@ -16,7 +16,7 @@ html(ng-app="App", manifest="/web.appcache")
             li <a href ng-click="go('/chat')">Chat</a>
             li <a href ng-click="go('/files')">Files</a>
         .container-fluid.visible-xs
-          span.vcenter(ng-show="group.name")
+          span(ng-show="group.name")
             span.pointer.navbar-text(ng-click='clearGroup()', class="glyphicon glyphicon-chevron-left").back
             span.bigger.navbar-text Tester
           span.vcenter(ng-show="!group.name")
