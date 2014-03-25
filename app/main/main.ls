@@ -9,6 +9,7 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
         .when('/members', {controller:'MembersCtrl', templateUrl:'app/main/members.jade'})
         .when('/files', {controller:'FilesCtrl', templateUrl:'app/main/files.jade'})
         .when('/help', {controller:'HelpCtrl', templateUrl:'app/main/help.jade'})
+        .when('/events', {controller:'EventsCtrl', templateUrl:'app/main/events.jade'})
         .when('/bigevents', {controller:'BigEventsCtrl', templateUrl:'app/main/bigevents.jade'})
         .otherwise({redirectTo: '/bigevents'})
 
