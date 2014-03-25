@@ -76,10 +76,13 @@ ratingRef = (l)-> l.sort!join('')
 # update shared classes/ groups
 app.post '/joinGroup/:type/:group', netidparse, (req, res)!->
   res.send 200
-#   firebase.child("/groups/#{req.params.group}/members").once 'value' (snapshot)!->
-#     data = snapshot.val!
-#     for ,val of data
-#       firebase.child("ratings/#{ratingRef [req.netid, val]}/#{type}").increment!
+  console.log('joining group ' + req.params.group + ' for id ' + req.netid)
+  firebase.child("/group/#{req.params.group}/users").once 'value' (snapshot)!->
+    data = snapshot.val!
+    console.log('')
+    for ,val of data
+      if val != req.netid
+        firebase.child("ratings/#{ratingRef [req.netid, val]}/#{req.params.type}").transaction ((x)->x+1)
 
 # get JSON
 classnames = []
@@ -95,7 +98,7 @@ app.get '/classnames.json' (req, res)!->
 
 # extend a facebook access token
 json = express.json!
-app.post '/extendToken', json, (req, res)!->
+app.post '/extendToken', netidparse, json, (req, res)!->
   graph.extendAccessToken({
     access_token: req.body.token,
     client_id: process.env.FBID,
