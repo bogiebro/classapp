@@ -14,11 +14,14 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'build/js/angular-file-upload-html5-shim.min.js',
       'build/js/vendor.js',
+      'build/js/angular-file-upload.min.js',
       'test/lib/firebase.js',
       'test/lib/angularfire.min.js',
       'build/js/app.main.templates.js',
       'build/js/main.js',
+      'build/js/app.main.templates.js',
       'build/js/params.js',
       'test/**/*.coffee'
     ],
