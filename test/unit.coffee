@@ -5,7 +5,7 @@
 # https://github.com/angular/protractor/blob/master/docs/getting-started.md
 
 describe "auth", ->
-    beforeEach(module('App'))
+    beforeEach(module('app.auth'))
     beforeEach(module(($provide)->
       $provide.constant('$cookies', {casInfo: params.cookieData})))
 
@@ -34,6 +34,22 @@ describe "auth", ->
       inject ($ref, $users)->
         $ref.base.child('group/testgroup/users').push $ref.netid, (err1)->
           $ref.base.child("users/#{$ref.netid}/groups").push 'testgroup', (err2)->
-            expect($users.groups['testgroup'].indexOf($ref.netid)).toBeTruthy()
-            done()
+            $ref.base.child("users/#{$ref.netid}/classes/testclass").set({
+              code: 'testclass',
+              name: 'Test Class',
+              maingroup: 'testgroup',
+              subgroups: []
+            }, (err3)->
+              expect($users.groups['testgroup'].indexOf($ref.netid)).toBeTruthy()
+              done())
 
+describe "group sidebar", ->
+  beforeEach(module('app.group'))
+  beforeEach(module(($provide)->
+    $provide.constant('$cookies', {casInfo: params.cookieData})))
+  
+  it 'should create a group controller',
+    inject ($ref, $controller, $rootScope)->
+      scope = $rootScope.$new()
+      ctrl = $controller('GroupCtrl', {$scope: scope})
+      expect(ctrl).toBeDefined()

@@ -23,7 +23,7 @@ module.exports = function(config) {
       'build/js/main.js',
       'build/js/app.main.templates.js',
       'build/js/params.js',
-      'test/**/*.coffee'
+      'test/unit.coffee'
     ],
 
 
@@ -55,8 +55,7 @@ module.exports = function(config) {
     autoWatch: true,
 
     preprocessors: {
-      'test/unit/*.coffee': ['coffee'],
-      'test/lib/*.coffee': ['coffee']
+      'test/unit.coffee': ['coffee']
     },
 
     // Start these browsers, currently available:
@@ -67,7 +66,8 @@ module.exports = function(config) {
     // - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
     // - PhantomJS
     // - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
-    browsers: ['Chrome', 'PhantomJS', 'Firefox'],
+    // browsers: ['Chrome', 'PhantomJS', 'Firefox'],
+    browsers: ['PhantomJS'],
 
 
     // If browser does not capture in given timeout [ms], kill it

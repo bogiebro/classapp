@@ -19,19 +19,6 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
     }
   });
 
-  // Link to big events view
-  $scope.goBig = function() {
-    $location.path('/bigevents');
-  }
- 
-  // Filter out classes of which the user is currently a member
-  $scope.notIn = function(val) {
-    return $scope.myclasses && !$scope.myclasses[val.code];
-  }
-  
-  // Boolean to indicate loading class has finished
-  $scope.classLoadWaiting = true;
-
   // Get class data
   $http.get('/classnames.json').then(function(result) {
     $scope.classLoadWaiting = false;
