@@ -16,19 +16,19 @@ html(ng-app="App", manifest="/web.appcache")
             li <a href ng-click="go('/chat')">Chat</a>
             li <a href ng-click="go('/files')">Files</a>
         .container-fluid.visible-xs
-          span.vcenter(ng-show="group.name")
-            span.pointer(ng-click='clearGroup()', class="glyphicon glyphicon-chevron-left").back
+          span(ng-show="group.name")
+            span.pointer.navbar-text(ng-click='clearGroup()', class="glyphicon glyphicon-chevron-left").back
             span.bigger.navbar-text Tester
           span.vcenter(ng-show="!group.name")
             a.bigger.navbar-text(href ng-click="go('/bigevents')") Quipu
-          span.btn-group.leftbuttons
-            button(type="button", ng-click='goEvents()', class="btn navbar-btn btn-sm")
+          span.btn-group.leftbuttons(ng-show="group.name")
+            button(type="button", ng-click="go('/events')", class="btn navbar-btn btn-sm")
               span(class="glyphicon glyphicon-th-list")
-            button(type="button", ng-clock='goMembers()', class="btn navbar-btn btn-sm") 
+            button(type="button", ng-click="go('/members')", class="btn navbar-btn btn-sm") 
               span(class="glyphicon glyphicon-user")
-            button(type="button", ng-click='goChat()', class="btn navbar-btn btn-sm") 
+            button(type="button", ng-click="go('/chat')", class="btn navbar-btn btn-sm") 
               span(class="glyphicon glyphicon-comment")
-            button(type="button", ng-click='goFiles()', class="btn navbar-btn btn-sm")
+            button(type="button", ng-click="go('/files')", class="btn navbar-btn btn-sm")
               span(class="glyphicon glyphicon-folder-open")
       .container-fluid
         .row(ng-controller="MainCtrl")
@@ -45,7 +45,8 @@ html(ng-app="App", manifest="/web.appcache")
 
       script(type="text/ng-template", id="askId")
           div.modal-header
-              h3 User Information
+            button.close(type='button', aria-hidden='true', ng-click='dismiss()')&times;
+            h3 User Information
           div.modal-body
               form(role="form", class="form-horizontal", ng-submit="dismiss()")
                   p(class="text-right")
@@ -61,9 +62,11 @@ html(ng-app="App", manifest="/web.appcache")
                   div(class="form-group")
                       label(class="col-sm-2 control-label")  Picture
                       div(class="col-sm-10 control-label")
-                          div(class="dropbox", file-dropzone="[image/png, image/jpeg, image/gif]", file="image.unscaled", file-name="imageFileName", data-max-file-size="2")
-                              span(ng-if="!me.image") Drop Image Here
-                              img(ng-if="me.image", ng-src="{{me.image}}")
+                        div(class="dropbox", ng-show="dropSupported",
+                          ng-file-drop="onImgSelect($files);",
+                          ng-file-drop-available="dropSupported=true")
+                            span(ng-if="!me.image") Drop Image Here
+                            img(ng-if="me.image", ng-src="{{me.image}}")
           div.modal-footer
 
       script(type="text/ng-template", id="aboutId")
@@ -78,7 +81,9 @@ html(ng-app="App", manifest="/web.appcache")
                   small &copy; 2014 Sam Anklesaria, Iyob Gebremariam, Isaac Reilly,
                       | James Batchelder, Peter Nguyen, Jadon Montero
 
+      script(src='/js/angular-file-upload-html5-shim.min.js')
       script(src='/js/vendor.js')
+      script(src='/js/angular-file-upload.min.js')
       script(src='https://cdn.firebase.com/v0/firebase.js')
       script(src='https://cdn.firebase.com/libs/angularfire/0.6.0/angularfire.min.js')
       script(src='/js/main.js')

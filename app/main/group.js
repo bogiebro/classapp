@@ -10,28 +10,14 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
 
   // Bind to the classes
   $scope.myclasses = $firebase($ref.base.child('users/' + $ref.netid + '/classes'));
-  $scope.showHelpText = true;
+  $scope.showHelpText = false;
   $scope.myclasses.$on('change', function() {
-    console.log('got called');
     if ($scope.myclasses.$getIndex().length == 0) {
       $scope.showHelpText = true;
     } else {
       $scope.showHelpText = false;
     }
   });
-
-  // Link to big events view
-  $scope.goBig = function() {
-    $location.path('/bigevents');
-  }
- 
-  // Filter out classes of which the user is currently a member
-  $scope.notIn = function(val) {
-    return $scope.myclasses && !$scope.myclasses[val.code];
-  }
-  
-  // Boolean to indicate loading class has finished
-  $scope.classLoadWaiting = true;
 
   // Get class data
   $http.get('/classnames.json').then(function(result) {
@@ -47,8 +33,10 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
       maingroup: model.maingroup,
       subgroups: []});
     $scope.model = {};
-    $ref.base.child('group/' + model.maingroup + '/users').push($ref.netid);
+    $ref.base.child('groups/' + model.maingroup + '/users').push($ref.netid);
     $ref.base.child('users/' + $ref.netid + '/groups').push(model.maingroup);
+    $http.post('/joinGroup/sharedClasses/' + model.maingroup);
+    $scope.changeGroup(model.maingroup);
   }
   
   // Set the group to what the user clicks on

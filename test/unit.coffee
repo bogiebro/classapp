@@ -3,10 +3,9 @@
 # http://nathanleclaire.com/blog/2013/12/13/how-to-unit-test-controllers-in-angularjs-without-setting-your-hair-on-fire/
 # http://www.sitepoint.com/unit-and-e2e-testing-in-angularjs/
 # https://github.com/angular/protractor/blob/master/docs/getting-started.md
-# use dotenv. That way foreman isn't required
 
 describe "auth", ->
-    beforeEach(module('App'))
+    beforeEach(module('app.auth'))
     beforeEach(module(($provide)->
       $provide.constant('$cookies', {casInfo: params.cookieData})))
 
@@ -28,6 +27,29 @@ describe "auth", ->
       inject ($ref, $trackConnected)->
         $trackConnected($ref.base.child('online'))
         $ref.base.child('online').on 'value', (snap)->
+          expect(snap.val()[$ref.netid]).toBeDefined()
           done()
 
+    it 'should track track all the user\'s groups', (done)->
+      inject ($ref, $users)->
+        $ref.base.child('groups/testgroup/users').push $ref.netid, (err1)->
+          $ref.base.child("users/#{$ref.netid}/groups").push 'testgroup', (err2)->
+            $ref.base.child("users/#{$ref.netid}/classes/testclass").set({
+              code: 'testclass',
+              name: 'Test Class',
+              maingroup: 'testgroup',
+              subgroups: []
+            }, (err3)->
+              expect($users.groups['testgroup'].indexOf($ref.netid)).toBeTruthy()
+              done())
 
+describe "group sidebar", ->
+  beforeEach(module('app.group'))
+  beforeEach(module(($provide)->
+    $provide.constant('$cookies', {casInfo: params.cookieData})))
+  
+  it 'should create a group controller',
+    inject ($ref, $controller, $rootScope)->
+      scope = $rootScope.$new()
+      ctrl = $controller('GroupCtrl', {$scope: scope})
+      expect(ctrl).toBeDefined()

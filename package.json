@@ -23,7 +23,10 @@
     "fbgraph": "*",
     "firebase-token-generator": "~0.1.4",
     "process-env-brunch": "*",
-    "cron": "*"
+    "cron": "*",
+    "multiparty": "*",
+    "gm": "*",
+    "knox": "*"
   },
   "devDependencies": {
     "karma": "*",

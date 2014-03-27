@@ -16,7 +16,7 @@ then
     "
     eval $(cat publicvars .env) npm start &
     ./node_modules/.bin/webdriver-manager start &
-    sleep 12
+    sleep 16
     echo "
     ####### Starting end to end tests #######
     "

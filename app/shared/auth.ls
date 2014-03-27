@@ -1,9 +1,9 @@
 angular.module("app.auth", ['firebase', 'ngCookies'])
 
 # gives you access to an authenticated firebase url ($ref.base)
-# the user's netid ($ref.netid) and the user's info ($ref.me)
+# and the user's netid ($ref.netid) 
 .factory '$ref' ($cookies, $rootScope, $firebase, $window)->
-    refScope = $rootScope.$new()
+    refScope = {}
     cookieData = JSON.parse($cookies.casInfo)
     netid = cookieData.netid
     firebase = new Firebase($PROCESS_ENV_FIREBASE)
@@ -14,13 +14,10 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
                 $window.location.assign("/refresh?url=#{encodeURIComponent $window.location}")
             else console.log('Cookie data corrupted', error)
         else
-            firebase.child("users/#{netid}").update({exists: true})
-            $firebase(firebase.child("users/#{netid}")).$bind(refScope, "me").then (unbind)->
-                $rootScope.$broadcast('newuser') if not refScope.me.name?
-                $rootScope.$broadcast('loggedin')
+            firebase.child("users/#{netid}/name").once 'value' (snap)!->
+              $rootScope.$broadcast('newuser') if not snap.val!
     refScope.base = firebase
     refScope.netid = netid
-    refScope.loggedin = false
     return refScope
 
 # returns a function that takes a firebase ref
@@ -29,10 +26,11 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
     (connections)!-> 
       conRef = $ref.base.root!child '.info/connected'
       childRef = connections.child($ref.netid)
-      conRef.on 'value' (snap)!->
-        if (snap.val!)
-          childRef.set {name: $ref.me?.name or $ref.netid}
-          childRef.onDisconnect!remove!
+      namesnap <- $ref.base.child("users/#{$ref.netid}/name").once 'value'
+      snap <- conRef.on 'value'
+      if (snap.val!)
+        childRef.set {name: namesnap.val! or $ref.netid}
+        childRef.onDisconnect!remove!
 
 # $users.users is a map from netid to user info
 # $users.groups is a map from group id to a list of netids
@@ -44,7 +42,7 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
   $ref.base.child("users/#{$ref.netid}/groups").on 'child_added' (gsnap)!->
     val = gsnap.val!
     result.groups[val] = []
-    $timeout((->$ref.base.child("group/#{val}/users").on 'child_added' (user)!->
+    $timeout((->$ref.base.child("groups/#{val}/users").on 'child_added' (user)!->
         netid = user.val!
         result.groups.$apply(result.groups[val].push(netid))
         if (!result.users[netid])
@@ -56,20 +54,21 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
       , 0)
   return result
 
-# $group.name gives the currently selected group name
+# $group.props.name gives the currently selected group name
 # $group.setGroup takes a group id to set as currently selected
 # call $group.clearGroup when back on the group page
-.factory '$group' ($ref, $timeout, $rootScope)->
+.factory '$group' ($ref, $timeout, $rootScope, $location)->
     result = {}
     result.props = $rootScope.$new!
     result.setGroup = (groupid)!->
         result.props.id = groupid
-        $timeout((-> $ref.base.child("group/#{groupid}/name").on 'value' (snapshot)->
-            result.props.$apply(-> result.props.name = snapshot.val!))
+        $timeout((-> $ref.base.child("groups/#{groupid}/props").on 'value' (snapshot)->
+            result.props.$apply(-> result.props <<< snapshot.val!))
           , 0)
     result.clearGroup = !->
       result.props.name = ''
       result.props.id = ''
+      $location.path('/')
     return result
 
 # create the identifier for compatibility between people
