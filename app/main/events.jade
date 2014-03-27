@@ -1,31 +1,35 @@
 h2 Events for group {{group.name}}
-body
-	p 
-		li(ng-repeat="event in eventList | orderByPriority")
-			h4 {{event.date}}
-			h4 Event: {{event.message}}
-			h4 Location: {{event.location}}
-			h4 priotity: {{event.$priotity}}
+body 
+    button(class="btn btn-default", ng-click="expandCreator()")
+        Toggle {{createButton}}
+    hr
+    div(collapse="isCollapsed")
+        div(class="well well-lg")
+            pre Selected date is: 
+                em {{dayobject.dt | date:"fullDate" }}
+            div 
+                div( style="display:inline-block; min-height:290px;")
+                    div( class="well well-sm", ng-model="dayobject.dt")
+                        datepicker(min="minDate", show-weeks="showWeeks")
+                    
+                div( class="row")
+                    div( class="col-md-6")
+                        label Format:
+                            select( class="form-control", ng-model="format", ng-options="f for f in formats")
+                                option
 
-		h2 {{testing}}
-		p	{{dayobject.dt}}
-		div
-			pre Selected date is: 
-				em {{dayobject.dt | date:"fullDate" }}
-			
-			div( style="display:inline-block; min-height:290px;")
-				div( class="well well-sm", ng-model="dayobject.dt")
-					datepicker(min="minDate", show-weeks="showWeeks")
-				
-			div( class="row")
-				div( class="col-md-6")
-					label Format:
-						select( class="form-control", ng-model="format", ng-options="f for f in formats")
-							option
+            form(ng-submit="newEvent()")
+                input(type='text', ng-model='form.messageInput', placeholder='title...')
+                input(type='text', ng-model='form.locationInput', placeholder='location')
+                input(class="btn-primary",  type="submit", value="Make Event!")
 
-		form(ng-submit="newEvent()")
-			input(type='text', ng-model='form.messageInput', placeholder='title...')
-			input(type='text', ng-model='form.locationInput', placeholder='location')
-			input(class="btn-primary",  type="submit", value="Make Event!")
-			input(type="button",  ng-click="displaydate()", value="display date")
-		p {{eventFire}}
+    li(ng-repeat="event in eventRef | orderByPriority ")
+        //h4 {{convertTime(event.date)}}
+        h4{{event.date }}
+        h4 {{event.message}}
+        button(popover="Located at: "+ "{{event.location}}"+ " Date: :" + "{{event.date}}", popover-title="{{event.message}}", class="btn btn-default", popover-placement="top") Details
+    
+    h2 {{testing}}
+    p   {{dayobject.dt}}
+
+    p {{eventFire}}
