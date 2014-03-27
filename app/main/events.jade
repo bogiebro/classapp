@@ -1,7 +1,7 @@
 h2 Events for group {{group.name}}
 body 
-    button(class="btn btn-default", ng-click="isCollapsed = !isCollapsed")
-        Toggle Create an Event
+    button(class="btn btn-default", ng-click="expandCreator()")
+        Toggle {{createButton}}
     hr
     div(collapse="isCollapsed")
         div(class="well well-lg")
@@ -24,8 +24,8 @@ body
                 input(class="btn-primary",  type="submit", value="Make Event!")
 
     li(ng-repeat="event in eventRef | orderByPriority ")
-        h4 {{convertTime(event.date)}}
-        h4{{event.date}}
+        //h4 {{convertTime(event.date)}}
+        h4{{event.date }}
         h4 {{event.message}}
         button(popover="Located at: "+ "{{event.location}}"+ " Date: :" + "{{event.date}}", popover-title="{{event.message}}", class="btn btn-default", popover-placement="top") Details
     
