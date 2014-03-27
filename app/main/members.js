@@ -1,6 +1,6 @@
 angular.module("app.members", ['app.auth'])
 
-.controller('MembersCtrl', function ($scope, $ref, $group, $users) {
+.controller('MembersCtrl', function ($scope, $ref, $group, $users, $location) {
   $scope.users = $users.groups;
   $scope.info = $users.users;
   $scope.group = $group.props;
@@ -9,7 +9,7 @@ angular.module("app.members", ['app.auth'])
   $scope.removeUser = function() {
     $ref.base.child('groups/' + $group.props.id + '/users/' + $ref.netid).remove();
     $ref.base.child('users/' + $ref.netid + '/groups/' + $group.props.id).remove();
-    if ($group.props.maingroup) {
+    if (!$group.props.maingroup) {
       $ref.base.child('users/' + $ref.netid + '/classes/' +
         $group.props.classCode + '/subgroups/' + $group.props.id).remove();
     } else {

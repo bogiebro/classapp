@@ -57,7 +57,7 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
 # $group.props.name gives the currently selected group name
 # $group.setGroup takes a group id to set as currently selected
 # call $group.clearGroup when back on the group page
-.factory '$group' ($ref, $timeout, $rootScope)->
+.factory '$group' ($ref, $timeout, $rootScope, $location)->
     result = {}
     result.props = $rootScope.$new!
     result.setGroup = (groupid)!->
@@ -68,6 +68,7 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
     result.clearGroup = !->
       result.props.name = ''
       result.props.id = ''
+      $location.path('/')
     return result
 
 # create the identifier for compatibility between people
