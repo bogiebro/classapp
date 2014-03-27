@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "postinstall": "sh install.sh",
-    "start": "./node_modules/LiveScript/bin/livescript app.ls"
+    "start": "./node_modules/.bin/lsc app.ls"
   },
   "dependencies": {
     "LiveScript-brunch": "1.5.x",
