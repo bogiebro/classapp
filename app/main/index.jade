@@ -45,7 +45,8 @@ html(ng-app="App", manifest="/web.appcache")
 
       script(type="text/ng-template", id="askId")
           div.modal-header
-              h3 User Information
+            button.close(type='button', aria-hidden='true', ng-click='dismiss()')&times;
+            h3 User Information
           div.modal-body
               form(role="form", class="form-horizontal", ng-submit="dismiss()")
                   p(class="text-right")
