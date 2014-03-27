@@ -36,6 +36,8 @@
     "karma-phantomjs-launcher": "*",
     "karma-firefox-launcher": "*",
     "karma-coffee-preprocessor": "*",
-    "protractor": "*"
+    "protractor": "*",
+    "readline": "*",
+    "lazy":"*"
   }
 }

@@ -3,6 +3,12 @@ Firebase = require('firebase')
 graph = require('fbgraph')
 im = gm.subClass(imageMagick: true)
 FirebaseTokenGenerator = require("firebase-token-generator")
+
+console.log <| JSON.stringify do
+    BASE: process.env.BASE
+    FBID: process.env.FBID
+    S3URL: process.env.S3URL
+    
 firebase = new Firebase(process.env.BASE)
 
 # Express config

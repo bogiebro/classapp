@@ -36,7 +36,12 @@ exports.config =
             pretty: yes
         uglify:
             mangle: false
+        jade_angular:
+            locals:
+                ROOT: ''
     overrides:
       production:
         conventions:
           ignored: /angular-mocks/
+        plugins: jade_angular: locals:
+          ROOT: 'http://wybcsite.s3-website-us-east-1.amazonaws.com'
