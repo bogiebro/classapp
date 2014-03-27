@@ -1,3 +1,4 @@
+console.log("base is #{process.env.BASE}")
 if process.env.NODE_ENV == 'testing'
     process.env.FIREBASE = "#{process.env.BASE}tests/#{process.env.UUID}"
     FirebaseTokenGenerator = require("firebase-token-generator")
@@ -43,5 +44,3 @@ exports.config =
       production:
         conventions:
           ignored: /angular-mocks/
-        plugins: jade_angular: locals:
-          ROOT: 'http://wybcsite.s3-website-us-east-1.amazonaws.com'

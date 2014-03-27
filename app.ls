@@ -8,6 +8,7 @@ console.log <| JSON.stringify do
     BASE: process.env.BASE
     FBID: process.env.FBID
     S3URL: process.env.S3URL
+    KEY: process.env.s3ID
     
 firebase = new Firebase(process.env.BASE)
 
