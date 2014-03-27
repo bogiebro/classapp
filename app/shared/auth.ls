@@ -42,7 +42,7 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
   $ref.base.child("users/#{$ref.netid}/groups").on 'child_added' (gsnap)!->
     val = gsnap.val!
     result.groups[val] = []
-    $timeout((->$ref.base.child("group/#{val}/users").on 'child_added' (user)!->
+    $timeout((->$ref.base.child("groups/#{val}/users").on 'child_added' (user)!->
         netid = user.val!
         result.groups.$apply(result.groups[val].push(netid))
         if (!result.users[netid])
@@ -62,8 +62,8 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
     result.props = $rootScope.$new!
     result.setGroup = (groupid)!->
         result.props.id = groupid
-        $timeout((-> $ref.base.child("group/#{groupid}/name").on 'value' (snapshot)->
-            result.props.$apply(-> result.props.name = snapshot.val!))
+        $timeout((-> $ref.base.child("groups/#{groupid}/props").on 'value' (snapshot)->
+            result.props.$apply(-> result.props <<< snapshot.val!))
           , 0)
     result.clearGroup = !->
       result.props.name = ''

@@ -77,7 +77,7 @@ ratingRef = (l)-> l.sort!join('')
 app.post '/joinGroup/:type/:group', netidparse, (req, res)!->
   res.send 200
   console.log('joining group ' + req.params.group + ' for id ' + req.netid)
-  firebase.child("/group/#{req.params.group}/users").once 'value' (snapshot)!->
+  firebase.child("/groups/#{req.params.group}/users").once 'value' (snapshot)!->
     data = snapshot.val!
     console.log('')
     for ,val of data

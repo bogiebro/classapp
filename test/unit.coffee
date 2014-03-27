@@ -32,7 +32,7 @@ describe "auth", ->
 
     it 'should track track all the user\'s groups', (done)->
       inject ($ref, $users)->
-        $ref.base.child('group/testgroup/users').push $ref.netid, (err1)->
+        $ref.base.child('groups/testgroup/users').push $ref.netid, (err1)->
           $ref.base.child("users/#{$ref.netid}/groups").push 'testgroup', (err2)->
             $ref.base.child("users/#{$ref.netid}/classes/testclass").set({
               code: 'testclass',
