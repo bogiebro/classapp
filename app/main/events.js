@@ -7,7 +7,7 @@ angular.module("app.events", ['app.auth'])
     $scope.group = $group.props;
     $scope.form = {}
     $scope.dayobject = {}
-
+    $scope.today= new Date()
    
 
     $scope.testing  = "Space reserved for test messages";
@@ -58,12 +58,17 @@ angular.module("app.events", ['app.auth'])
         $scope.display.text= display.text;
         return display.text;
      }
-     
+    
+    // $scope.eventList.endAt($scope.today.getTime).on('child_added', function(snapshot) {
+      //  var EventInfo = snapshot.val();
+       // alert('date ' + EventInfo.date + ' Message: ' + EventInfo.message);
+    //});
+
+
+
     $scope.archiveEvents = function(){
         // remove passed events
-        angular.forEach($scope.eventList, function(event) {
-            $scope.event.$child(event.$id).$set({displaydate: "hello"});
-        });
+        
     }
 
 
