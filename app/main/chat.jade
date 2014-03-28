@@ -1,1 +1,20 @@
-p chat is here
+div(ng-controller="ChatCtrl")
+    div.list-group(ng-repeat="cmtchain in chains" style="width : 200px; float: left" ng-click="focus.chain = cmtchain")
+        em
+            strong
+                li.list-group-item {{cmtchain.head.content}}
+                li.list-group-item {{cmtchain.head.user}}
+                li.list-group-item {{cmtchain.head.date}}
+        div(ng-repeat="tail in cmtchain.tail  | filter: commentSearch()")
+            li.list-group-item {{tail.content}}
+            li.list-group-item {{tail.user}}
+            li.list-group-item {{tail.date}}
+
+    form(style="clear: both")
+        input(type="text" ng-model="textBox" size="100" placeholder="placeholder()")
+        input(type="checkbox" ng-model="toggled") 
+            span Toggle Search
+        input(type="button" class="btn btn-primary" type="submit" value="add comment" ng-click="addComment()")
+        input(type="button" class="btn btn-primary" type="submit" value="new comment" ng-click="newComment()")
+    div.error(ng-model="error") {{error}}
+    div {{focus.chain}}
