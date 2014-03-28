@@ -23,12 +23,15 @@ body
                 input(type='text', ng-model='form.locationInput', placeholder='location')
                 input(class="btn-primary",  type="submit", value="Make Event!")
 
-    li(ng-repeat="event in eventRef | orderByPriority ")
+    li(ng-repeat="event in eventRef | orderByPriority  ")
         //h4 {{convertTime(event.date)}}
-        h4{{event.date }}
+        h4{{ toDate(event.date) | date:"EEE h a MM/dd/yy" }}
         h4 {{event.message}}
-        button(popover="Located at: "+ "{{event.location}}"+ " Date: :" + "{{event.date}}", popover-title="{{event.message}}", class="btn btn-default", popover-placement="top") Details
-    
+       // {{event.$id}}
+        button(popover="Located at: "+ "{{event.location}}"+ " Date: :" + "{{event.date}}" +  "Members: " + "{{event.Members}}", popover-title="{{event.message}}", class="btn btn-default", popover-placement="top") Details
+        //button(type="button", ng-model="addMember(event.$id)") join
+       
+        
     h2 {{testing}}
     p   {{dayobject.dt}}
 
