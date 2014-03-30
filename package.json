@@ -26,7 +26,9 @@
     "cron": "*",
     "multiparty": "*",
     "gm": "*",
-    "knox": "0.8.9"
+    "knox": "0.8.9",
+    "jshint-brunch": "*",
+    "auto-reload-brunch": "*"
   },
   "devDependencies": {
     "karma": "*",

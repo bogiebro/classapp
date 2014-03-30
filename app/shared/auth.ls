@@ -8,14 +8,15 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
     netid = cookieData.netid
     firebase = new Firebase($PROCESS_ENV_FIREBASE)
     do
-        error <- firebase.auth(cookieData.token)
-        if error
-            if error.code is "EXPIRED_TOKEN"
-                $window.location.assign("/refresh?url=#{encodeURIComponent $window.location}")
-            else console.log('Cookie data corrupted', error)
-        else
-            firebase.child("users/#{netid}/name").once 'value' (snap)!->
-              $rootScope.$broadcast('newuser') if not snap.val!
+      error <- firebase.auth(cookieData.token)
+      if error
+        if error.code is "EXPIRED_TOKEN"
+            $window.location.assign("/refresh?url=#{encodeURIComponent $window.location}")
+        else console.log('Cookie data corrupted', error)
+      else
+        $rootScope.$broadcast('loggedin')
+        firebase.child("users/#{netid}/props/name").once 'value' (snap)!->
+          $rootScope.$broadcast('newuser') if not snap.val!
     refScope.base = firebase
     refScope.netid = netid
     return refScope
@@ -26,10 +27,10 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
     (connections)!-> 
       conRef = $ref.base.root!child '.info/connected'
       childRef = connections.child($ref.netid)
-      namesnap <- $ref.base.child("users/#{$ref.netid}/name").once 'value'
+      namesnap <- $ref.base.child("users/#{$ref.netid}/props").once 'value'
       snap <- conRef.on 'value'
       if (snap.val!)
-        childRef.set {name: namesnap.val! or $ref.netid}
+        childRef.set namesnap.val!
         childRef.onDisconnect!remove!
 
 # $users.users is a map from netid to user info
@@ -47,7 +48,7 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
         result.groups.$apply(result.groups[val].push(netid))
         if (!result.users[netid])
           result.users[netid] = {}
-          $ref.base.child("users/#{netid}").once 'value' (snap)!->
+          $ref.base.child("users/#{netid}/props").once 'value' (snap)!->
             result.users.$apply(result.users[netid] <<< snap.val!)
           $ref.base.child("ratings/" + ratingRef([$ref.netid, netid])).once 'value' (snap)!->
             result.users.$apply(result.users[netid] <<< snap.val!))

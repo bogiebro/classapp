@@ -71,7 +71,7 @@ app.post '/upload', netidparse, (req, res)!->
       im(part, part.filename).resize(50).setFormat('jpeg').toBuffer (err, buffer)!->
         if err then console.error err else
           s3.putBuffer(buffer, uploadName, {}, s3result res)
-          firebase.child("/users/#{req.netid}/pic").set(process.env.S3URL + uploadName)
+          firebase.child("/users/#{req.netid}/props/pic").set(process.env.S3URL + uploadName)
     else
       header = 'Content-Length': part.byteCount
       s3.putStream part, "/docs/#{req.netid}/#{part.filename}", header, (s3result res)
@@ -110,7 +110,7 @@ app.post '/extendToken', netidparse, json, (req, res)!->
     access_token: req.body.token,
     client_id: process.env.FBID,
     client_secret: process.env.FBSECRET}, (err, fbres)->
-      firebase.child("/users/#{req.body.netid}").update(token: fbres.access_token) if (!err))
+      firebase.child("/users/#{req.body.netid}/props").update(token: fbres.access_token) if (!err))
   res.send 200
 
 # get the root

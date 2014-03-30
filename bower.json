@@ -21,7 +21,7 @@
     "angular-mocks": "1.2.14",
     "angular-cookies": "1.2.14",
     "firepad": "0.1.4",
-    "codemirror": "4.0.1",
+    "CodeMirror": "4.0.1",
     "bootstrap": "3.1.1"
   },
   "overrides": {
@@ -36,9 +36,8 @@
       ],
       "dependencies": []
     },
-    "angular-file-dnd": {
-      "main": ["./dist/angular-file-dnd.min.js"]
+    "firepad": {
+      "dependencies": {"CodeMirror": "4.0.1"}
     }
-
   }
 }
