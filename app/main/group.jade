@@ -11,9 +11,11 @@ h3.helptext(ng-show="showHelpText", ng-if="!classLoadWaiting")
 ul.classesBody.nav.nav-pills.nav-stacked(ng-if="!classLoadWaiting", ng-repeat="class in myclasses")
   li(ng-class="{active: group.id == class.maingroup}")
     a(href, ng-click='changeGroup(class.maingroup)') {{class.code}}
+      span.badge.pull-right.hidden-sm {{class.unread}}
   ul.nav.nav-pills.nav-stacked.subgroup(ng-repeat="subgroup in class.subgroups")
     li(ng-class="{active: subgroup.groupid == group.id}", ng-click="changeGroup(subgroup.groupid)")
-      a {{subgroup.name}}
+      a(href) {{subgroup.name}}
+        span.badge.pull-right.hidden-sm {{subgroup.unread}}
 
 
 script(type="text/ng-template", id="classTemplate.html")

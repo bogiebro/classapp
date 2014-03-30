@@ -69,7 +69,7 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
     result.clearGroup = !->
       result.props.name = ''
       result.props.id = ''
-      $location.path('/')
+      $location.path('/bigevents')
     return result
 
 # create the identifier for compatibility between people
