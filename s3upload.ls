@@ -6,7 +6,7 @@ lazy = require("lazy")
 s3 = knox.createClient(
     key: process.env.S3ID
     secret: process.env.S3SECRET
-    bucket: 'wybcsite')
+    bucket: 'quipu')
 
 uploadPath = (file, path)->
     s3.putFile(String(file), String(path), (err, r)->

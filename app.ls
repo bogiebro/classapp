@@ -54,7 +54,7 @@ app.use(express.errorHandler!) if development
 s3 = knox.createClient do
     key: process.env.S3ID
     secret: process.env.S3SECRET
-    bucket: 'wybcsite'
+    bucket: 'quipu'
 
 # return from an s3 storage command
 s3result = (res, err, r)-->
