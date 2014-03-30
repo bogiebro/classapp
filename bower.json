@@ -14,15 +14,15 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "*",
-    "angular-bootstrap": "*",
-    "angular-route": "*",
+    "angular": "1.2.14",
+    "angular-bootstrap": "0.10.0",
+    "angular-route": "1.2.14",
     "angular-easyfb": "0.3.0",
-    "angular-mocks": "*",
-    "angular-cookies": "*",
-    "firepad": "*",
-    "codemirror": "*",
-    "bootstrap": "*"
+    "angular-mocks": "1.2.14",
+    "angular-cookies": "1.2.14",
+    "firepad": "0.1.4",
+    "codemirror": "4.0.1",
+    "bootstrap": "3.1.1"
   },
   "overrides": {
     "bootstrap": {
