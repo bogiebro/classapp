@@ -4,6 +4,10 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
  
   // Contains all user input
   $scope.model = {};
+
+  $scope.classLoadWaiting = true;
+  loadedSearchClasses = false;
+  loadedMyClasses = false;
   
   // Capture the current group
   $scope.group = $group.props;
@@ -12,6 +16,10 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
   $scope.myclasses = $firebase($ref.base.child('users/' + $ref.netid + '/classes'));
   $scope.showHelpText = false;
   $scope.myclasses.$on('change', function() {
+    loadedMyClasses = true;
+    if (loadedSearchClasses) {
+      $scope.$apply($scope.classLoadWaiting = false);
+    }
     if ($scope.myclasses.$getIndex().length == 0) {
       $scope.showHelpText = true;
     } else {
@@ -20,8 +28,12 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
   });
 
   // Get class data
+  loadedClasses = false;
   $http.get('/classnames.json').then(function(result) {
-    $scope.classLoadWaiting = false;
+    loadedSearchClasses = true;
+    if (loadedMyClasses) {
+      $scope.$apply($scope.classLoadWaiting = false);
+    }
     $scope.classes = result.data;
   });
 
