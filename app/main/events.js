@@ -1,43 +1,71 @@
 angular.module("app.events", ['app.auth'])
 
+
 .controller('EventsCtrl', function ($scope, $firebase, $group, $ref) {
         
       //var myApp = angular.module("MyApp", ["firebase"]);
     $scope.group = $group.props;
     $scope.form = {}
     $scope.dayobject = {}
-    
+
    
-    
+
     $scope.testing  = "Space reserved for test messages";
+    //currently useing external firebase will migrate soon
     var eventref = new Firebase('https://myfirstbase.firebaseio.com/');
-    $scope.eventList = $firebase(eventref);
-    
+    $scope.eventRef = $firebase(eventref);// angle fire refrence used for reading to array
+    //firebase refrence used to write new data
+    $scope.eventList = new Firebase('https://myfirstbase.firebaseio.com/');
+
+    $scope.isCollapsed = true;
+    $scope.display = {}
+    $scope.createButton = "Create an Event"
+    $scope.expandCreator = function(){
+        $scope.isCollapsed = !$scope.isCollapsed;
+        if( $scope.isCollapsed) {
+            $scope.createButton = "Create an Event";
+        }else{
+            $scope.createButton = "close event creator";
+        }
+    }
 
      $scope.newEvent = function(){
-        $scope.form.messageInput = "TBA";
-        $scope.form.locationInput = "TBA";
-       
-        if ( $scope.form.messageInput !=="" ) {eventMessage = $scope.form.messageInput;}
-        if ( $scope.form.locationInput !== "")  eventLocation = $scope.form.locationInput;
-        var index =0;
-
-
-        $scope.eventList.$add({date:$scope.dayobject.dt.toUTCString(), message:$scope.form.messageInput,
-                                   location:$scope.form.locationInput, members:""}).setPriority($scope.dayobject.dt.getTime());
+        var eventMessage = "TBA";
+        var eventLocation = "TBA";
         
-        //$scope.eventList.push().setWithPriority({date:$scope.dayobject.dt.toUTCString(), message:$scope.form.messageInput,
-          //                         location:$scope.form.locationInput, members:""}, $scope.dayobject.dt.getTime());
+        if ($scope.form.messageInput ) eventMessage = $scope.form.messageInput;
+        if ($scope.form.locationInput )  eventLocation = $scope.form.locationInput;
+        $scope.testing = "called";
         
-        $scope.testing = $scope.dayobject.dt.getTime();
+        //.setPriority($scope.dayobject.dt.getTime());
+         $scope.eventList.push().setWithPriority({"date":$scope.dayobject.dt.toUTCString(), "message":eventMessage, 
+                                "location":eventLocation, Members:{}}, $scope.dayobject.dt.getTime());
+         $scope.testing = "pushed"
          $scope.form.locationInput = "";
          $scope.form.messageInput = "";
      }
+    
 
+     $scope.dsiplayParser = function(){
+        var newdate = new Date(); 
+        var curdate = new Date();
+        var display = {};
+        display.text = "";
+        if ( newdate.getDay() == curdate.getDay()) display.text = display.text + "Today";
+        else  display.text = display.text + newdate.getDay();
+        if ( newdate.getDate() - curdate.getDate() >= 7) display.text = display.text + " " + newdate.getDate();
+        display.text= "hello"
+        $scope.display.text= display.text;
+        return display.text;
+     }
      
     $scope.archiveEvents = function(){
         // remove passed events
+        angular.forEach($scope.eventList, function(event) {
+            $scope.event.$child(event.$id).$set({displaydate: "hello"});
+        });
     }
+
 
     $scope.addmember = function(){
         //add members to an event
@@ -49,15 +77,9 @@ angular.module("app.events", ['app.auth'])
     }
 
 
-
-    $scope.displaydate = function(){
-        $scope.testing = $scope.dayobject.dt;
-        //$scope.dt = new Date(79,5,24);
-    }
-
     
     $scope.today = function() {
-        //$scope.testing = $scope.dt;
+        //sets the date to the current date
         $scope.dayobject.dt = new Date();
     };
     $scope.today();
@@ -95,8 +117,12 @@ angular.module("app.events", ['app.auth'])
 
     $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'shortDate'];
     $scope.format = $scope.formats[0];
-   //$scope.testing = $scope.dayobject.dt.getTime();
+   
 
+   $scope.convertTime = function (date) {
+       var dt = new Date(date);
+       return dt.getTime();
+   }
 
 
 })

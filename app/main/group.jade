@@ -5,25 +5,33 @@ input.form-control.input-sm.classSearchBar(type="text", ng-disabled="classLoadWa
   typeahead-template-url="classTemplate.html", typeahead-on-select="chooseClass($model)")
 div.classList
     img.loadingImg(src="/img/loading_classes_.gif", ng-if="classLoadWaiting")
-    div.list-group-item.oneClass(href="#", ng-repeat="class in myclasses", ng-mouseover="showIcons = class.name", ng-mouseleave="showIcons = ''")
-      a.list-group-item-heading.oneClassHeading()
+    div.oneClass(ng-repeat="class in myclasses",
+      ng-mouseover="showIcons = class.name", 
+      ng-mouseleave="showIcons = ''",
+      ng-class="getGroupClass(class.maingroup)")
+      a.list-group-item-heading.oneClassHeading(href="#", ng-click="changeGroup(class.maingroup)")
         b
           | {{class.code}}
         br
-      a.list-group-item-text.greenText.oneClassHeading()
+      a.list-group-item-text.greenText.oneClassHeading(href="#", ng-click="changeGroup(class.maingroup)")
         | {{class.name}}
         br
-      a.list-group-item-text.redText.oneClassHeading()
-        | {{class.prof}}
-        br
-      div.allGroups
-        div.group(ng-repeat="group in class.groups", ng-class="groupClass(group)", ng-click="selectGroup(group)")
-          span.glyphicon.glyphicon-lock(ng-show="group.type == 'closed'")
+      //- a.list-group-item-text.redText.oneClassHeading(href="#", ng-click="changeGroup(class.maingroup)")
+      //-   | {{class.prof}}
+      //-   br
+      ul.allGroups.nav.nav-pills.nav-stacked
+        li.group(ng-repeat="subgroup in class.subgroups", 
+          ng-click="changeGroup(subgroup.id)",
+          ng-class="getSubgroupClass(subgroup)")
           a
-            |  {{group.name}}
+            span.icon.glyphicon.glyphicon-remove(ng-click="openRemoveClassModal(class, subgroup)", ng-show="subgroup.id == activeGroupId")
+            span.icon.glyphicon.glyphicon-wrench(ng-click="openEditClassModal(class, subgroup)", ng-show="subgroup.id == activeGroupId")
+            span.glyphicon.glyphicon-lock(ng-show="subgroup.type == 'closed'")
+            span
+              |  {{subgroup.name}}
       .toolBarContainer(ng-show="showIcons == class.name")
         .btn-group
-          a(href="#", id="toolIcon", ng-click="openRemoveClassModal(class)")
+          a(href="#", id="toolIcon", ng-click="openRemoveClassModal(class, undefined)")
             span.glyphicon.glyphicon-trash
           a(href="#", id="toolIcon", ng-click="openAddGroupModal(class)")
             span.glyphicon.glyphicon-plus  
@@ -47,26 +55,28 @@ script(type="text/ng-template", id="groupModal.html")
   div.modal-body(id="groupModal")
     div.groupModalDiv1
       div.groupModalMiddleDiv.panel.panel-default
-        div.oneMember.suggestedClass(ng-repeat="member in newGroupMembers", ng-click="removeGroupMember(member)")
-          span.glyphicon.glyphicon-minus(ng-click="removeMemberFromGroup(member)")
-          img(src="/img/anonymous.jpeg", height="20", width="20")
-          a
-            | {{member.name}}
+        ul.nav.nav-pills.nav-stacked
+          li.newGroupMember(ng-repeat="member in newGroupMembers", ng-click="removeGroupMember(member)")
+            a
+              span.glyphicon.glyphicon-minus(ng-click="removeMemberFromGroup(member)")
+              img(src="/img/anonymous.jpeg", height="20", width="20")
+              span {{member.name}}
       div.groupModalBottomDiv1
         div.input-group-btn
-          input.shortInput(class="form-control", type="text", placeholder="{{group.name}}", ng-model='group.name', ng-class='isNameValid(group.name)')
-          input.longInput(class="form-control", type="text", placeholder="{{group.desc}}", ng-model='group.desc')
-          select(ng-model="group.type", ng-options="opt for opt in group.options")
+          input.shortInput(class="form-control", type="text", placeholder="{{newgroup.name}}", ng-model='newgroup.name', 
+            ng-class='{invalidInput : !isNameValid(newgroup.name)}')
+          input.longInput(class="form-control", type="text", placeholder="{{newgroup.desc}}", ng-model='newgroup.desc')
+          select(ng-model="newgroup.type", ng-options="opt for opt in newgroup.options")
 
 
     div.groupModalDiv2
       div.groupModalMiddleDiv.panel.panel-default
-        div.suggestedMember(ng-repeat="member in classMembers | filter : memSearch", id="{{member.name}}", ng-click="addMemberToGroup(member)")
-          a.list-group-item-heading
-            span.glyphicon.glyphicon-plus
-            img(src="/img/anonymous.jpeg", height="20", width="20")
-            b
-              | {{member.name}}
+        ul.nav.nav-pills.nav-stacked
+          li.newGroupMember(ng-repeat="member in classMembers | filter : memSearch", ng-click="addMemberToGroup(member)")
+            a
+              span.glyphicon.glyphicon-plus
+              img(src="/img/anonymous.jpeg", height="20", width="25")
+              b {{member.name}} ({{member.netid}})
       div.groupModalBottomDiv2
         form.navbar-form
           input.liveSearch(class="form-control", type="text", placeholder="Search Classmates", ng-model="memSearch")

@@ -1,6 +1,7 @@
 .groupContainer
-  padding: 0px !important
+  padding: 5px !important
   margin: 0px
+
 .classList
   -webkit-border-radius 0px !important
   -moz-border-radius 0px !important
@@ -8,29 +9,40 @@
   margin 0
 
 .oneClass
+  border 1px solid
+  min-height 100px
   padding 0px
-  height 100px
   text-align center
-  border-top-right-radius 0px
-  border-top-left-radius 0px
-  -webkit-border-radius 0px !important
-  -moz-border-radius 0px !important
-  border-radius 0px !important
-  background-color #f8f8f8
   position relative
-  -webkit-transition-duration: 0.5s;
+  -webkit-transition-duration: 0.1s;
   font-size 11px
-
-.oneClass:hover
-  background-color #ffffff
-  cursor pointer
+  overflow visible
+  padding 3px
+  padding-bottom 25px
+  margin-bottom 4px
 
 .oneClass .toolBarContainer
   position absolute
+  margin-top 10px
   bottom 5px
   right 0px
   width 100%
   padding 0px
+
+.classList .activeClass
+  background-color #D8D8D8
+
+.activeSubgroup
+  background-color #D8D8D8
+
+.icon
+  opacity 0.3
+  color black
+  float left
+  margin-right 10px
+
+.icon:hover
+  opacity 1
 
 #toolIcon
   color gray
@@ -102,30 +114,29 @@
 
 .allGroups
   margin 0px
-  padding-top 5px
-  margin-top 53px
+  padding-top 15px
+  margin-bottom 15px
   border-color #D8D8D8
+
+.allGroups li
+  padding 0px
 
 .group
   padding 2px
   cursor pointer
+  border 1px solid
+  border-radius 4px
   font-size 10px
-  -webkit-transition-duration 0.3s
-  background-color #A4A4A4
-  margin-bottom 2px
-  margin-right 2px
-  width 47%
-  float left
+  color black
+  margin 2px
+  margin-left 2px
+  background-color #fff
 
-.group:hover
-  background-color #DF0101
+.greenGroup
+  border-color green 
 
-.group a, .group span
-  color #fff !important
-
-.allGroups .activeGroup
-  background-color #DF0101
-  width 100%
+.redGroup
+  border-color red 
 
 #searchModal .searchBar
   width 100%
@@ -175,3 +186,12 @@
   padding-top 10px
 
 
+.loading
+  margin-top 10px
+
+.newGroupMember
+  font-size 10px
+  cursor pointer
+
+.newGroupMember .glyphicon
+  float left

@@ -21,7 +21,6 @@
     "angular-mocks": "*",
     "angular-cookies": "*",
     "firepad": "*",
-    "angular-file-dnd": "*",
     "codemirror": "*",
     "bootstrap": "*"
   },

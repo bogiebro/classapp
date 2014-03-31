@@ -1,6 +1,6 @@
 angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead', 'ui.bootstrap.tpls'])
 
-.controller('GroupCtrl', function ($scope, $http, $ref, $location, $firebase, $group, $modal) {
+.controller('GroupCtrl', function ($scope, $http, $ref, $location, $firebase, $group, $users, $modal, $timeout) {
  
   // Contains all user input
   $scope.model = {};
@@ -10,6 +10,8 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
 
   // Bind to the classes
   $scope.myclasses = $firebase($ref.base.child('users/' + $ref.netid + '/classes'));
+  console.log($scope.myclasses);
+
   $scope.myclasses.$on('change', function() {
     console.log('Classes changed');
     if ($scope.myclasses.$getIndex().length == 0) {
@@ -46,28 +48,56 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
       maingroup: model.maingroup,
       subgroups: []});
     $scope.model = {};
-    $ref.base.child('group/' + model.maingroup + '/users').push($ref.netid);
+    $ref.base.child('groups/' + model.maingroup + '/users').push($ref.netid);
     $ref.base.child('users/' + $ref.netid + '/groups').push(model.maingroup);
   }
   
   // Set the group to what the user clicks on
+  $scope.activeGroupId = undefined;
   $scope.changeGroup = function(gid) {
+    console.log("Changing group to " + gid);
     $group.setGroup(gid);
+    $scope.activeGroupId = gid;
   }
 
+  // Active class on or off
+  $scope.getGroupClass = function(gid) {
+    return $scope.activeGroupId == gid ? 'activeClass' : undefined
+  }
 
-  $scope.openRemoveClassModal = function(clickedClass) {
+  // Active sub group on or off
+  $scope.getSubgroupClass = function(subgroup) {
+    if(subgroup.id == $scope.activeGroupId) {
+      return "activeSubgroup";
+    } else {
+      if(subgroup.creatorid == $ref.netid)
+        return "greenGroup"
+      else
+        return "redGroup"
+    }
+  }
+
+  // Green red marking based on creator
+  $scope.getGroupColor = function(cid) {
+    return $ref.netid == cid ? 'greenGroup' : 'redGroup'
+  }  
+
+
+  $scope.openRemoveClassModal = function(clickedClass, subgroup) {
       var modalInstance = $modal.open({
           templateUrl: 'removeClassModal.html',
           controller: removeClassModalInstanceCtrl,
           resolve: {
             rclass: function() {
               return function() {
-                $scope.removeClass(clickedClass);
+                $scope.removeClass(clickedClass, subgroup);
               }
             },
             msg: function () {
+              if(subgroup == undefined)
                 return "Are you sure you want to remove " + clickedClass.name + "?";
+              else
+                return "Are you sure you want to remove " + subgroup.name + "?";
             }
           }
       });
@@ -86,88 +116,154 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
     }
   }
 
-   $scope.removeClass = function(clickedClass) {
-     console.log("Removing class " + clickedClass.code + " of " + $ref.netid)
-     // Remove the class from user
-     // $ref.base.child("users/" + $ref.netid + "/classes/" + clickedClass.code)
+   // Permanently remove class from user's profile
+   $scope.removeClass = function(clickedClass, subgroup) {
+     console.log("Removing class " + clickedClass + " of " + $ref.netid)
+      if(subgroup != undefined) {
+        // Remove the class from user
+        $ref.base.child("users/" + $ref.netid + "/classes/" + clickedClass.code + "/subgroups/" + subgroup.name).remove();
+      } else {
+        // Remove the class from user
+        $ref.base.child("users/" + $ref.netid + "/classes/" + clickedClass.code).remove(); 
+      }
   }
 
-  $scope.openAddGroupModal = function(clickedClass) {
+  // Modal to create a new subgroup or edit a subgroup
+  $scope.openGroupModal = function(clickedClass, subgroupId) {
 
-    classMembers = [];
-    groupNum = 0;
-    nonAvailNames = [];
-    studentName = "Student Name";
-
+    $scope.changeGroup(clickedClass.maingroup);
+    
     var modalInstance = $modal.open({
       templateUrl: 'groupModal.html',
       controller: GroupModalInstanceCtrl,
       resolve: {
         msg: function () {
           return "Create a new study group for " + clickedClass.code;
-        }, 
-        members: function() {
-          return classMembers;
         },
-        classCode: function() {
-          return clickedClass.code;
+        classCode : function() {
+          return clickedClass.code
         },
-        groupNum: function() {
-          return groupNum;
+        subgroups : function() {
+          return $scope.myclasses[clickedClass.code]['subgroups']
         },
-        nonAvailNames : function() {
-          return nonAvailNames;
-        },
-        studentName : function() {
-          return studentName;
+        subgroupId : function() {
+          return subgroupId
         }
       }
     });
   }
 
   // The group creation modal
-  var GroupModalInstanceCtrl = function ($scope, $modalInstance, msg, members, classCode, groupNum, nonAvailNames, studentName) {
+  var GroupModalInstanceCtrl = function ($scope, $modalInstance, msg, classCode, subgroups, subgroupId) {
     $scope.msg = msg;
     $scope.newGroupMembers = [];
-    $scope.classMembers = members;
-    $scope.group = new Object();
+    $scope.gidToNid = $users.groups;//[$group.props.id];
+    $scope.nidToUser = $users.users;
+    console.log($scope.gidToNid);
 
-    $scope.group.name = 'Group ' + groupNum;
-    $scope.group.options = ['open', 'closed']
-    $scope.group.type = 'open';
-    $scope.group.desc = 'Some Description(Optional)';
-    $scope.nonAvailNames = nonAvailNames;
+    $scope.group = $group.props;
+
+    $scope.newgroup = new Object();
+    $scope.newgroup.options = ['open', 'closed'];
+    $scope.newgroup.type = 'open';
+    $scope.newgroup.desc = 'Some Description(Optional)';
+
+    // Returns a compiled list of all members in selected class
+    $scope.classMembers = new Array();
+    $scope.newGroupMembers = new Array();
+    $timeout(function() {
+      console.log("Populating member list")
+      var arr = $scope.gidToNid[$scope.group.id];
+      if(arr != undefined) {
+        // TODO: auto add user to new group
+        for(i = 0; i < arr.length; i++) {
+          nid = arr[i];
+          userObj = $scope.nidToUser[nid];
+          userObj.netid = nid;
+          if(nid == $ref.netid) {
+            $scope.newgroup.cid = userObj.netid;
+            $scope.newgroup.creatorname = userObj.name;
+          } else {
+            if(subgroupId == '')
+              $scope.classMembers.push(userObj);
+            else
+              $scope.newGroupMembers.push(userObj);
+          }
+        }
+      }
+      $scope.newgroup.name = $scope.getGroupName();
+    }, 0);
+
+    // Gets the size of an object
+    $scope.getSize = function(obj) {
+      var size = 0;
+      var key;
+      for (key in obj) {
+          if (obj.hasOwnProperty(key)) size++;
+      }
+      return size + 1;
+    }
+
+    // Returns the next default name for a group
+    $scope.getGroupName = function() {
+      var size = $scope.getSize(subgroups);
+      console.log("Got name: Group " + size);
+      return "Group " + size;
+    }
 
     $scope.ok = function() {
-      console.log($scope.newGroupMembers);
-      if($scope.nonAvailNames.indexOf($scope.group.name) == -1) {
-        // Get today's data
+      console.log($scope.newGroupMembers.length);
+      if($scope.isNameValid($scope.newgroup.name)) {
+        // Get today's date
         var today = new Date();
         var dd = today.getDate();
         var mm = today.getMonth()+1;
         var yyyy = today.getFullYear();
         var todayDate = mm+'/'+dd+'/'+yyyy;
-        var groupCreator = studentName + "(" + $ref.netid + ")";
+        
+        $scope.newgroup.datecreated = todayDate;
 
-        // Create the group under the class
-        setFB("classcodes/" + classCode + "/groups/" + $scope.group.name,
-            {name:$scope.group.name, 
-             type:$scope.group.type, 
-             desc:$scope.group.desc, 
-             size:$scope.newGroupMembers.length,
-             date:todayDate,
-             creator:groupCreator});
+        // Save the group to groups
+        var pushref = $ref.base.child('groups/').push({
+          props : {
+            name : $scope.newgroup.name,
+            datecreated : $scope.newgroup.datecreated,
+            desc : $scope.newgroup.desc,
+            creatorid : $scope.newgroup.cid,
+            maingroup : false
+          }
+        });
 
-        // Add the members to the group
+        // Get the id of the new group in firebase
+        var newgroupId = pushref.name();
+
+        // Save the group under this user
+        $ref.base.child('users/' + $ref.netid + '/classes/' + classCode + '/subgroups/' + $scope.newgroup.name).set({
+          name : $scope.newgroup.name,
+          type : $scope.newgroup.type,
+          creatorid : $scope.newgroup.cid,
+          id : newgroupId
+        });
+
+        // Push this member to the new group
+        $ref.base.child('groups/users/' + newgroupId).push($ref.netid);
+
+        // Save the group under each member
         for(i = 0; i < $scope.newGroupMembers.length; i++) {
-          setFB("classcodes/" + classCode + "/groups/" + $scope.group.name +
-                "/members/" + $scope.newGroupMembers[i].netid,
-                {member:true, name:$scope.newGroupMembers[i].name});
-        }
+          var nid = $scope.newGroupMembers[i].netid;
+          console.log("Saving to " + nid);
 
-        // Create the group name under the user
-        setFB("users/" + $ref.netid + "/classes/" + classCode + "/groups/" + $scope.group.name,
-            {name:$scope.group.name});
+          // Push this member to the group
+          $ref.base.child('groups/' + newgroupId + '/users/').push(nid);
+
+          // Push this group to the user
+          $ref.base.child('users/' + nid + "/classes/" + classCode + "/subgroups/" + $scope.newgroup.name).set({
+            name : $scope.newgroup.name,
+            type : $scope.newgroup.type,
+            creatorid : $scope.newgroup.cid,
+            id : newgroupId
+          });
+        }
 
        $modalInstance.close();
      }
@@ -178,10 +274,10 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
     }
 
     var transferMember = function(from, to, member) {
-      console.log("Transfering " + member.netid + 'of group ' + $scope.group.name);
       to.push(member);
       var ind = from.indexOf(member);
       from.splice(ind, 1);
+      console.log("Transfered " + member.netid + 'of group ' + from + " at " + ind);
     }
 
     $scope.addMemberToGroup = function(member) {
@@ -191,8 +287,10 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
     $scope.removeGroupMember = function(member) {
       transferMember($scope.newGroupMembers, $scope.classMembers, member);
     }
-    $scope.isNameValid = function(name) {
-      return $scope.nonAvailNames.indexOf(name) != -1 ? 'invalidInput' : undefined
+
+    // Checks if the new group's name is valid
+    $scope.isNameValid = function(newName) {
+      return subgroups[newName] == undefined;
     }
   }
 
@@ -244,376 +342,6 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
   }
 
 });
-
-
-
-
-
-// angular.module("app.group", ['app.auth', 'firebase'])
-
-// .controller('GroupCtrl', function ($scope, $ref, $modal, $location, $firebase) {
- 
-//   $scope.goBig = function() {
-//       $location.path('/bigevents');
-//   }
-
-//   // Bind the head of firebase
-//   $scope.data = $firebase(new Firebase('https://torid-fire-3655.firebaseio.com/'));
-
-//   $scope.data.$on('loaded', start);
-//   $scope.data.$on('change', check);
-
-//   // array of classes
-//   $scope.allClasses = new Array();
-
-//   // Boolean to indicate loading class has finished
-//   $scope.classLoadWaiting = true;
-
-//   // Live search object
-//   $scope.searchText = new Object();
-//   $scope.searchText.txt = '';
-
-//   // Function to close the search suggestions
-//   $scope.closeClassList = function(strg) {
-//     strg.txt = '';
-//   }
-
-//   // Util function to update firebase obj
-//   setFB = function(url, value) {
-//     $firebase($ref.base.child(url)).$set(value);
-//   }
-
-//   // Util function to remove firebase obj
-//   removeFB = function(url) {
-//     $firebase($ref.base.child(url)).$remove();
-//   }
-
-//   // Add a class to the user's profile
-//   $scope.addClass = function(clickedClass) {
-//    console.log("Adding class " + clickedClass.name);
-
-//    // If the class has not been added
-//    if($scope.user.classes == undefined ||
-//      $scope.user.classes[clickedClass.code] == undefined) {
-
-//       // Add the class to the user's fb
-//       setFB('users/' + $ref.netid + '/classes/' + clickedClass.code,
-//           {name:clickedClass.name, code:clickedClass.code, prof:clickedClass.prof});
-
-//       // Add the user to the class fb
-//       setFB('classcodes/' + clickedClass.code + '/members/' + $ref.netid,
-//           {member: true});
-
-//       // Clear the search
-//       $scope.searchText.txt = '';
-//     }
-
-//     else
-//       console.log(clickedClass.code + " already added!");
-//   };
-
-//   // Removes class from the user profile
-//   $scope.removeClass = function(clickedClass) {
-//    console.log("Removing class " + clickedClass.code + " of " + $ref.netid)
-
-//    // Remove the class from user
-//    removeFB("users/" + $ref.netid + "/classes/" + clickedClass.code);
-
-//    // Remove user from class
-//    removeFB("classcodes/" + clickedClass.code + "/members/" + $ref.netid);
-//  }
-
-//   // Load initial data
-//   function start() {
-//     // load classes into array
-//     for(obj in $scope.data['classcodes']) {
-//       $scope.allClasses.push($scope.data['classcodes'][obj]);
-//     }
-
-//     $scope.classLoadWaiting = false;
-
-//     $scope.user = $scope.data.users[$ref.netid];
-//   }
-
-//   function check() {
-//     $scope.user = $scope.data.users[$ref.netid];
-//   }
-
-//   // to toggle between highlighted groups
-//   $scope.selectedGroup = null;
-//   $scope.selectGroup = function(group) {
-//     $scope.selectedGroup = group;
-//   }
-//   $scope.groupClass = function(group) {
-//     return group == $scope.selectedGroup ? 'activeGroup' : undefined;
-//   }
-
-//   // Load modal window for deleting class
-//   $scope.openRemoveClassModal = function(clickedClass) {
-//     var modalInstance = $modal.open({
-//         templateUrl: 'simpleModal.html',
-//         controller: SimpleModalInstanceCtrl,
-//         resolve: {
-//           rclass: function() {
-//             return function() {
-//               $scope.removeClass(clickedClass);
-//             }
-//           },
-//           msg: function () {
-//               return "Are you sure you want to remove " + clickedClass.name + "?";
-//           }
-//         }
-//     });
-//   }
-
-//   // The actual confirmation modal
-//   var SimpleModalInstanceCtrl = function ($scope, $modalInstance, rclass, msg) {
-//     $scope.msg = msg;
-
-//     $scope.ok = function() {
-//      rclass();
-//      $modalInstance.close();
-//     }
-
-//     $scope.cancel = function() {
-//      $modalInstance.dismiss('cancel');
-//     }
-//   }
-
-//   // Open modal for creating groups
-//   $scope.openAddGroupModal = function(clickedClass) {
-
-//     // Get members of the class
-//     var members = $scope.data.classcodes[clickedClass.code]['members'];
-//     var classMembers = new Array();
-
-//     // Determine what number this group is in the class
-//     var groups = $scope.data.classcodes[clickedClass.code]['groups'];
-//     var groupNum = 0;
-//     if(groups != undefined)
-//       groupNum = Object.keys(groups).length + 1;
-
-//     // Get list of unavailable names
-//     var nonAvailNames = new Array();
-//     for(key in groups){
-//       console.log('Group name ' + key)
-//       nonAvailNames.push(key)
-//     }
-
-//     for(i = 0; i < Object.keys(members).length; i++) {
-//       var nid = Object.keys(members)[i];
-
-//       // Skip this user
-//       if(nid == $ref.netid)
-//         continue;
-
-//       var obj = $scope.data.users[nid];
-//       obj.netid = nid;
-//       classMembers.push(obj);
-//     }
-
-//     var modalInstance = $modal.open({
-//       templateUrl: 'groupModal.html',
-//       controller: GroupModalInstanceCtrl,
-//       resolve: {
-//         msg: function () {
-//           return "Create a new study group for " + clickedClass.code;
-//         }, 
-//         members: function() {
-//           return classMembers;
-//         },
-//         classCode: function() {
-//           return clickedClass.code;
-//         },
-//         groupNum: function() {
-//           return groupNum;
-//         },
-//         nonAvailNames : function() {
-//           return nonAvailNames;
-//         },
-//         studentName : function() {
-//           return $scope.data.users[$ref.netid]['name'];
-//         }
-//       }
-//     });
-//   }
-
-//   // The group creation modal
-//   var GroupModalInstanceCtrl = function ($scope, $modalInstance, msg, members, classCode, groupNum, nonAvailNames, studentName) {
-//     $scope.msg = msg;
-//     $scope.newGroupMembers = [];
-//     $scope.classMembers = members;
-//     $scope.group = new Object();
-
-//     $scope.group.name = 'Group ' + groupNum;
-//     $scope.group.options = ['open', 'closed']
-//     $scope.group.type = 'open';
-//     $scope.group.desc = 'Some Description(Optional)';
-//     $scope.nonAvailNames = nonAvailNames;
-//     console.log('Non avail names ' + $scope.nonAvailNames)
-
-//     $scope.ok = function() {
-//       console.log($scope.newGroupMembers);
-//       if($scope.nonAvailNames.indexOf($scope.group.name) == -1) {
-//         // Get today's data
-//         var today = new Date();
-//         var dd = today.getDate();
-//         var mm = today.getMonth()+1;
-//         var yyyy = today.getFullYear();
-//         var todayDate = mm+'/'+dd+'/'+yyyy;
-//         var groupCreator = studentName + "(" + $ref.netid + ")";
-
-//         // Create the group under the class
-//         setFB("classcodes/" + classCode + "/groups/" + $scope.group.name,
-//             {name:$scope.group.name, 
-//              type:$scope.group.type, 
-//              desc:$scope.group.desc, 
-//              size:$scope.newGroupMembers.length,
-//              date:todayDate,
-//              creator:groupCreator});
-
-//         // Add the members to the group
-//         for(i = 0; i < $scope.newGroupMembers.length; i++) {
-//           setFB("classcodes/" + classCode + "/groups/" + $scope.group.name +
-//                 "/members/" + $scope.newGroupMembers[i].netid,
-//                 {member:true, name:$scope.newGroupMembers[i].name});
-//         }
-
-//         // Create the group name under the user
-//         setFB("users/" + $ref.netid + "/classes/" + classCode + "/groups/" + $scope.group.name,
-//             {name:$scope.group.name});
-
-//        $modalInstance.close();
-//      }
-//     }
-
-//     $scope.cancel = function() {
-//       $modalInstance.dismiss();
-//     }
-
-//     var transferMember = function(from, to, member) {
-//       console.log("Transfering " + member.netid + 'of group ' + $scope.group.name);
-//       to.push(member);
-//       var ind = from.indexOf(member);
-//       from.splice(ind, 1);
-//     }
-
-//     $scope.addMemberToGroup = function(member) {
-//       transferMember($scope.classMembers, $scope.newGroupMembers, member);
-//     }
-
-//     $scope.removeGroupMember = function(member) {
-//       transferMember($scope.newGroupMembers, $scope.classMembers, member);
-//     }
-//     $scope.isNameValid = function(name) {
-//       return $scope.nonAvailNames.indexOf(name) != -1 ? 'invalidInput' : undefined
-//     }
-//   }
-
-//   // Group search modal
-//   $scope.openSearchGroupModal = function(clickedClass) {
-
-//     // All groups under this class
-//     var groupArr = new Array();
-//     var groups = $scope.data.classcodes[clickedClass.code]['groups'];
-//     for(g in groups) {
-//       groupArr.push(groups[g]);
-//     }
-
-//     var modalInstance = $modal.open({
-//       templateUrl: 'searchGroupModal.html',
-//       controller: GroupSearchModalInstanceCtrl,
-//       resolve: {
-//         msg: function () {
-//           return "Search groups in " + clickedClass.code;
-//         },
-//         classCode: function() {
-//           return clickedClass.code;
-//         }, 
-//         groups: function() {
-//           return groupArr;
-//         }
-//        }
-//     });
-
-//   }
-
-//   // The group creation modal
-//   var GroupSearchModalInstanceCtrl = function ($scope, $modalInstance, msg, classCode, groups) {
-//     console.log('Passed groups ' + groups);
-//     $scope.groups = groups;
-//     $scope.msg = msg;
-//     $scope.groupTypeOptions = ['open', 'closed'];
-//     $scope.groupType = 'open';
-//     $scope.groupSizeOptions = ['small', 'medium', 'large'];
-//     $scope.groupSize = 'small';
-
-//     $scope.ok = function() {
-//       $modalInstance.dismiss();
-//     }
-
-//     $scope.cancel = function() {
-//       $modalInstance.dismiss();
-//     }
-
-
-//   }
-
-// })
-
-// //   // Open modal for creating group
-
-// // })
-
-
-// .directive("manipulate", function(){
-//     var linker = function(scope, element, attr) {
-
-
-//         if(element.hasClass('collapseBtn')) {
-//             element.click(function() {
-//         if($(".leftbar").css("width") == "60px") {
-//           $(".leftbar").css("width", "15%");
-//           $(".oneClass a").show();
-//           element.removeClass("glyphicon-circle-arrow-right");
-//           element.addClass("glyphicon-circle-arrow-left");
-//         } else {
-//                   $(".leftbar").css("width", "60px");
-//           $(".oneClass a").hide();
-//           $(".oneClass .list-group-item-heading").show();
-//           element.removeClass("glyphicon-circle-arrow-left");
-//           element.addClass("glyphicon-circle-arrow-right");
-//         }
-//             });
-//         }
-
-//         if(element.hasClass('oneClassHeading')) {
-//             element.click(function() {
-//                 // If already a tall class, make it short
-//                 if(element.parent().hasClass('tallClass')) {
-//                     console.log("Removing tall class!");
-//                     element.parent().removeClass('tallClass');
-//                     element.parent().find('.toolBarContainer').addClass('hiddenElement');
-
-//                 } else {
-//                     // If not make everything else short
-//                     $('.oneClass').removeClass('tallClass');
-//                       $('.oneClass').find('.toolBarContainer').addClass('hiddenElement');
-                    
-//                     // and then make this tall
-//                     element.parent().addClass("tallClass");
-//                     element.parent().find('.toolBarContainer').removeClass('hiddenElement');
-
-//                 }
-//       });
-//         }
-
-//     }
-
-//     return {
-//         link: linker
-//     }
-// })
 
 
 

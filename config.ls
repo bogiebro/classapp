@@ -1,3 +1,4 @@
+console.log("base is #{process.env.BASE}")
 if process.env.NODE_ENV == 'testing'
     process.env.FIREBASE = "#{process.env.BASE}tests/#{process.env.UUID}"
     FirebaseTokenGenerator = require("firebase-token-generator")
@@ -36,6 +37,9 @@ exports.config =
             pretty: yes
         uglify:
             mangle: false
+        jade_angular:
+            locals:
+                ROOT: ''
     overrides:
       production:
         conventions:

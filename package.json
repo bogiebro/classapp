@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "postinstall": "sh install.sh",
-    "start": "./node_modules/LiveScript/bin/livescript app.ls"
+    "start": "./node_modules/.bin/lsc app.ls"
   },
   "dependencies": {
     "LiveScript-brunch": "1.5.x",
@@ -23,7 +23,10 @@
     "fbgraph": "*",
     "firebase-token-generator": "~0.1.4",
     "process-env-brunch": "*",
-    "cron": "*"
+    "cron": "*",
+    "multiparty": "*",
+    "gm": "*",
+    "knox": "*"
   },
   "devDependencies": {
     "karma": "*",
@@ -33,6 +36,8 @@
     "karma-phantomjs-launcher": "*",
     "karma-firefox-launcher": "*",
     "karma-coffee-preprocessor": "*",
-    "protractor": "*"
+    "protractor": "*",
+    "readline": "*",
+    "lazy":"*"
   }
 }
