@@ -32,7 +32,7 @@ html(ng-app="App", manifest="/web.appcache")
               span(class="glyphicon glyphicon-folder-open")
       .container-fluid
         .row(ng-controller="MainCtrl")
-          .col-sm-2(ng-controller="GroupCtrl", ng-class="{'hidden-xs': group.id}")
+          .col-sm-2.groupContainer(ng-controller="GroupCtrl", ng-class="{'hidden-xs': group.id}")
             ng-include(src="'app/main/group.jade'")
           div(ng-class="{'col-sm-8': !big, 'col-sm-10': big, 'hidden-xs': !group.id}")
             div(ng-view)
