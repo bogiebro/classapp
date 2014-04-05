@@ -15,11 +15,18 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
   // Bind to the classes
   $scope.myclasses = $firebase($ref.base.child('users/' + $ref.netid + '/classes'));
   $scope.showHelpText = false;
-  $scope.myclasses.$on('change', function() {
+  $scope.myclasses.$on('loaded', function() {
     loadedMyClasses = true;
     if (loadedSearchClasses) {
       $scope.$apply($scope.classLoadWaiting = false);
     }
+    if ($scope.myclasses.$getIndex().length == 0) {
+      $scope.showHelpText = true;
+    } else {
+      $scope.showHelpText = false;
+    }
+  });
+  $scope.myclasses.$on('change', function() {
     if ($scope.myclasses.$getIndex().length == 0) {
       $scope.showHelpText = true;
     } else {
@@ -36,6 +43,11 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
     }
     $scope.classes = result.data;
   });
+  
+  // Filter out classes of which the user is currently a member
+  $scope.notIn = function(val) {
+    return $scope.myclasses && !$scope.myclasses[val.code];
+  }
 
   // Add the user to a class
   $scope.chooseClass = function(model) {

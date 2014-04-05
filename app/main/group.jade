@@ -1,4 +1,4 @@
-input.form-control.input-sm(type="text", ng-disabled="classLoadWaiting || !myclasses",
+input.form-control.input-sm(type="text", ng-disabled="classLoadWaiting",
   ng-model="model.pickedClass", placeholder="Search for a class",
   typeahead="class as class.code for class in classes | filter:$viewValue | filter:notIn | limitTo:8",
   typeahead-template-url="classTemplate.html", typeahead-on-select="chooseClass($model)")
