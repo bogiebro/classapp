@@ -1,7 +1,8 @@
 angular.module("app.auth", ['firebase', 'ngCookies'])
 
-# gives you access to an authenticated firebase url ($ref.base)
-# and the user's netid ($ref.netid) 
+# gives you access to the authenticated firebase object ($ref.base)
+# at starting node (aka 'classcodes', 'classname', 'groups' are children)
+# and the user's netid ($ref.netid) as string
 .factory '$ref' ($cookies, $rootScope, $firebase, $window)->
     refScope = {}
     cookieData = JSON.parse($cookies.casInfo)
