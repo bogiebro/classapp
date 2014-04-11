@@ -1,4 +1,6 @@
-div.membersContainer
+div.membersContainer(ng-show="group.id == 'default'")
+	h4 Select a group
+div.membersContainer(ng-show="group.id != 'default'")
 	h4 {{group.props.name}} Members
 	div(ng-show="!group.props.maingroup")
 		input.shortInput.inlineElem(class="form-control", type="text",
@@ -21,7 +23,8 @@ div.membersContainer
       						ng-mouseleave="showIcons = ''")
 							a
 								img(src="/img/anonymous.jpeg", height="20", width="20")
-								span {{member.name}} ({{member.netid}})
+								span(ng-show="member != thisUser") {{member.name}} ({{member.netid}})
+								span(ng-show="member == thisUser") Me ({{member.netid}})
 								span.glyphicon.glyphicon-user(ng-show="isUserAdmin(member)")
 								span.memToolSet(ng-show="showIcons == member.netid")
 									span.icon.glyphicon.glyphicon-plus(ng-click="moveToNew(member)", 
@@ -42,7 +45,8 @@ div.membersContainer
 							a(tooltip="Change group name to add this member!", tooltip-placement="right", 
 								tooltip-trigger="{{{true: 'mouseenter', false: 'never'}[!isnameValidInUser(member, group.props.name)]}}")
 								img(src="/img/anonymous.jpeg", height="20", width="20")
-								span {{member.name}} ({{member.netid}})
+								span(ng-show="member != thisUser") {{member.name}} ({{member.netid}})
+								span(ng-show="member == thisUser") Me ({{member.netid}})
 								span.memToolSet(ng-show="showIcons == member.netid")
 									span.icon.glyphicon.glyphicon-plus(
 										ng-click="addToGroup(group, member.netid, false); removeFromList(member, classMembers); groupMembers.push(member)")
@@ -58,7 +62,8 @@ div.membersContainer
       						ng-mouseleave="showIcons = ''")
 							a
 								img(src="/img/anonymous.jpeg", height="20", width="20")
-								span {{member.name}} ({{member.netid}})
+								span(ng-show="member != thisUser") {{member.name}} ({{member.netid}})
+								span(ng-show="member == thisUser") Me ({{member.netid}})
 								span.glyphicon.glyphicon-user(ng-show="member.isAdminNewGroup")
 								span.memToolSet(ng-show="showIcons == class.name")
 									span.icon.glyphicon.glyphicon-minus(ng-show="isUserAdmin(thisUser) || member != thisUser", 
@@ -83,7 +88,8 @@ div.membersContainer
 					li.memberLi(ng-repeat="member in groupMembers", ng-show="isUserAdmin(member)")
 						a
 							img(src="/img/anonymous.jpeg", height="20", width="20")
-							span {{member.name}} ({{member.netid}})
+							span(ng-show="member != thisUser") {{member.name}} ({{member.netid}})
+							span(ng-show="member == thisUser") Me ({{member.netid}})
 			div.membersList.groupSubgroups(ng-show="group.subgroups")
 				p Groups under {{group.props.name}}
 				div.allMembers.panel.panel-default
@@ -92,7 +98,8 @@ div.membersContainer
 							ng-mouseover="showIcons = subgroup", 
       						ng-mouseleave="showIcons = ''")
 							a
-								span {{subgroup.name}} (by {{nidToUser[subgroup.creatorid].name}})
+								span(ng-show="subgroup.creatorid != thisUser.netid") {{subgroup.name}} (by {{nidToUser[subgroup.creatorid].name}})
+								span(ng-show="subgroup.creatorid == thisUser.netid") {{subgroup.name}} (by Me)
 								span.memToolSet(ng-show="showIcons == subgroup")
 									span.icon.glyphicon.glyphicon-arrow-left(ng-click="", ng-show="isnameValidInUser(thisUser, subgroup.name)")
 				input.inlineElem(class="form-control", type="text", placeholder="Search groups")

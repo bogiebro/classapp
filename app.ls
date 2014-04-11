@@ -55,7 +55,6 @@ app.use(express.errorHandler!) if development
 #    key: process.env.S3ID
 #    secret: process.env.S3SECRET
 #    bucket: 'wybcsite'
-
 # return from an s3 storage command
 #s3result = (res, err, r)-->
 #  console.error err if err
@@ -110,7 +109,7 @@ app.post '/extendToken', netidparse, json, (req, res)!->
     access_token: req.body.token,
     client_id: process.env.FBID,
     client_secret: process.env.FBSECRET}, (err, fbres)->
-      firebase.child("/users/#{req.body.netid}").update(token: fbres.access_token) if (!err))
+      firebase.child("/users/#{req.body.netid}/props").update(token: fbres.access_token) if (!err))
   res.send 200
 
 # get the root

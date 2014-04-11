@@ -1,13 +1,13 @@
 angular.module("app.events", ['app.auth'])
 
 
-.controller('EventsCtrl', function ($scope, $firebase, $group, $ref) {
+.controller('EventsCtrl', function ($scope, $firebase, $group, $ref, $users) {
         
       //var myApp = angular.module("MyApp", ["firebase"]);
     $scope.group = $group.props;
     $scope.form = {}
     $scope.dayobject = {}
-
+    $scope.today= new Date()
    
 
     $scope.testing  = "Space reserved for test messages";
@@ -27,49 +27,48 @@ angular.module("app.events", ['app.auth'])
         }else{
             $scope.createButton = "close event creator";
         }
-    }
+    } 
 
      $scope.newEvent = function(){
         var eventMessage = "TBA";
         var eventLocation = "TBA";
-        
         if ($scope.form.messageInput ) eventMessage = $scope.form.messageInput;
         if ($scope.form.locationInput )  eventLocation = $scope.form.locationInput;
         $scope.testing = "called";
         
-        //.setPriority($scope.dayobject.dt.getTime());
+        
          $scope.eventList.push().setWithPriority({"date":$scope.dayobject.dt.toUTCString(), "message":eventMessage, 
-                                "location":eventLocation, Members:{}}, $scope.dayobject.dt.getTime());
+                                "location":eventLocation, Members:[$ref.netid]},
+                                 $scope.dayobject.dt.getTime());
          $scope.testing = "pushed"
          $scope.form.locationInput = "";
          $scope.form.messageInput = "";
      }
     
+    
 
-     $scope.dsiplayParser = function(){
-        var newdate = new Date(); 
-        var curdate = new Date();
-        var display = {};
-        display.text = "";
-        if ( newdate.getDay() == curdate.getDay()) display.text = display.text + "Today";
-        else  display.text = display.text + newdate.getDay();
-        if ( newdate.getDate() - curdate.getDate() >= 7) display.text = display.text + " " + newdate.getDate();
-        display.text= "hello"
-        $scope.display.text= display.text;
-        return display.text;
+     $scope.toDate = function(dateString){
+        var newdate = new Date(dateString); 
+        
+        return newdate;
      }
-     
-    $scope.archiveEvents = function(){
-        // remove passed events
-        angular.forEach($scope.eventList, function(event) {
-            $scope.event.$child(event.$id).$set({displaydate: "hello"});
-        });
-    }
+    
+     $scope.eventList.endAt($scope.today.getTime()).on('child_added', function(snapshot) {
+        var EventInfo = snapshot.val();
+        var eventName = snapshot.name();
+        $scope.eventList.child(eventName).remove(); 
+        //EventInfo.remove();
+    });
 
 
-    $scope.addmember = function(){
-        //add members to an event
-        //need to find out how to acess 
+
+   
+
+    $scope.addMember = function(eventName){
+        var addRef = $scope.eventList.child(eventName);
+        console.log(addRef);
+        
+        
     }
 
     $scope.removeMember = function(){

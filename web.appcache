@@ -7,13 +7,13 @@ FALLBACK:
 
 
 CACHE:
-./splash/index.html
-./main/index.html
-./editor/index.html
-./css/main.css
-./css/vendor.css
-./js/app.main.templates.js
-./js/main.js
-./js/editor.js
-./js/vendor.js
+http://quipu.s3-website-us-west-2.amazonaws.com/splash/index.html
+http://quipu.s3-website-us-west-2.amazonaws.com/main/index.html
+http://quipu.s3-website-us-west-2.amazonaws.com/editor/index.html
+http://quipu.s3-website-us-west-2.amazonaws.com/css/main.css
+http://quipu.s3-website-us-west-2.amazonaws.com/css/vendor.css
+http://quipu.s3-website-us-west-2.amazonaws.com/js/app.main.templates.js
+http://quipu.s3-website-us-west-2.amazonaws.com/js/main.js
+http://quipu.s3-website-us-west-2.amazonaws.com/js/editor.js
+http://quipu.s3-website-us-west-2.amazonaws.com/js/vendor.js
 ./classnames.json

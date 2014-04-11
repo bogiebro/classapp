@@ -10,18 +10,18 @@ html(ng-app="App", manifest="/web.appcache")
       nav.navbar.navbar-default.navbar-fixed-top.navbar-inverse(role="navigation", ng-controller="NavCtrl")
         .container-fluid.hidden-xs
           .navbar-header
-            a.navbar-brand(href ng-click="go('/bigevents')") Quipu
+            a.navbar-brand.ng-cloak(href ng-click="go('/bigevents')") Quipu{{group.name ? ': ' + group.name : ''}}
           ul.nav.navbar-nav.navbar-right.hidden-xs
-            li <a href ng-click="go('/members')">Members</a>
-            li <a href ng-click="go('/chat')">Chat</a>
-            li <a href ng-click="go('/files')">Files</a>
+            li(ng-class='{active: path == "/members"}') <a href ng-click="go('/members')">Members</a>
+            li(ng-class='{active: path == "/chat"}') <a href ng-click="go('/chat')">Chat</a>
+            li(ng-class='{active: path == "/files"}') <a href ng-click="go('/files')">Files</a>
         .container-fluid.visible-xs
           span(ng-show="group.name")
-            span.pointer.navbar-text(ng-click='clearGroup()', class="glyphicon glyphicon-chevron-left").back
-            span.bigger.navbar-text Tester
+            span.ng-cloak.pointer.navbar-text(ng-click='clearGroup()', class="glyphicon glyphicon-chevron-left").back
+            span.ng-cloak.bigger.navbar-text {{group.classCode}}
           span.vcenter(ng-show="!group.name")
             a.bigger.navbar-text(href ng-click="go('/bigevents')") Quipu
-          span.btn-group.leftbuttons(ng-show="group.name")
+          span.ng-cloak.btn-group.leftbuttons(ng-show="group.name")
             button(type="button", ng-click="go('/events')", class="btn navbar-btn btn-sm")
               span(class="glyphicon glyphicon-th-list")
             button(type="button", ng-click="go('/members')", class="btn navbar-btn btn-sm") 

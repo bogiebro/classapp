@@ -348,8 +348,3 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
   // }
 
 });
-
-
-
-
-

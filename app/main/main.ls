@@ -17,15 +17,15 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
     
     # configure basic fields for manual text entry
     $scope.me = {}
-    $firebase($ref.base.child("users/#{$ref.netid}/name")).$bind($scope, "me.name")
-    $firebase($ref.base.child("users/#{$ref.netid}/college")).$bind($scope, "me.college")
+    $firebase($ref.base.child("users/#{$ref.netid}/props/name")).$bind($scope, "me.name")
+    $firebase($ref.base.child("users/#{$ref.netid}/props/college")).$bind($scope, "me.college")
 
     # facebook integration
     fillFBData = (token)->
       console.log('filling data')
       $http.post('/extendToken', {token: token, netid: $ref.netid})
       api <- $FB.api('/me?fields=id,name,picture')
-      $ref.base.child("/users/#{$ref.netid}").update do
+      $ref.base.child("/users/#{$ref.netid}/props").update do
         fbid: api.id
         name: api.name
         image: api.picture.data.url
@@ -42,7 +42,7 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
     $scope.dismiss = !-> $modalInstance.close!
 
     # drag and drop image uploading with progress support
-    $ref.base.child("/users/#{$ref.netid}/pic").once 'value' (snap)->
+    $ref.base.child("/users/#{$ref.netid}/props/pic").once 'value' (snap)->
         $scope.me.image = snap.val!
     $scope.image = {}
     $scope.image.progress = 0
@@ -79,9 +79,14 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
   $scope.big = false
   $scope.$on 'newuser', !-> $location.path('/help')
   $scope.$on '$locationChangeSuccess', !->
-    if $location.path! is '/bigevents' then $scope.big = true else $scope.big = false
+    if $location.path! is '/bigevents'
+      $scope.big = true
+      $group.clearGroup!
+    else $scope.big = false
 
 .controller 'NavCtrl', ($scope, $location, $group)!->
+  $scope.$on '$locationChangeSuccess', !->
+    $scope.path = $location.path!
   $scope.clearGroup = $group.clearGroup
   $scope.group = $group.props
   $scope.go = (x)-> $location.path(x)

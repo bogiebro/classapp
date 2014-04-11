@@ -14,15 +14,15 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "*",
-    "angular-bootstrap": "*",
-    "angular-route": "*",
-    "angular-easyfb": "*",
-    "angular-mocks": "*",
-    "angular-cookies": "*",
-    "firepad": "*",
-    "codemirror": "*",
-    "bootstrap": "*"
+    "angular": "1.2.14",
+    "angular-bootstrap": "0.10.0",
+    "angular-route": "1.2.14",
+    "angular-easyfb": "0.3.0",
+    "angular-mocks": "1.2.14",
+    "angular-cookies": "1.2.14",
+    "firepad": "0.1.4",
+    "codemirror": "4.0.1",
+    "bootstrap": "3.1.1"
   },
   "overrides": {
     "bootstrap": {
@@ -36,9 +36,13 @@
       ],
       "dependencies": []
     },
-    "angular-file-dnd": {
-      "main": ["./dist/angular-file-dnd.min.js"]
+    "firepad": {
+      "dependencies": {
+        "CodeMirror": "4.0.1"
+      }
     }
-
+  },
+  "resolutions": {
+    "angular": "1.2.13"
   }
 }

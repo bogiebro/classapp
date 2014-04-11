@@ -1,6 +1,6 @@
 angular.module("app.chat", ['app.auth'])
 
-.controller('ChatCtrl', function ($scope) {
+.controller('ChatCtrl', function ($scope, $ref, $firebase, $group) {
     $scope.toggled = true;          // checks whether search is toggled
     $scope.textBox = "";
     $scope.focus = {};              // holds the reference to the chain in focus
@@ -20,6 +20,10 @@ angular.module("app.chat", ['app.auth'])
             ]
         }
     ];
+
+    $scope.toggle = function () {
+        $scope.toggled = !scope.toggled;
+    }
 
     // Util function to filter comments by textbox contents when search toggled 
     $scope.commentSearch = function () {

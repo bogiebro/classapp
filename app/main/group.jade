@@ -25,13 +25,7 @@ div.classList
                     span.glyphicon.glyphicon-lock(ng-show="subgroup.type == 'closed'")
                     span {{subgroup.name}}
 
-        div.btn-group.toolBarContainer(ng-show="showIcons")        
-            a(href="#", id="toolIcon", ng-click="openRemoveClassModal(class, undefined)")
-                span.glyphicon.glyphicon-trash
-            a(href="#", id="toolIcon")
-                span.glyphicon.glyphicon-plus  
-            a(href="#", id="toolIcon")
-                span.glyphicon.glyphicon-search
+        span.icon.glyphicon.glyphicon-remove(id="toolIcon", ng-click="openRemoveClassModal(class, undefined)")
 
 script(type="text/ng-template", id="removeClassModal.html")
   div.modal-body

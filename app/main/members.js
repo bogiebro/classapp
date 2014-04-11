@@ -5,6 +5,9 @@ angular.module("app.members", ['app.auth'])
   $scope.nidToUser = $users.users;
   $scope.group = $group.object;
   $scope.hasAdmin = true;
+
+  if($scope.group.id == 'default')
+    return;
   
   // Does this group have members other than this member
   $scope.hasMembers = false;
@@ -45,6 +48,8 @@ angular.module("app.members", ['app.auth'])
         }
         $scope.groupMembers.push(userObj);
       }
+
+      console.log("Inserting done!");
 
       // There were more than one members
       if(i > 0)
@@ -113,11 +118,16 @@ angular.module("app.members", ['app.auth'])
     
     var currentName = $scope.group.props.name;
 
-    // Change the group's fb, Not working without timeout ???
+    // Change the group's fb, Not working without timeout !!!
     $timeout(function() {
       $ref.base.child('groups/' + $scope.group.id + '/props/' + atr).set({'name':$scope.newName, 'type':$scope.newType}[atr]);
     }, 0);
 
+    if(atr == 'name')
+      $timeout(function() {
+        console.log("Changing name under subgroup");
+        $ref.base.child('groups/' + $scope.group.props.parentid + '/subgroups/' + $scope.group.id + "/name").set($scope.newName);
+      }, 0);
 
     // Change attributes for every user
     for(i = 0; i < $scope.groupMembers.length; i++) {
@@ -335,11 +345,16 @@ angular.module("app.members", ['app.auth'])
   // Checks if name does not exist as subgroup of
   // user's groups
   $scope.isnameValidInUser = function(user, name) {
-    if(user.classes[$scope.group.props.classCode].subgroups != undefined)
-      if(user.classes[$scope.group.props.classCode].subgroups[name] != undefined) {
-        return false;
+    try {
+      if(user.classes[$scope.group.props.classCode].subgroups != undefined)
+        if(user.classes[$scope.group.props.classCode].subgroups[name] != undefined) {
+          return false;
+      }
+      return true;
+    } catch(err) {
+      console.log("Error getting user");
+      return false;
     }
-    return true;
   }
 
   // Checks if the group name is valid for every user
