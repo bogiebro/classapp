@@ -40,14 +40,14 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
   result.groups = $rootScope.$new!
   result.users = $rootScope.$new!
   $ref.base.child("users/#{$ref.netid}/groups").on 'child_added' (gsnap)!->
-    val = gsnap.val!
+    val = gsnap.val!.id
     result.groups[val] = []
     $timeout((->$ref.base.child("groups/#{val}/users").on 'child_added' (user)!->
-        netid = user.val!
+        netid = user.val!.netid
         result.groups.$apply(result.groups[val].push(netid))
         if (!result.users[netid])
           result.users[netid] = {}
-          $ref.base.child("users/#{netid}").once 'value' (snap)!->
+          $ref.base.child("users/#{netid}").on 'value' (snap)!->
             result.users.$apply(result.users[netid] <<< snap.val!)
           $ref.base.child("ratings/" + ratingRef([$ref.netid, netid])).once 'value' (snap)!->
             result.users.$apply(result.users[netid] <<< snap.val!))
@@ -59,15 +59,16 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
 # call $group.clearGroup when back on the group page
 .factory '$group' ($ref, $timeout, $rootScope, $location)->
     result = {}
-    result.props = $rootScope.$new!
     result.setGroup = (groupid)!->
-        result.props.id = groupid
-        $timeout((-> $ref.base.child("groups/#{groupid}/props").on 'value' (snapshot)->
-            result.props.$apply(-> result.props <<< snapshot.val!))
+        result.object = $rootScope.$new!
+        result.object.id = groupid
+        $timeout((-> $ref.base.child("groups/#{groupid}").on 'value' (snapshot)->
+            result.object.$apply(-> result.object <<< snapshot.val!))
           , 0)
     result.clearGroup = !->
-      result.props.name = ''
-      result.props.id = ''
+      result.object = undefined
+      result.object.name = ''
+      result.object.id = ''
       $location.path('/')
     return result
 

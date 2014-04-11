@@ -1,4 +1,4 @@
-h3 Classes
+h4 Classes and Groups
 input.form-control.input-sm.classSearchBar(type="text", ng-disabled="classLoadWaiting || !myclasses",
   ng-model="model.pickedClass", placeholder="Search for a class",
   typeahead="class as class.code for class in classes | filter:$viewValue | filter:notIn | limitTo:8",
@@ -9,34 +9,29 @@ div.classList
       ng-mouseover="showIcons = class.name", 
       ng-mouseleave="showIcons = ''",
       ng-class="getGroupClass(class.maingroup)")
-      a.list-group-item-heading.oneClassHeading(href="#", ng-click="changeGroup(class.maingroup)")
-        b
-          | {{class.code}}
-        br
-      a.list-group-item-text.greenText.oneClassHeading(href="#", ng-click="changeGroup(class.maingroup)")
-        | {{class.name}}
-        br
-      //- a.list-group-item-text.redText.oneClassHeading(href="#", ng-click="changeGroup(class.maingroup)")
-      //-   | {{class.prof}}
-      //-   br
-      ul.allGroups.nav.nav-pills.nav-stacked
-        li.group(ng-repeat="subgroup in class.subgroups", 
-          ng-click="changeGroup(subgroup.id)",
-          ng-class="getSubgroupClass(subgroup)")
-          a
-            span.icon.glyphicon.glyphicon-remove(ng-click="openRemoveClassModal(class, subgroup)", ng-show="subgroup.id == activeGroupId")
-            span.icon.glyphicon.glyphicon-wrench(ng-click="openEditClassModal(class, subgroup)", ng-show="subgroup.id == activeGroupId")
-            span.glyphicon.glyphicon-lock(ng-show="subgroup.type == 'closed'")
-            span
-              |  {{subgroup.name}}
-      .toolBarContainer(ng-show="showIcons == class.name")
-        .btn-group
-          a(href="#", id="toolIcon", ng-click="openRemoveClassModal(class, undefined)")
-            span.glyphicon.glyphicon-trash
-          a(href="#", id="toolIcon", ng-click="openAddGroupModal(class)")
-            span.glyphicon.glyphicon-plus  
-          a(href="#", id="toolIcon", ng-click="openSearchGroupModal(class)")
-            span.glyphicon.glyphicon-search
+        a.list-group-item-heading.oneClassHeading(href="#", ng-click="changeGroup(class.maingroup)")
+            b {{class.code}}
+            br
+            a.list-group-item-text.greenText.oneClassHeading(href="#", ng-click="changeGroup(class.maingroup)")
+            | {{class.name}}
+            br
+        ul.allGroups.nav.nav-pills.nav-stacked
+            li.group(ng-repeat="subgroup in class.subgroups", 
+                ng-click="changeGroup(subgroup.id)",
+                ng-class="getSubgroupClass(subgroup)")
+                a
+                    span.icon.glyphicon.glyphicon-remove(ng-click="openRemoveClassModal(class, subgroup)",
+                        ng-show="subgroup.id == activeGroupId")
+                    span.glyphicon.glyphicon-lock(ng-show="subgroup.type == 'closed'")
+                    span {{subgroup.name}}
+
+        div.btn-group.toolBarContainer(ng-show="showIcons")        
+            a(href="#", id="toolIcon", ng-click="openRemoveClassModal(class, undefined)")
+                span.glyphicon.glyphicon-trash
+            a(href="#", id="toolIcon")
+                span.glyphicon.glyphicon-plus  
+            a(href="#", id="toolIcon")
+                span.glyphicon.glyphicon-search
 
 script(type="text/ng-template", id="removeClassModal.html")
   div.modal-body
@@ -47,70 +42,7 @@ script(type="text/ng-template", id="removeClassModal.html")
       | Yes
     button.btn.btn-primary(ng-click="cancel()")
       | Cancel
-
-script(type="text/ng-template", id="groupModal.html")
-  div.modal-header
-    h3
-      | {{msg}}
-  div.modal-body(id="groupModal")
-    div.groupModalDiv1
-      div.groupModalMiddleDiv.panel.panel-default
-        ul.nav.nav-pills.nav-stacked
-          li.newGroupMember(ng-repeat="member in newGroupMembers", ng-click="removeGroupMember(member)")
-            a
-              span.glyphicon.glyphicon-minus(ng-click="removeMemberFromGroup(member)")
-              img(src="/img/anonymous.jpeg", height="20", width="20")
-              span {{member.name}}
-      div.groupModalBottomDiv1
-        div.input-group-btn
-          input.shortInput(class="form-control", type="text", placeholder="{{newgroup.name}}", ng-model='newgroup.name', 
-            ng-class='{invalidInput : !isNameValid(newgroup.name)}')
-          input.longInput(class="form-control", type="text", placeholder="{{newgroup.desc}}", ng-model='newgroup.desc')
-          select(ng-model="newgroup.type", ng-options="opt for opt in newgroup.options")
-
-
-    div.groupModalDiv2
-      div.groupModalMiddleDiv.panel.panel-default
-        ul.nav.nav-pills.nav-stacked
-          li.newGroupMember(ng-repeat="member in classMembers | filter : memSearch", ng-click="addMemberToGroup(member)")
-            a
-              span.glyphicon.glyphicon-plus
-              img(src="/img/anonymous.jpeg", height="20", width="25")
-              b {{member.name}} ({{member.netid}})
-      div.groupModalBottomDiv2
-        form.navbar-form
-          input.liveSearch(class="form-control", type="text", placeholder="Search Classmates", ng-model="memSearch")
-    
-  div.modal-footer
-    button.btn.btn-primary(ng-click="ok()")
-      | Done
-    button.btn.btn-primary(ng-click="cancel()")
-      | Cancel
-
-script(type="text/ng-template", id="searchGroupModal.html")
-  div.modal-header
-    h3
-      | {{msg}}
-  div.modal-body(id="searchModal")
-    div.searchBar
-      input(class="form-control", type="text", placeholder="Group Name, Member Name", ng-model="groupSearchText")
-      select(ng-model="groupType", ng-options="op for op in groupTypeOptions")
-      select(ng-model="groupSize", ng-options="opt for opt in groupSizeOptions")
-      br
-    div.resultBar(ng-repeat="group in groups | filter : groupSearchText")
-      div.groupBar.suggestedClass
-        span.glyphicon.glyphicon-lock(ng-show="group.type == 'closed'")
-        b
-          {{group.name}} Created by {{group.creator}} on {{group.date}}
-          br
-        div.groupMember(ng-repeat="mem in group.members")
-          a {{mem.name}}
-  div.modal-footer
-    button.btn.btn-primary(ng-click="ok()")
-      | Done
-    button.btn.btn-primary(ng-click="cancel()")
-      | Cancel
-
+      
 script(type="text/ng-template", id="classTemplate.html")
   a
     span(bind-html-unsafe="match.model.name | typeaheadHighlight:query")
@@ -118,3 +50,4 @@ script(type="text/ng-template", id="classTemplate.html")
       | &nbsp (
       span(bind-html-unsafe="match.label | typeaheadHighlight:query")
       | )
+

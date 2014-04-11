@@ -1,4 +1,108 @@
-h4 Members
-button(ng-click='removeUser()') Leave group
-ul(ng-repeat="usr in users[group.id]")
-  li {{info[usr].name}}
+div.membersContainer
+	h4 {{group.props.name}} Members
+	div(ng-show="!group.props.maingroup")
+		input.shortInput.inlineElem(class="form-control", type="text",
+			ng-class='{invalidInput : !isNameValid(newName, groupMembers)}', ng-model="newName")
+		button.btn.btn-primary(ng-click="changeGroupAttr('name')", ng-show="newName.trim() != group.props.name && isNameValid(newName.trim(), groupMembers)") Change
+		//- select.inlineElem.tallSelect(ng-model="newType", value="{{group.type}}", ng-options="opt for opt in newgroup.options"
+		button.inlineElem.btn.btn-default(ng-click="newType = {true : 'closed', false : 'open'}[newType == 'open']; changeGroupAttr('type')") 
+			span.glyphicon.glyphicon-lock(ng-show="newType == 'closed'")
+			{{newType}}
+		br
+	div.membersWorkspace(ng-show="hasMembers")
+		//- Show only when the group has members
+		div.groupEdit
+			div.membersList
+				p Edit Members
+				div.allMembers.panel.panel-default
+					ul.nav.nav-pills.nav-stacked
+						li.memberLi(ng-repeat="member in groupMembers | filter : memSearch",
+							ng-mouseover="showIcons = member.netid", 
+      						ng-mouseleave="showIcons = ''")
+							a
+								img(src="/img/anonymous.jpeg", height="20", width="20")
+								span {{member.name}} ({{member.netid}})
+								span.glyphicon.glyphicon-user(ng-show="isUserAdmin(member)")
+								span.memToolSet(ng-show="showIcons == member.netid")
+									span.icon.glyphicon.glyphicon-plus(ng-click="moveToNew(member)", 
+										ng-show="selectedList.indexOf(member) == -1")
+									span.icon.glyphicon.glyphicon-trash(ng-click="confirm(member, 'remove')",
+										ng-show="isUserAdmin(thisUser) && member.netid != thisUser.netid")
+									span.icon.glyphicon.glyphicon-user(ng-click="changeAdmin(member, !isUserAdmin(member))",
+										ng-show="isUserAdmin(thisUser)")
+				
+				input(class="form-control", type="text", placeholder="Search Members", ng-model="memSearch")
+			div.membersList(ng-show="!group.props.maingroup && classMembers.length > 0")
+				p  Add New Members
+				div.allMembers.panel.panel-default
+					ul.nav.nav-pills.nav-stacked
+						li.memberLi(ng-repeat="member in classMembers | filter : clsSearch",
+							ng-mouseover="showIcons = member.netid",
+	  						ng-mouseleave="showIcons = ''")
+							a(tooltip="Change group name to add this member!", tooltip-placement="right", 
+								tooltip-trigger="{{{true: 'mouseenter', false: 'never'}[!isnameValidInUser(member, group.props.name)]}}")
+								img(src="/img/anonymous.jpeg", height="20", width="20")
+								span {{member.name}} ({{member.netid}})
+								span.memToolSet(ng-show="showIcons == member.netid")
+									span.icon.glyphicon.glyphicon-plus(
+										ng-click="addToGroup(group, member.netid, false); removeFromList(member, classMembers); groupMembers.push(member)")
+
+				input(class="form-control", type="text", placeholder="Search New Members", ng-model="clsSearch")
+
+			div.selectedList(ng-show="selectedList.length > 0")
+				p New Subgroup
+				div.selectedMembers.panel.panel-default
+					ul.nav.nav-pills.nav-stacked
+						li.memberLi(ng-repeat="member in selectedList", ng-click="move(member, false)",
+							ng-mouseover="showIcons = class.name", 
+      						ng-mouseleave="showIcons = ''")
+							a
+								img(src="/img/anonymous.jpeg", height="20", width="20")
+								span {{member.name}} ({{member.netid}})
+								span.glyphicon.glyphicon-user(ng-show="member.isAdminNewGroup")
+								span.memToolSet(ng-show="showIcons == class.name")
+									span.icon.glyphicon.glyphicon-minus(ng-show="isUserAdmin(thisUser) || member != thisUser", 
+										ng-click="removeFromList(member, selectedList)")
+									span.icon.glyphicon.glyphicon-user(ng-click="member.isAdminNewGroup = true")
+				div.actionBtns
+					div.panel.panel-default.newGroupForm
+						input.inlineElem.shortInput(class="form-control", type="text", placeholder="{{newgroup.name}}", 
+							ng-model='newgroup.name', 
+							ng-class='{invalidInput : !isNameValid(newgroup.name, selectedList)}')
+						input.inlineElem.mediumInput(class="form-control", type="text", placeholder="{{newgroup.desc}}", 
+							ng-model='newgroup.desc')
+						select.inlineElem(ng-model="newgroup.type", ng-options="opt for opt in newgroup.options")
+					button.memButton.btn.btn-primary(ng-click="newGroup()") New Group
+					button.memButton.btn.btn-primary(ng-click="selectedList = []; resetNewGroup()") Clear
+		//- Only show if group has subgroups
+		div.groupInfo
+			div.groupAdmins(ng-show="hasAdmin")
+				hr
+				p Admins
+				ul.nav.nav-pills.nav-stacked
+					li.memberLi(ng-repeat="member in groupMembers", ng-show="isUserAdmin(member)")
+						a
+							img(src="/img/anonymous.jpeg", height="20", width="20")
+							span {{member.name}} ({{member.netid}})
+			div.membersList.groupSubgroups(ng-show="group.subgroups")
+				p Groups under {{group.props.name}}
+				div.allMembers.panel.panel-default
+					ul.nav.nav-pills.nav-stacked
+						li.memberLi(ng-repeat="subgroup in group.subgroups",
+							ng-mouseover="showIcons = subgroup", 
+      						ng-mouseleave="showIcons = ''")
+							a
+								span {{subgroup.name}} (by {{nidToUser[subgroup.creatorid].name}})
+								span.memToolSet(ng-show="showIcons == subgroup")
+									span.icon.glyphicon.glyphicon-arrow-left(ng-click="", ng-show="isnameValidInUser(thisUser, subgroup.name)")
+				input.inlineElem(class="form-control", type="text", placeholder="Search groups")
+
+	p(ng-show="!hasMembers") No members in this group
+
+script(type="text/ng-template", id="removeClassModal.html")
+	div.modal-body
+		p {{msg}}
+		div.modal-footer
+			button.btn.btn-primary(ng-click="ok(class)") Yes
+			button.btn.btn-primary(ng-click="cancel()") Cancel
+
