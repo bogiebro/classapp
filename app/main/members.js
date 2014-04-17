@@ -6,8 +6,13 @@ angular.module("app.members", ['app.auth'])
   $scope.group = $group.object;
   $scope.hasAdmin = true;
 
-  if($scope.group.id == 'default')
-    return;
+  // Empty group object when no group selected
+  if($scope.group.props == undefined) {
+    console.log("grou is undefined");
+    $scope.group = new Object();
+    $scope.group.id = 'default';
+    $scope.group.props = new Object();
+  }
   
   // Does this group have members other than this member
   $scope.hasMembers = false;

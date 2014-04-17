@@ -1,4 +1,4 @@
-div.membersContainer(ng-show="group.id == 'default'")
+div(ng-show="group.id == 'default'")
 	h4 Select a group
 div.membersContainer(ng-show="group.id != 'default'")
 	h4 {{group.props.name}} Members
@@ -101,7 +101,7 @@ div.membersContainer(ng-show="group.id != 'default'")
 								span(ng-show="subgroup.creatorid != thisUser.netid") {{subgroup.name}} (by {{nidToUser[subgroup.creatorid].name}})
 								span(ng-show="subgroup.creatorid == thisUser.netid") {{subgroup.name}} (by Me)
 								span.memToolSet(ng-show="showIcons == subgroup")
-									span.icon.glyphicon.glyphicon-arrow-left(ng-click="", ng-show="isnameValidInUser(thisUser, subgroup.name)")
+									span.icon.glyphicon.glyphicon-arrow-left(ng-click="joinGroup(subgroup)", ng-show="isnameValidInUser(thisUser, subgroup.name)")
 				input.inlineElem(class="form-control", type="text", placeholder="Search groups")
 
 	p(ng-show="!hasMembers") No members in this group

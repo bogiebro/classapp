@@ -48,7 +48,7 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
       maingroup: model.maingroup,
       subgroups: []});
     $scope.model = {};
-    $ref.base.child('groups/' + model.maingroup + '/users').push($ref.netid);
+    $ref.base.child('groups/' + model.maingroup + '/users/' + $ref.netid).set($ref.netid);
     $ref.base.child('users/' + $ref.netid + '/groups').push(model.maingroup);
   }
   
