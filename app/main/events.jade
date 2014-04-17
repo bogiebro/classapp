@@ -1,4 +1,4 @@
-h2 Events for group {{groups.name}}
+h2 Events for {{group.name}}
 body 
     button(class="btn btn-default", ng-click="expandCreator()")
         Toggle {{createButton}}
@@ -24,15 +24,11 @@ body
                 input(class="btn-primary",  type="submit", value="Make Event!")
 
     li(ng-repeat="event in eventRef | orderByPriority  ")
-        //h4 {{convertTime(event.date)}}
-        h4{{ toDate(event.date) | date:"EEE h a MM/dd/yy" }}
-        h4 {{event.message}}
-       // {{event.$id}}
-        button(popover="Located at: "+ "{{event.location}}"+ " Date: :" + "{{event.date}}" +  "Members: " + "{{event.Members}}", popover-title="{{event.message}}", class="btn btn-default", popover-placement="top") Details
-        //button(type="button", ng-model="addMember(event.$id)") join
-       
+       h4{{ toDate(event.date) | date:"EEE h a MM/dd/yy" }}
+       h4 {{event.message}}
+          //{{event.$id}}
+       button(popover="Located at: "+ "{{event.location}}"+ " Date: :" + "{{event.date}}" +  "Members: " + "{{event.Members}}", popover-title="{{event.message}}", class="btn btn-default", popover-placement="top") Details
+       button(type="button", ng-model="addMember(event.$id)") join
+       button(class="btn btn-default", ng-click="edit(event.$id)") Edit
         
     h2 {{testing}}
-    p   {{dayobject.dt}}
-
-    p {{eventFire}}
