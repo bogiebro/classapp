@@ -39,6 +39,8 @@ html(ng-app="App", manifest="/web.appcache")
           div.events.hidden-xs(ng-class="{'col-sm-2': !big, hidden: big}", ng-controller="EventsCtrl")
             ng-include(src="'app/main/events.jade'")
       .options(ng-controller="PrefCtrl") 
+          a.spaced(ng-click="tutorial()") Tutorial
+          a.spaced(ng-click="help()") FAQ
           a.spaced(ng-click="about()") About
           a.spaced(ng-click="setupUser()") Preferences
           a.spaced(href='/logout') Log out
@@ -80,6 +82,12 @@ html(ng-app="App", manifest="/web.appcache")
               p.smaller
                   small &copy; 2014 Sam Anklesaria, Iyob Gebremariam, Isaac Reilly,
                       | James Batchelder, Peter Nguyen, Jadon Montero
+
+      script(type="text/ng-template", id="tutorialId")
+          div.modal-header
+              h3 Quipu first step: join your classes
+          div.modal-body
+              include ./tutorial.jade
 
       script(src=ROOT + '/js/angular-file-upload-html5-shim.min.js')
       script(src=ROOT + '/js/vendor.js')
