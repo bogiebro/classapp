@@ -27,8 +27,7 @@
     "multiparty": "*",
     "gm": "*",
     "knox": "0.8.9",
-    "jshint-brunch": "*",
-    "auto-reload-brunch": "*"
+    "jshint-brunch": "*"
   },
   "devDependencies": {
     "karma": "*",
