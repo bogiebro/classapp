@@ -1,10 +1,20 @@
 angular.module("app.events", ['app.auth'])
 
 
-.controller('EventsCtrl', function ($scope, $firebase, $group, $ref, $users) {
-        
+.controller('EventsCtrl', function ($scope, $firebase, $group, $ref, $users, $timeout) {
+     
       //var myApp = angular.module("MyApp", ["firebase"]);
-    $scope.group = $group.props;
+    //$scope.mainGroup= $group;
+    $scope.eventList= $ref.base.child('groups/' + $group.props.id + '/events');
+          console.log("new ref is " + $scope.eventList)
+          var eventref= $ref.base.child('groups/' +  $group.props.id + '/events');
+           $scope.eventRef = $firebase(eventref);
+    console.log("eventctl1")
+    
+
+
+          
+
     $scope.form = {}
     $scope.dayobject = {}
     $scope.today= new Date()
@@ -12,14 +22,31 @@ angular.module("app.events", ['app.auth'])
 
     $scope.testing  = "Space reserved for test messages";
     //currently useing external firebase will migrate soon
-    var eventref = new Firebase('https://myfirstbase.firebaseio.com/');
-    $scope.eventRef = $firebase(eventref);// angle fire refrence used for reading to array
+    //var eventref = new Firebase('https://myfirstbase.firebaseio.com/');
+   // $scope.eventRef = $firebase(eventref);// angle fire refrence used for reading to array
     //firebase refrence used to write new data
-    $scope.eventList = new Firebase('https://myfirstbase.firebaseio.com/');
+    //$scope.eventList = new Firebase('https://myfirstbase.firebaseio.com/');
+         $scope.testing = $scope.group.id;    
 
     $scope.isCollapsed = true;
     $scope.display = {}
     $scope.createButton = "Create an Event"
+
+
+ $group.props.watch("id", function(id, oldval, newval){
+        
+         $scope.isCollapsed = true;
+          $scope.eventList= $ref.base.child('groups/' + newval + '/events');
+          console.log("new ref is " + $scope.eventList)
+          var eventref= $ref.base.child('groups/' + newval + '/events');
+           $scope.eventRef = $firebase(eventref);
+            console.log($scope.eventRef)
+
+       
+     });
+
+
+
     $scope.expandCreator = function(){
         $scope.isCollapsed = !$scope.isCollapsed;
         if( $scope.isCollapsed) {
@@ -35,12 +62,32 @@ angular.module("app.events", ['app.auth'])
         if ($scope.form.messageInput ) eventMessage = $scope.form.messageInput;
         if ($scope.form.locationInput )  eventLocation = $scope.form.locationInput;
         $scope.testing = "called";
-        
-        
-         $scope.eventList.push().setWithPriority({"date":$scope.dayobject.dt.toUTCString(), "message":eventMessage, 
-                                "location":eventLocation, Members:[$ref.netid]},
+       // $ref.base.child("groups/" + $group.props.id ).once 'value' (snap)
+       var mem = {};
+       var name = $ref.netid;
+       mem[name] = $ref.netid;
+        var newevent = {"date":$scope.dayobject.dt.toUTCString(), 
+                "message":eventMessage, "location":eventLocation, Members:mem};
+
+     //  $ref.base.child('groups/' + $group.props.id).push(newevent);
+
+          $scope.eventList.push().setWithPriority(newevent,
                                  $scope.dayobject.dt.getTime());
-         $scope.testing = "pushed"
+
+        if ($ref.base.child('groups/' + $group.props.id).events == undefined){
+            console.log("its empty")
+            console.log($group.props)
+            $ref.base.child('groups/' + $group.props.id).child("events").set("test val");
+            //$ref.base.child('groups/' + $group.props.id).push({events:"test val"});
+            //({"events": { newevent} })
+        }
+        else{
+            console.log("pushing to events set");
+        
+         $scope.eventList.push().setWithPriority(newevent,
+                                 $scope.dayobject.dt.getTime());
+        }
+         console.log("pushed event")
          $scope.form.locationInput = "";
          $scope.form.messageInput = "";
      }
@@ -56,8 +103,8 @@ angular.module("app.events", ['app.auth'])
      $scope.eventList.endAt($scope.today.getTime()).on('child_added', function(snapshot) {
         var EventInfo = snapshot.val();
         var eventName = snapshot.name();
-        $scope.eventList.child(eventName).remove(); 
-        //EventInfo.remove();
+      //  $scope.eventList.child(eventName).remove(); 
+        EventInfo.remove();
     });
 
 
