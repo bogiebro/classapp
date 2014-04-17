@@ -42,14 +42,20 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
 
   // Add the user to a class
   $scope.chooseClass = function(model) {
-    $ref.base.child('users/' + $ref.netid + '/classes/' + model.code).set({
+    $timeout(function() {
+      $ref.base.child('users/' + $ref.netid + '/classes/' + model.code).set({
       code: model.code,
       name: model.name,
       maingroup: model.maingroup,
       subgroups: []});
+    }, 0);
     $scope.model = {};
-    $ref.base.child('groups/' + model.maingroup + '/users/' + $ref.netid).set($ref.netid);
-    $ref.base.child('users/' + $ref.netid + '/groups').push(model.maingroup);
+    $timeout(function() {
+      $ref.base.child('groups/' + model.maingroup + '/users/' + $ref.netid).set({'netid':$ref.netid});
+    }, 0);
+    $timeout(function() {
+      $ref.base.child('users/' + $ref.netid + '/groups/' + model.maingroup).set({'id':model.maingroup});
+    }, 0);
   }
   
   // Set the group to what the user clicks on
@@ -123,14 +129,14 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
       if(subgroup != undefined) {
 
         // Remove subgroup from all places
-        $ref.base.child("users/" + $ref.netid + "/classes/" + clickedClass.code + "/subgroups/" + subgroup.name).remove();
-        $ref.base.child("users/groups/" + subgroup.id).remove();
-        $ref.base.child("groups/" + subgroup.id).remove();
+        $timeout(function() {$ref.base.child("users/" + $ref.netid + "/classes/" + clickedClass.code + "/subgroups/" + subgroup.name).remove();}, 0);
+        $timeout(function() {$ref.base.child("users/groups/" + subgroup.id).remove();}, 0);
+        $timeout(function() {$ref.base.child("groups/" + subgroup.id).remove();}, 0);
       } else {
 
         // Remove the class from user
-        $ref.base.child("users/" + $ref.netid + "/classes/" + clickedClass.code).remove(); 
-        $ref.base.child("users/groups/" + clickedClass.maingroup).remove(); 
+        $timeout(function() {$ref.base.child("users/" + $ref.netid + "/classes/" + clickedClass.code).remove(); }, 0); 
+        $timeout(function() {$ref.base.child("users/groups/" + clickedClass.maingroup).remove(); }, 0);
       }
   }
 });

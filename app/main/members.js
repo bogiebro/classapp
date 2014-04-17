@@ -8,11 +8,13 @@ angular.module("app.members", ['app.auth'])
 
   // Empty group object when no group selected
   if($scope.group.props == undefined) {
-    console.log("grou is undefined");
+    console.log("group is undefined");
     $scope.group = new Object();
     $scope.group.id = 'default';
     $scope.group.props = new Object();
   }
+
+  console.log($scope.gidToNid);
   
   // Does this group have members other than this member
   $scope.hasMembers = false;
