@@ -1,6 +1,24 @@
 angular.module("app.files", ['app.auth', 'angularFileUpload'])
 
-.controller('FilesCtrl', function ($scope, $ref, $group, $firebase, $upload) {
+.controller('NewDocCtrl', function ($scope, $ref, $group, $modalInstance, $window) {
+  $scope.namer = {}
+  $scope.namedDoc = function() {
+    var filename = $scope.namer.name;
+    var fileref = $ref.base.child('notes').push({name: filename, creator: $ref.netid});
+    var link = '/editor#?note=' + fileref.name();
+    $ref.base.child('users/' + $ref.netid + '/props/name').once('value', function(snap) {
+      $ref.base.child('groups/' + $group.props.id + '/files').push(
+        {name: filename, creator: snap.val(), ref: link},
+        function () {
+          $window.open(link);
+          $modalInstance.close(); 
+        }
+      );
+    });
+  }
+})
+
+.controller('FilesCtrl', function ($scope, $ref, $group, $firebase, $upload, $modal) {
   $scope.group = $group.props;
   $scope.uploadthing = {};
   $scope.uploadthing.progress = 0;
@@ -13,9 +31,18 @@ angular.module("app.files", ['app.auth', 'angularFileUpload'])
         fileFormDataName: 'myFile'
       });
       $ref.base.child('users/' + $ref.netid + '/props/name').once('value', function(snap) {
-        $scope.files.$add({name: $files[0].name, creator: snap.val()});
+        $scope.files.$add({name: $files[0].name, creator: snap.val(),
+          ref: $PROCESS_ENV_S3URL + '/docs/' + $group.props.id + '/' +
+            encodeURIComponent($files[0].name)});
       });
     }
+  }
+
+  $scope.createDoc = function() {
+    $modal.open({
+        templateUrl: 'nameId',
+        controller: 'NewDocCtrl'
+    });
   }
 
   $scope.$watch('id', function (newvalue, oldvalue) {
