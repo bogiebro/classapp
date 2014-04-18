@@ -34,10 +34,13 @@ html(ng-app="App", manifest="/web.appcache")
         .row(ng-controller="MainCtrl")
           .col-sm-2(ng-controller="GroupCtrl", ng-class="{'hidden-xs': group.id}")
             ng-include(src="'app/main/group.jade'")
-          div(ng-class="{'col-sm-8': !big, 'col-sm-10': big, 'hidden-xs': !group.id}")
-            div(ng-view)
-          div.events.hidden-xs(ng-class="{'col-sm-2': !big, hidden: big}", ng-controller="EventsCtrl")
-            ng-include(src="'app/main/events.jade'")
+          div.col-sm-10(ng-if="!group.id")
+            h3.text-center.text-muted No group selected
+          div(ng-if="group.id")
+            div(ng-class="{'col-sm-8': !big, 'col-sm-10': big, 'hidden-xs': !group.id}")
+              div(ng-view)
+            div.events.hidden-xs(ng-class="{'col-sm-2': !big, hidden: big}", ng-controller="EventsCtrl")
+              ng-include(src="'app/main/events.jade'")
       .options(ng-controller="PrefCtrl") 
           a.spaced(ng-click="tutorial()") Tutorial
           a.spaced(ng-click="help()") FAQ
