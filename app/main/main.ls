@@ -77,17 +77,15 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
         $modal.open(
             templateUrl: 'aboutId'
             controller: 'AboutCtrl')
-    $scope.tutorial = ->
-        $modal.open(
-            templateUrl: 'tutorialId'
-            controller: 'HelpCtrl')
     $scope.help = ->
         $location.path('/help');
 
-.controller 'MainCtrl', ($scope, $location, $group)!->
+.controller 'MainCtrl', ($scope, $location, $modal, $group)!->
   $scope.group = $group.props
   $scope.big = false
-  $scope.$on 'newuser', !-> $location.path('/welcome')
+  $scope.$on 'newuser', !-> $modal.open(
+            templateUrl: 'tutorialId'
+            controller: 'HelpCtrl')
   $scope.$on '$locationChangeSuccess', !->
     if $location.path! is '/bigevents'
       $scope.big = true
