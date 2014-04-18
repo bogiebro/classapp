@@ -18,7 +18,7 @@ angular.module("app.files", ['app.auth', 'angularFileUpload'])
   }
 })
 
-.controller('FilesCtrl', function ($scope, $ref, $group, $firebase, $upload, $modal) {
+.controller('FilesCtrl', function ($scope, $ref, $group, $firebase, $upload, $location, $modal) {
   $scope.group = $group.props;
   $scope.uploadthing = {};
   $scope.uploadthing.progress = 0;
@@ -45,10 +45,14 @@ angular.module("app.files", ['app.auth', 'angularFileUpload'])
     });
   }
 
-  $scope.$watch('id', function (newvalue, oldvalue) {
-    if ($scope.files) {
-      $scope.files.$off();
+  $scope.$watch('group.id', function (newvalue, oldvalue) {
+    if (!newvalue) {
+      $location.path('/bigevents');
+    } else {
+      if ($scope.files) {
+        $scope.files.$off();
+      }
+      $scope.files = $firebase($ref.base.child('groups/' + $group.props.id + '/files'));
     }
-    $scope.files = $firebase($ref.base.child('groups/' + $group.props.id + '/files'));
   });
 })

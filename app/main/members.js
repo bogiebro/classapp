@@ -4,6 +4,12 @@ angular.module("app.members", ['app.auth'])
   $scope.users = $users.groups;
   $scope.info = $users.users;
   $scope.group = $group.props;
+  
+  $scope.$watch('group.id', function (newvalue, oldvalue) {
+    if (!newvalue) {
+      $location.path('/bigevents');
+    }
+  });
 
   // remove a user from the group
   $scope.removeUser = function() {
