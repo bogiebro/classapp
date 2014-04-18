@@ -1,4 +1,11 @@
 h4 Members
-button(ng-click='removeUser()') Leave group
-ul(ng-repeat="usr in users[group.id]")
-  li {{info[usr].name}}
+div
+  span(ng-repeat="usr in users[group.id]")
+    div.picsquare
+      img.img-thumbnail(ng-src="{{info[usr].pic}}", width='80', height='80')
+      p
+        small {{info[usr].name}}
+h4 Subgroups
+  h5.text-muted.indented No subgroups to display
+hr.rule
+button.btn.downer.btn-danger(type='button', ng-click='removeUser()') Leave group
