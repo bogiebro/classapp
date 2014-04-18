@@ -9,9 +9,12 @@ div(ng-if="group.maingroup")
         p
           small {{usr.name}}
   h4 Subgroups
+    button.btn.btn-xs.bitoff(type='button')
+      span.glyphicon.glyphicon-plus
     h5.text-muted.indented No subgroups to display
-  hr.rule
-  button.btn.downer.btn-danger(type='button', ng-click='removeUser()') Leave group
+  div.atbottom
+    hr
+    button.pull-right.btn.btn-xs.btn-danger(type='button', ng-click='removeUser()') Leave group
 div(ng-if="!group.maingroup")
   form
     input(type='text', ng-model="group.name")

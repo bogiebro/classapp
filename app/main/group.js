@@ -1,6 +1,6 @@
 angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead', 'ui.bootstrap.tpls'])
 
-.controller('GroupCtrl', function ($scope, $http, $ref, $location, $firebase, $group) {
+.controller('GroupCtrl', function ($scope, $http, $ref, $location, $firebase, $group, $timeout) {
  
   // Contains all user input
   $scope.model = {};
@@ -18,7 +18,9 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
   $scope.myclasses.$on('loaded', function() {
     loadedMyClasses = true;
     if (loadedSearchClasses) {
-      $scope.$apply($scope.classLoadWaiting = false);
+      $timeout(function() {
+        $scope.$apply($scope.classLoadWaiting = false);
+      }, 0);
     }
     if ($scope.myclasses.$getIndex().length == 0) {
       $scope.showHelpText = true;
@@ -39,7 +41,9 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
   $http.get('/classnames.json').then(function(result) {
     loadedSearchClasses = true;
     if (loadedMyClasses) {
-      $scope.$apply($scope.classLoadWaiting = false);
+      $timeout(function() {
+        $scope.$apply($scope.classLoadWaiting = false);
+      }, 0);
     }
     $scope.classes = result.data;
   });
