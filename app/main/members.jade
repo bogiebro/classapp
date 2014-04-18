@@ -3,11 +3,11 @@ div(ng-if="group.maingroup")
     form.pull-right
       input.form-control(type='text', placeholder="Search", ng-model="my.searchtext")
   div
-    span(ng-repeat="usr in users[group.id] | filter: my.searchtext")
+    span(ng-repeat="usr in users[group.id] | userify: info | filter: my.searchtext")
       div.picsquare
-        img.img-thumbnail(ng-src="{{info[usr].pic}}", width='80', height='80')
+        img.img-thumbnail(ng-src="{{usr.pic}}", width='80', height='80')
         p
-          small {{info[usr].name}}
+          small {{usr.name}}
   h4 Subgroups
     h5.text-muted.indented No subgroups to display
   hr.rule

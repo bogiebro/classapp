@@ -1,5 +1,13 @@
 angular.module("app.members", ['app.auth'])
 
+.filter('userify', function() {
+  return function(input, info) {
+    return input.map(function(id){
+      return info[input];
+    });
+  }
+})
+
 .controller('MembersCtrl', function ($scope, $ref, $group, $users, $location) {
   $scope.my = {}
   $scope.users = $users.groups;
