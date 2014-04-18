@@ -8,7 +8,8 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
         .when('/chat', {controller:'ChatCtrl', templateUrl:'app/main/chat.jade'})
         .when('/members', {controller:'MembersCtrl', templateUrl:'app/main/members.jade'})
         .when('/files', {controller:'FilesCtrl', templateUrl:'app/main/files.jade'})
-        .when('/help', {controller:'HelpCtrl', templateUrl:'app/main/help.jade'})
+        .when('/help', {controller:'PrefCtrl', templateUrl:'app/main/help.jade'})
+        .when('/welcome', {controller:'PrefCtrl', templateUrl:'app/main/welcome.jade'})
         .when('/events', {controller:'EventsCtrl', templateUrl:'app/main/events.jade'})
         .when('/bigevents', {controller:'BigEventsCtrl', templateUrl:'app/main/bigevents.jade'})
         .otherwise({redirectTo: '/bigevents'})
@@ -63,7 +64,10 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
 .controller 'AboutCtrl', ($scope, $modalInstance)->
     $scope.dismiss = !-> $modalInstance.close!
 
-.controller 'PrefCtrl', ($firebase, $scope, $ref, $modal)->
+.controller 'HelpCtrl', ($scope, $modalInstance)->
+    $scope.dismiss = !-> $modalInstance.close!
+
+.controller 'PrefCtrl', ($firebase, $scope, $ref, $modal, $location)->
     $scope.setupUser = ->
         $modal.open(
             templateUrl: 'askId'
@@ -73,11 +77,17 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
         $modal.open(
             templateUrl: 'aboutId'
             controller: 'AboutCtrl')
+    $scope.tutorial = ->
+        $modal.open(
+            templateUrl: 'tutorialId'
+            controller: 'HelpCtrl')
+    $scope.help = ->
+        $location.path('/help');
 
 .controller 'MainCtrl', ($scope, $location, $group)!->
   $scope.group = $group.props
   $scope.big = false
-  $scope.$on 'newuser', !-> $location.path('/help')
+  $scope.$on 'newuser', !-> $location.path('/welcome')
   $scope.$on '$locationChangeSuccess', !->
     if $location.path! is '/bigevents'
       $scope.big = true
