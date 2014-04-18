@@ -1,1 +1,1 @@
-p files content is here
+h3.text-center.text-muted(ng-show="files.$getIndex().length == 0") No filestable.table.table-striped(ng-show="files.$getIndex().length > 0")  thead    tr      th Filename      th Creator  tbody    tr(ng-repeat="file in files")      td        a(ng-href="{{file.ref}}") {{file.name}}      td {{file.creator}}.pull-right  span(class="dropbox", ng-show="dropSupported",  ng-file-drop="onSelect($files);",  ng-file-drop-available="dropSupported=true")    span Drop File Here  span.newdoc or <a ng-click="createDoc()">create a new document</a>

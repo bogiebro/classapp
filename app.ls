@@ -71,11 +71,19 @@ app.post '/upload', netidparse, (req, res)!->
       im(part, part.filename).resize(50).setFormat('jpeg').toBuffer (err, buffer)!->
         if err then console.error err else
           s3.putBuffer(buffer, uploadName, {}, s3result res)
-          firebase.child("/users/#{req.netid}/props/pic").set(process.env.S3URL + uploadName)
-    else
-      header = 'Content-Length': part.byteCount
-      s3.putStream part, "/docs/#{req.netid}/#{part.filename}", header, (s3result res)
+          firebase.child("users/#{req.netid}/props/pic").set(process.env.S3URL + uploadName)
   form.parse(req)
+
+# upload something else
+app.post '/newfile/:groupid', netidparse, (req, res)!->
+  firebase.child("groups/#{req.params.groupid}/users/#{req.netid}").on 'value' (snap)!->
+    if snap.val! == req.netid
+      form = new multiparty.Form!
+      form.on 'part', (part)!->
+          header = 'Content-Length': part.byteCount
+          s3.putStream part, "/docs/#{req.params.groupid}/#{part.filename}", header, (s3result res)
+      form.parse(req)
+    else res.send 401
 
 # the usual compatibility creator
 ratingRef = (l)-> l.sort!join('')
