@@ -1,11 +1,24 @@
-h4 Members
-div
-  span(ng-repeat="usr in users[group.id]")
-    div.picsquare
-      img.img-thumbnail(ng-src="{{info[usr].pic}}", width='80', height='80')
-      p
-        small {{info[usr].name}}
-h4 Subgroups
-  h5.text-muted.indented No subgroups to display
-hr.rule
-button.btn.downer.btn-danger(type='button', ng-click='removeUser()') Leave group
+div(ng-if="group.maingroup")
+  h4 Members
+    form.pull-right
+      input.form-control(type='text', placeholder="Search", ng-model="my.searchtext")
+  div
+    span(ng-repeat="usr in users[group.id] | filter: my.searchtext")
+      div.picsquare
+        img.img-thumbnail(ng-src="{{info[usr].pic}}", width='80', height='80')
+        p
+          small {{info[usr].name}}
+  h4 Subgroups
+    h5.text-muted.indented No subgroups to display
+  hr.rule
+  button.btn.downer.btn-danger(type='button', ng-click='removeUser()') Leave group
+div(ng-if="!group.maingroup")
+  form
+    input(type='text', ng-model="group.name")
+  div
+    span(ng-repeat="usr in users[group.id] | filter: searchtext")
+      div.picsquare
+        img.img-thumbnail(ng-src="{{info[usr].pic}}", width='80', height='80')
+        p
+          small {{info[usr].name}
+// we should be able to search by name. put names in the users service along with netids 
