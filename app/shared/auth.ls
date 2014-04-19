@@ -64,8 +64,15 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
 .factory '$group' ($ref, $timeout, $rootScope, $location)->
     result = {}
     result.props = $rootScope.$new!
+    result.subgroups = $rootScope.$new!
     result.setGroup = (groupid)!->
         result.props.id = groupid
+        $timeout((-> $ref.base.child("groups/#{groupid}/subgroups").on 'value' (snapshot)->
+          console.log('got called');
+          result.subgroups.$apply(->
+              result.subgroups <<< snapshot.val!
+              console.log(result.subgroups)))
+          , 0)
         $timeout((-> $ref.base.child("groups/#{groupid}/props").on 'value' (snapshot)->
             result.props.$apply(->
               result.props <<< snapshot.val!

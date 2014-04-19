@@ -1,18 +1,21 @@
 .row
   form.pull-left
-    input.form-control(type='text', placeholder="Search", ng-model="my.searchtext")
+    input.form-control.input-sm(type='text', placeholder="Search members", ng-model="my.searchtext")
   button.btn.btn-default.pull-right Create Subgroup
 .row
   span(ng-repeat="usr in users[group.id] | userify: info | filter: my.searchtext")
     div.picsquare
       img(ng-class="{'img-rounded': !selected[usr.netid], 'img-thumbnail': selected[usr.netid]}",
-        ng-src="{{usr.pic}}", width='80', height='80', ng-click="selected[usr.netid] = !selected[usr.netid]")
+        ng-src="{{usr.pic || '/img/anonymous.jpeg'}}", width='80', height='60', ng-click="selected[usr.netid] = !selected[usr.netid]")
       p
         small {{usr.name}}
+div(ng-if="!group.maingroup")
+  h2.text-center.draginfo <small>Drag users from the main group to add members</small>
 div(ng-if="group.maingroup")
   h2.text-center.draginfo <small>Drag users to subgroups in the sidebar to add members</small>
   p.subgroups Subgroups:
-    span.label.label-default.subgrouplabel subgroup 1
-    span.label.label-default.subgrouplabel pirate boys
-    span.label.label-default.subgrouplabel quipu
-    span.label.label-default.subgrouplabel magic hat
+    span.label.label-default.subgrouplabel(ng-repeat="subgroup in subgroups")
+      | {{subgroup.name}}
+div.atbottom
+  hr
+  button.btn.btn-xs.btn-danger(type='button', ng-click='removeUser()') Leave group

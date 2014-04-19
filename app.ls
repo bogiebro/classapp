@@ -68,7 +68,7 @@ app.post '/upload', netidparse, (req, res)!->
   form.on 'part', (part)!->
     if part.filename is /png|jpg|jpeg|pdf/i
       uploadName = "/pics/#{req.netid}.jpg"
-      im(part, part.filename).resize(80).setFormat('jpeg').toBuffer (err, buffer)!->
+      im(part, part.filename).resize(80, 60).setFormat('jpeg').toBuffer (err, buffer)!->
         if err then console.error err else
           s3.putBuffer(buffer, uploadName, {}, s3result res)
           firebase.child("users/#{req.netid}/props/pic").set(process.env.S3URL + uploadName)
