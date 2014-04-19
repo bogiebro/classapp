@@ -2,9 +2,13 @@ angular.module("app.members", ['app.auth'])
 
 .filter('userify', function() {
   return function(input, info) {
-    return input.map(function(id){
-      return info[input];
-    });
+    if (input) {
+      return input.map(function(id){
+        return info[input];
+      });
+    } else {
+      return undefined;
+    }
   }
 })
 
@@ -21,6 +25,19 @@ angular.module("app.members", ['app.auth'])
       $location.path('/bigevents');
     }
   });
+  
+  $scope.setName = function(name){
+    $ref.base.child('groups/' + $group.props.id + '/props/name').set(name);
+    // what if we removed all cached copies of groups.
+    // subgroups was a property of groups that had a map from id to id
+    // groups was a property of users that had a map from groupid to groupid
+    // group sidebar built pretty list by itself
+    // we get subgroups by keeping a map group groupid to props, the same way our $users service works
+  };
+
+  $scope.setGroup = function (id) {
+    $group.setGroup(id);
+  };
 
   // remove a user from the group
   $scope.removeUser = function() {

@@ -1,3 +1,9 @@
+.row.topspaced.ng-cloak(ng-if="!group.maingroup")
+  .col-xs-6
+    .input-group
+      input.form-control.input-lg(type="text", ng-model='group.name')
+      span.input-group-btn
+        button.btn.btn-lg(type='button', ng-click='setName(group.name)') set name
 .row
   form.pull-left
     input.form-control.input-sm(type='text', placeholder="Search members", ng-model="my.searchtext")
@@ -14,7 +20,7 @@ div(ng-if="!group.maingroup")
 div(ng-if="group.maingroup")
   h2.text-center.draginfo <small>Drag users to subgroups in the sidebar to add members</small>
   p.subgroups Subgroups:
-    span.label.label-default.subgrouplabel(ng-repeat="subgroup in subgroups")
+    span.label.label-default.subgrouplabel(ng-repeat="subgroup in subgroups", ng-click="setGroup(subgroup.groupid)")
       | {{subgroup.name}}
 div.atbottom
   hr
