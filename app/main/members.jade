@@ -1,27 +1,18 @@
+.row
+  form.pull-left
+    input.form-control(type='text', placeholder="Search", ng-model="my.searchtext")
+  button.btn.btn-default.pull-right Create Subgroup
+.row
+  span(ng-repeat="usr in users[group.id] | userify: info | filter: my.searchtext")
+    div.picsquare
+      img(ng-class="{'img-rounded': !selected[usr.netid], 'img-thumbnail': selected[usr.netid]}",
+        ng-src="{{usr.pic}}", width='80', height='80', ng-click="selected[usr.netid] = !selected[usr.netid]")
+      p
+        small {{usr.name}}
 div(ng-if="group.maingroup")
-  h4 Members
-    form.pull-right
-      input.form-control(type='text', placeholder="Search", ng-model="my.searchtext")
-  div
-    span(ng-repeat="usr in users[group.id] | userify: info | filter: my.searchtext")
-      div.picsquare
-        img.img-thumbnail(ng-src="{{usr.pic}}", width='80', height='80')
-        p
-          small {{usr.name}}
-  h4 Subgroups
-    button.btn.btn-xs.bitoff(type='button')
-      span.glyphicon.glyphicon-plus
-    h5.text-muted.indented No subgroups to display
-  div.atbottom
-    hr
-    button.pull-right.btn.btn-xs.btn-danger(type='button', ng-click='removeUser()') Leave group
-div(ng-if="!group.maingroup")
-  form
-    input(type='text', ng-model="group.name")
-  div
-    span(ng-repeat="usr in users[group.id] | filter: searchtext")
-      div.picsquare
-        img.img-thumbnail(ng-src="{{info[usr].pic}}", width='80', height='80')
-        p
-          small {{info[usr].name}
-// we should be able to search by name. put names in the users service along with netids 
+  h2.text-center.draginfo <small>Drag users to subgroups in the sidebar to add members</small>
+  p.subgroups Subgroups:
+    span.label.label-default.subgrouplabel subgroup 1
+    span.label.label-default.subgrouplabel pirate boys
+    span.label.label-default.subgrouplabel quipu
+    span.label.label-default.subgrouplabel magic hat
