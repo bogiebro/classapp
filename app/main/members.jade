@@ -9,12 +9,12 @@
     input.form-control.input-sm(type='text', placeholder="Search members", ng-model="my.searchtext")
   button.btn.btn-default.pull-right Create Subgroup
 .row
-  span(ng-repeat="usr in users[group.id] | userify: info | filter: my.searchtext")
-    div.picsquare
-      img(ng-class="{'img-rounded': !selected[usr.netid], 'img-thumbnail': selected[usr.netid]}",
-        ng-src="{{usr.pic || '/img/anonymous.jpeg'}}", width='80', height='60', ng-click="selected[usr.netid] = !selected[usr.netid]")
-      p
-        small {{usr.name}}
+  //span(ng-repeat="usr in users[group.id] | userify: info | filter: my.searchtext")
+    //div.picsquare
+     // img(ng-class="{'img-rounded': !selected[usr.netid], 'img-thumbnail': selected[usr.netid]}",
+      //  ng-src="{{usr.pic || '/img/anonymous.jpeg'}}", width='80', height='60', ng-click="selected[usr.netid] = !selected[usr.netid]")
+      //p
+       // small {{usr.name}}
 div(ng-if="!group.maingroup")
   h2.text-center.draginfo <small>Drag users from the main group to add members</small>
 div(ng-if="group.maingroup")

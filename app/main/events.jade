@@ -12,23 +12,23 @@ body
                     div( class="well well-sm", ng-model="dayobject.dt")
                         datepicker(min="minDate", show-weeks="showWeeks")
                     
-                div( class="row")
-                    div( class="col-md-6")
-                        label Format:
-                            select( class="form-control", ng-model="format", ng-options="f for f in formats")
-                                option
-
+               
             form(ng-submit="newEvent()")
                 input(type='text', ng-model='form.messageInput', placeholder='title...')
                 input(type='text', ng-model='form.locationInput', placeholder='location')
-                input(class="btn-primary",  type="submit", value="Make Event!")
+                //input(type='text', ng-model='form.timeInput', placeholder='hour')
+                 
+                //<input type="checkbox" ng-model="form.AM", value = "AM?">
+               
+                //input(class="btn-primary",  type="submit", value="Make Event!")
+    //div(collapse="editing")
+      //h2  Editing event on 
 
     li(ng-repeat="event in eventRef | orderByPriority  ")
        h4{{ toDate(event.date) | date:"EEE h a MM/dd/yy" }}
        h4 {{event.message}}
           //{{event.$id}}
-       button(popover="Located at: "+ "{{event.location}}"+ " Date: :" + "{{event.date}}" +  "Members: " + "{{event.Members}}", popover-title="{{event.message}}", class="btn btn-default", popover-placement="top") Details
-       button(type="button", ng-model="addMember(event.$id)") join
-       button(class="btn btn-default", ng-click="edit(event.$id)") Edit
+       button(popover="Located at: "+ "{{event.location}}"+ " Date: :" + "{{event.date}}" +  "Creator: " + "{{event.Members}}", popover-title="{{event.message}}", class="btn btn-default", popover-placement="right") Details
+     //  button(class="btn btn-default", ng-click="edit( eventId :{{event.$id}} )") Edit
         
     h2 {{testing}}
