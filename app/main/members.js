@@ -12,7 +12,15 @@ angular.module("app.members", ['app.auth'])
   }
 })
 
-.controller('MembersCtrl', function ($scope, $ref, $group, $users, $location) {
+.controller('NameCtrl', function ($scope, $ref, $group, $instance) {
+  $scope.newprops = {};
+  $scope.setName = function () {
+    $ref.base.child('groups/' + $group.props.id + '/props/name').set($scope.newprops.name);
+    $modalInstance.close();
+  };
+})
+
+.controller('MembersCtrl', function ($scope, $ref, $group, $users, $location, $modal) {
   $scope.my = {}
   $scope.selected = {}
   $scope.users = $users.groups;
@@ -28,19 +36,22 @@ angular.module("app.members", ['app.auth'])
       $ref.base.child('groups/' + newvalue + '/subgroups').on('child_added', function (snap) {
         var subid = snap.val();
         $ref.base.child('groups/' + subid + '/props/name').on('value', function (name) {
-          subgroups[subid] = {groupid: subid, name: name.val()};
+          $scope.subgroups[subid] = {groupid: subid, name: name.val()};
         });
       });
       $ref.base.child('groups/' + newvalue + '/subgroups').on('child_removed', function (snap) {
         var subid = snap.val();
-        delete subgroups[subid];
+        delete $scope.subgroups[subid];
         $ref.base.child('groups/' + subid + 'props/name').off();
       });
     }
   });
   
-  $scope.setName = function(name){
-    $ref.base.child('groups/' + $group.props.id + '/props/name').set(name);
+  $scope.changeName = function () {
+    $modal.open({
+      templateUrl: 'changeNameId',
+      controller: 'NameCtrl'
+    });
   };
 
   $scope.setGroup = function (id) {

@@ -1,13 +1,12 @@
-// .row.topspaced.ng-cloak(ng-if="!group.maingroup")
-  .col-xs-6
-    .input-group
-      input.form-control.input-lg(type="text", ng-model='group.name')
-      span.input-group-btn
-        button.btn.btn-lg(type='button', ng-click='setName(group.name)') set name
 .row
-  form.pull-left
+  .pull-left
     input.form-control.input-sm(type='text', placeholder="Search members", ng-model="my.searchtext")
-  button.btn.btn-default.pull-right Create Subgroup
+  form.pull-right
+    .btn-group
+      button.btn.btn-default(type='button', ng-click='newSubgroup()') Create Subgroup
+      button.btn.btn-default(type='button', ng-if='group.maingroup',
+        ng-click='changeName()') Change Name
+      button.btn.btn-default(type='button', ng-click='removeUser()') Leave group
 .row
   span(ng-repeat="usr in users[group.id] | userify: info | filter: my.searchtext")
     div.picsquare
@@ -22,6 +21,13 @@ div(ng-if="!group.maingroup")
   p.subgroups Subgroups:
     span.label.label-default.subgrouplabel(ng-repeat="subgroup in subgroups", ng-click="setGroup(subgroup.groupid)")
       | {{subgroup.name}}
-div.atbottom
-  hr
-  button.btn.btn-xs.btn-danger(type='button', ng-click='removeUser()') Leave group
+
+script(type='text/ng-template', id='changeNameId')
+  div.modal-header
+    h3 Set Group Name
+  div.modal-body
+    .input-group
+      input.form-control.input-lg(type="text", ng-model='newprops.name')
+      span.input-group-btn
+        button.btn.btn-lg(type='button', ng-click='setName(group.name)') update 
+
