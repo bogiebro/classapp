@@ -5,13 +5,13 @@ input.form-control.input-sm(type="text", ng-disabled="classLoadWaiting",
 
 img.center-block.loading(src="/img/loader.gif", ng-if="classLoadWaiting")
 
-h3.helptext(ng-show="showHelpText", ng-if="!classLoadWaiting")
+h3.helptext(ng-if="!classLoadWaiting && numGroups == 0")
   small Search for a class to join study groups
 
 ul.classesBody.nav.nav-pills.nav-stacked(ng-if="!classLoadWaiting", ng-repeat="class in myclasses")
-  li(ng-class="{active: group.id == class.maingroup}")
-    a(href, ng-click='changeGroup(class.maingroup)') {{class.code}}
-      span.badge.pull-right.hidden-sm {{class.unread}}
+  li(ng-class="{active: group.id == class.props.groupid}")
+    a(href, ng-click='changeGroup(class.props.groupid)') {{class.props.classcode}}
+      span.badge.pull-right.hidden-sm {{class.props.unread}}
   ul.nav.nav-pills.nav-stacked.subgroup(ng-repeat="subgroup in class.subgroups")
     li(ng-class="{active: subgroup.groupid == group.id}", ng-click="changeGroup(subgroup.groupid)")
       a(href) {{subgroup.name}}

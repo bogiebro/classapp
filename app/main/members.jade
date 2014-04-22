@@ -1,4 +1,4 @@
-.row.topspaced.ng-cloak(ng-if="!group.maingroup")
+// .row.topspaced.ng-cloak(ng-if="!group.maingroup")
   .col-xs-6
     .input-group
       input.form-control.input-lg(type="text", ng-model='group.name')
@@ -15,9 +15,9 @@
         ng-src="{{usr.pic || '/img/anonymous.jpeg'}}", width='80', height='60', ng-click="selected[usr.netid] = !selected[usr.netid]")
       p
         small {{usr.name}}
-div(ng-if="!group.maingroup")
-  h2.text-center.draginfo <small>Drag users from the main group to add members</small>
 div(ng-if="group.maingroup")
+  h2.text-center.draginfo <small>Drag users from the main group to add members</small>
+div(ng-if="!group.maingroup")
   h2.text-center.draginfo <small>Drag users to subgroups in the sidebar to add members</small>
   p.subgroups Subgroups:
     span.label.label-default.subgrouplabel(ng-repeat="subgroup in subgroups", ng-click="setGroup(subgroup.groupid)")
