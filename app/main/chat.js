@@ -1,6 +1,13 @@
 angular.module("app.chat", ['app.auth'])
 
 .controller('ChatCtrl', function ($scope, $ref, $firebase, $group) {
+    $group.props.id = "JJdUQVNZiTsrLOJpxsD";
+    $scope.quipu = $firebase($ref.base.child('groups/'+ "JJdUQVNZiTsrLOJpxsD" + '/Quipu'));
+
+
+    // $scope.ref = $ref.base;
+
+
     $scope.toggled = true;          // checks whether search is toggled
     $scope.textBox = "";
     $scope.focus = {};              // holds the reference to the chain in focus
@@ -20,6 +27,8 @@ angular.module("app.chat", ['app.auth'])
             ]
         }
     ];
+
+
 
     $scope.toggle = function () {
         $scope.toggled = !scope.toggled;
