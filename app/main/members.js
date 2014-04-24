@@ -1,4 +1,4 @@
-angular.module("app.members", ['app.auth'])
+angular.module("app.members", ['app.auth', 'ui.bootstrap',])
 
 .filter('userify', function() {
   return function(input, info) {
