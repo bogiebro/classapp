@@ -29,10 +29,10 @@ div(ng-if="!group.parent")
 
 script(type='text/ng-template', id='changeNameId')
   div.modal-header
-    h3 Set Group Name
+    h3 Set group name
   div.modal-body
     form(ng-submit='setName(group.name)')
       .input-group
-        input.form-control.input-lg(type="text", ng-model='newprops.name')
+        input.form-control(type="text", ng-model='newprops.name')
         span.input-group-btn
-          button.btn.btn-lg(type='button', ng-click='setName(group.name)') update 
+          button.btn.btn-default(type='button', ng-click='setName(group.name)') update 

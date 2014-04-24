@@ -92,6 +92,7 @@ angular.module("app.members", ['app.auth', 'ui.bootstrap', 'ngDragDrop'])
     }, function (err) {
       $group.setGroup(newname);
       $scope.joinGroup(newname);
+      $scope.changeName();
     });
   }
 
