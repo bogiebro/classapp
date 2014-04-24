@@ -12,7 +12,7 @@ angular.module("app.members", ['app.auth'])
   }
 })
 
-.controller('NameCtrl', function ($scope, $ref, $group, $instance) {
+.controller('NameCtrl', function ($scope, $ref, $group, $modalInstance) {
   $scope.newprops = {};
   $scope.setName = function () {
     $ref.base.child('groups/' + $group.props.id + '/props/name').set($scope.newprops.name);
@@ -46,20 +46,37 @@ angular.module("app.members", ['app.auth'])
       });
     }
   });
+
+  $scope.privitize = function () {
+    if ($group.props.private) {
+      $ref.base.child('groups/' + $group.props.id + '/props/private').set(false);
+      $ref.base.child('groups/' + $group.props.parent + '/subgroups/' +
+          $group.props.id).set($group.props.id);
+    } else {
+      $ref.base.child('groups/' + $group.props.id + '/props/private').set(true);
+      $ref.base.child('groups/' + $group.props.parent + '/subgroups/' + $group.props.id).remove();
+    }
+  }
  
   $scope.newSubgroup = function () {
     var newgroup = $ref.base.child('groups').push();
     var newname = newgroup.name();
-    $ref.base.child('users/' + $ref.netid + '/groups/' + newname).set(newname);
     $ref.base.child('groups/' + $group.props.id + '/subgroups/' + newname).set(newname);
     newgroup.child('props').set({
         name: 'Untitled Group',
         groupid: newname,
         classcode: $group.props.classcode,
+        private: false,
         parent: $group.props.parent || $group.props.groupid
     }, function (err) {
       $group.setGroup(newname);
+      $scope.joinGroup(newname);
     });
+  }
+
+  $scope.joinGroup = function (gid) {
+    $ref.base.child('groups/' + gid + '/users/' + $ref.netid).set($ref.netid);
+    $ref.base.child('users/' + $ref.netid + '/groups/' + gid).set(gid);
   }
 
   $scope.changeName = function () {

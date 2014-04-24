@@ -66,11 +66,12 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
     result.props = $rootScope.$new!
     result.setGroup = (groupid)!->
         result.props.id = groupid
-        $timeout((-> $ref.base.child("groups/#{groupid}/props").on 'value' (snapshot)->
+        $ref.base.child("groups/#{groupid}/props").on 'value' (snapshot)->
+          $timeout((->
             result.props.$apply(->
               result.props <<< snapshot.val!
               result.props.id = groupid))
-          , 0)
+            , 0)
     result.clearGroup = !->
       result.props.name = ''
       result.props.id = ''

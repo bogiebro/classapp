@@ -7,6 +7,9 @@
       button.btn.btn-default(type='button', ng-if='group.parent',
         ng-click='changeName()') Change Name
       button.btn.btn-default(type='button', ng-click='removeUser()') Leave group
+      button.btn.btn-default(type='button', ng-if='group.parent', ng-click='privitize()')
+        | Make group {{group.private ? 'public' : 'private'}}
+        // span.glyphicon.glyphicon-lock
 .row
   span(ng-repeat="usr in users[group.id] | userify: info | filter: my.searchtext")
     div.picsquare
@@ -26,8 +29,9 @@ script(type='text/ng-template', id='changeNameId')
   div.modal-header
     h3 Set Group Name
   div.modal-body
-    .input-group
-      input.form-control.input-lg(type="text", ng-model='newprops.name')
-      span.input-group-btn
-        button.btn.btn-lg(type='button', ng-click='setName(group.name)') update 
+    form(ng-submit='setName(group.name)')
+      .input-group
+        input.form-control.input-lg(type="text", ng-model='newprops.name')
+        span.input-group-btn
+          button.btn.btn-lg(type='button', ng-click='setName(group.name)') update 
 
