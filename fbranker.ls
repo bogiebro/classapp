@@ -1,6 +1,7 @@
 graph = require('fbgraph')
 Firebase = require('firebase')
 firebase = new Firebase(process.env.BASE)
+firebase.auth(process.env.GENSECRET)
 cronJob = require('cron').CronJob
 
 # create identifier for compatibility.

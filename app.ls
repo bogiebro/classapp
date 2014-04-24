@@ -11,6 +11,7 @@ FirebaseTokenGenerator = require("firebase-token-generator")
 #     KEY: process.env.s3ID
 
 firebase = new Firebase(process.env.BASE)
+firebase.auth(process.env.GENSECRET)
 
 # Express config
 express.static.mime.define({'text/cache-manifest': ['appcache']})
