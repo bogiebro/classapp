@@ -20,30 +20,45 @@ angular.module("app.members", ['app.auth'])
   };
 })
 
-.controller('MembersCtrl', function ($scope, $ref, $group, $users, $location, $modal) {
+.controller('MembersCtrl', function ($scope, $ref, $group, $users, $location, $modal, $timeout) {
   $scope.my = {}
   $scope.selected = {}
   $scope.users = $users.groups;
   $scope.info = $users.users;
   $scope.group = $group.props;
   $scope.subgroups = {};
+  var watching = {};
  
+  // why do we turn off updating whenever we change ids?
+  // we should just always update
   $scope.$watch('group.id', function (newvalue, oldvalue) {
     if (!newvalue) {
       $location.path('/bigevents');
     } else {
-      $ref.base.child('groups/' + oldvalue + '/subgroups').off();
-      $ref.base.child('groups/' + newvalue + '/subgroups').on('child_added', function (snap) {
-        var subid = snap.val();
-        $ref.base.child('groups/' + subid + '/props/name').on('value', function (name) {
-          $scope.subgroups[subid] = {groupid: subid, name: name.val()};
+      if (!watching[newvalue]) {
+        watching[newvalue] = true;
+        $ref.base.child('groups/' + newvalue + '/subgroups').on('child_added', function (snap) {
+          console.log('child added');
+          var subid = snap.val();
+          $ref.base.child('groups/' + subid + '/props/name').on('value', function (name) {
+            $timeout(function () {
+              $scope.$apply(function () {
+                $scope.subgroups[subid] = {groupid: subid, name: name.val()};
+              })
+            }, 0);
+          });
         });
-      });
-      $ref.base.child('groups/' + newvalue + '/subgroups').on('child_removed', function (snap) {
-        var subid = snap.val();
-        delete $scope.subgroups[subid];
-        $ref.base.child('groups/' + subid + 'props/name').off();
-      });
+        $ref.base.child('groups/' + newvalue + '/subgroups').on('child_removed', function (snap) {
+          var subid = snap.val();
+          console.log('child removed');
+          $timeout(function () {
+            $scope.$apply(function () {
+              delete $scope.subgroups[subid];
+            });
+          }, 0);
+          $ref.base.child('groups/' + subid + 'props/name').off();
+        });
+      }
     }
   });
 
@@ -61,7 +76,11 @@ angular.module("app.members", ['app.auth'])
   $scope.newSubgroup = function () {
     var newgroup = $ref.base.child('groups').push();
     var newname = newgroup.name();
-    $ref.base.child('groups/' + $group.props.id + '/subgroups/' + newname).set(newname);
+    if (!$group.props.parent) {
+      $ref.base.child('groups/' + $group.props.id + '/subgroups/' + newname).set(newname);
+    } else {
+      $ref.base.child('groups/' + $group.props.parent + '/subgroups' + newname).set(newname);
+    }
     newgroup.child('props').set({
         name: 'Untitled Group',
         groupid: newname,
