@@ -1,4 +1,4 @@
-angular.module("app.members", ['app.auth', 'ui.bootstrap',])
+angular.module("app.members", ['app.auth', 'ui.bootstrap', 'ngDragDrop'])
 
 .filter('userify', function() {
   return function(input, info) {

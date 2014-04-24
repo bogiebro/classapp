@@ -1,4 +1,4 @@
-angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead', 'ui.bootstrap.tpls'])
+angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead', 'ngDragDrop', 'ui.bootstrap.tpls'])
 
 .controller('GroupCtrl', function ($scope, $http, $ref, $location, $firebase, $group, $timeout) {
  
@@ -17,6 +17,12 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
   
   // Capture the current group
   $scope.group = $group.props;
+
+  // Handle a dropped user from the members page
+  $scope.onDrop = function ($event, $data, subid) {
+    $ref.base.child('groups/' + subid + '/users/' + $data).set($data);
+    $ref.base.child('users/' + $data + '/groups/' + subid).set(subid);
+  };
 
   // Bind to the classes
   $ref.base.child('users/' + $ref.netid + '/groups').on('child_added', function (snap) {

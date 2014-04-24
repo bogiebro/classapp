@@ -23,7 +23,8 @@
     "firepad": "0.1.4",
     "codemirror": "4.0.1",
     "bootstrap": "3.1.1",
-    "angular-ui-utils": "*"
+    "angular-ui-utils": "*",
+    "angular-dragdrop": "https://github.com/ganarajpr/angular-dragdrop.git#~1.0.1"
   },
   "overrides": {
     "bootstrap": {
@@ -38,7 +39,9 @@
       "dependencies": []
     },
     "firepad": {
-      "dependencies": {"CodeMirror": "4.0.1"}
+      "dependencies": {
+        "CodeMirror": "4.0.1"
+      }
     }
   }
 }
