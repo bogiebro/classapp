@@ -4,10 +4,11 @@
   form.pull-right
     .btn-group
       button.btn.btn-default(type='button', ng-click='newSubgroup()') Create Subgroup
-      button.btn.btn-default(type='button', ng-if='group.parent',
+      button.btn.btn-default(type='button', ng-if='group.parent && member()',
         ng-click='changeName()') Change Name
-      button.btn.btn-default(type='button', ng-click='removeUser()') Leave group
-      button.btn.btn-default(type='button', ng-if='group.parent', ng-click='privitize()')
+      button.btn.btn-default(type='button', ng-if='member()', ng-click='removeUser()') Leave group
+      button.btn.btn-default(type='button', ng-if='!member()', ng-click='joinGroup(group.id)') Join
+      button.btn.btn-default(type='button', ng-if='group.parent && member()', ng-click='privitize()')
         | Make group {{group.private ? 'public' : 'private'}}
         // span.glyphicon.glyphicon-lock
 .row

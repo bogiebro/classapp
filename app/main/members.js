@@ -29,8 +29,6 @@ angular.module("app.members", ['app.auth'])
   $scope.subgroups = {};
   var watching = {};
  
-  // why do we turn off updating whenever we change ids?
-  // we should just always update
   $scope.$watch('group.id', function (newvalue, oldvalue) {
     if (!newvalue) {
       $location.path('/bigevents');
@@ -61,6 +59,10 @@ angular.module("app.members", ['app.auth'])
       }
     }
   });
+   
+  $scope.member = function () {
+    return $scope.users[$scope.group.id] && $scope.users[$scope.group.id][$ref.netid];
+  }
 
   $scope.privitize = function () {
     if ($group.props.private) {
