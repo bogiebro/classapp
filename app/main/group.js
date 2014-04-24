@@ -70,6 +70,7 @@ angular.module("app.group", ['app.auth', 'ui.bootstrap', 'ui.bootstrap.typeahead
     $ref.base.child('users/' + $ref.netid + '/groups/' + model.maingroup).set(model.maingroup);
     $http.post('/joinGroup/sharedClasses/' + model.maingroup);
     $scope.changeGroup(model.maingroup);
+    $scope.model.pickedClass = '';
   }
   
   // Set the group to what the user clicks on

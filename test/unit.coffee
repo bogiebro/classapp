@@ -13,7 +13,12 @@ describe "auth", ->
       expect($ref.netid).toBeDefined()
 
     it 'should switch groups', inject ($ref, $group, $rootScope)->
-      $ref.base.child("group/testgroup").set({name: 'CPSC 112'})
+      $ref.base.child("group/testgroup").set({
+        name: 'CPSC 112',
+        groupid: 'testgroup',
+        classcode: 'testclass',
+        parent: 'false'
+      })
       scopea = $rootScope.$new()
       scopeb = $rootScope.$new()
       scopea.group = $group.props

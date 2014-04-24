@@ -4,7 +4,7 @@
   form.pull-right
     .btn-group
       button.btn.btn-default(type='button', ng-click='newSubgroup()') Create Subgroup
-      button.btn.btn-default(type='button', ng-if='group.maingroup',
+      button.btn.btn-default(type='button', ng-if='group.parent',
         ng-click='changeName()') Change Name
       button.btn.btn-default(type='button', ng-click='removeUser()') Leave group
 .row
@@ -14,9 +14,9 @@
         ng-src="{{usr.pic || '/img/anonymous.jpeg'}}", width='80', height='60', ng-click="selected[usr.netid] = !selected[usr.netid]")
       p
         small {{usr.name}}
-div(ng-if="group.maingroup")
+div(ng-if="group.parent")
   h2.text-center.draginfo <small>Drag users from the main group to add members</small>
-div(ng-if="!group.maingroup")
+div(ng-if="!group.parent")
   h2.text-center.draginfo <small>Drag users to subgroups in the sidebar to add members</small>
   p.subgroups Subgroups:
     span.label.label-default.subgrouplabel(ng-repeat="subgroup in subgroups", ng-click="setGroup(subgroup.groupid)")

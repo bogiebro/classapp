@@ -46,7 +46,22 @@ angular.module("app.members", ['app.auth'])
       });
     }
   });
-  
+ 
+  $scope.newSubgroup = function () {
+    var newgroup = $ref.base.child('groups').push();
+    var newname = newgroup.name();
+    $ref.base.child('users/' + $ref.netid + '/groups/' + newname).set(newname);
+    $ref.base.child('groups/' + $group.props.id + '/subgroups/' + newname).set(newname);
+    newgroup.child('props').set({
+        name: 'Untitled Group',
+        groupid: newname,
+        classcode: $group.props.classcode,
+        parent: $group.props.parent || $group.props.groupid
+    }, function (err) {
+      $group.setGroup(newname);
+    });
+  }
+
   $scope.changeName = function () {
     $modal.open({
       templateUrl: 'changeNameId',
