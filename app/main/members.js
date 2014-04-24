@@ -113,8 +113,18 @@ angular.module("app.members", ['app.auth', 'ui.bootstrap',])
 
   // remove a user from the group
   $scope.removeUser = function() {
-    $ref.base.child('groups/' + $group.props.id + '/users/' + $ref.netid).remove();
     $ref.base.child('users/' + $ref.netid + '/groups/' + $group.props.id).remove();
+    $ref.base.child('groups/' + $group.props.id + '/users/' + $ref.netid).remove(function (err) {
+      $ref.base.child('groups/' + $group.props.id + '/users').limit(1).once('value', function (snap) {
+        if (!snap.val()) {
+          var gid = $group.props.id;
+          if ($group.props.parent) {
+            $ref.base.child('groups/' + $group.props.parent + '/subgroups/' + gid).remove();
+          }
+          $ref.base.child('groups/' + gid).remove();
+        };
+      });
+    });
     $group.clearGroup();
   }
 });
