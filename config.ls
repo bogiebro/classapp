@@ -1,5 +1,5 @@
 if process.env.NODE_ENV == 'testing'
-    process.env.FIREBASE = "#{process.env.BASE}tests/#{process.env.UUID}"
+    process.env.FIREBASE = "#{process.env.BASE}/tests/#{process.env.UUID}"
     FirebaseTokenGenerator = require("firebase-token-generator")
     tokenGenerator = new FirebaseTokenGenerator(process.env.GENSECRET)
     process.env.COOKIE = JSON.stringify do

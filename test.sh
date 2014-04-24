@@ -1,3 +1,4 @@
+#!/bin/bash
 trap 'curl -X DELETE https://torid-fire-3655.firebaseio.com/tests/$UUID.json; kill -HUP 0' EXIT
 set -e
 export NODE_ENV=testing

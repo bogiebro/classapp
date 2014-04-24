@@ -7,46 +7,51 @@
 describe "auth", ->
     beforeEach(module('app.auth'))
     beforeEach(module(($provide)->
+      $provide.constant('$timeout', setTimeout)
       $provide.constant('$cookies', {casInfo: params.cookieData})))
 
-    it 'should have a ref', inject ($ref)->
-      expect($ref.netid).toBeDefined()
+    it 'should have a ref', (done)->
+      inject ($ref)->
+        expect($ref.netid).toBeDefined()
+        $ref.base.child("users/#{$ref.netid}/props").set({name: 'Test User'}, ->
+          done())
 
-    it 'should switch groups', inject ($ref, $group, $rootScope)->
-      $ref.base.child("group/testgroup").set({
-        name: 'CPSC 112',
-        groupid: 'testgroup',
-        classcode: 'testclass',
-        parent: 'false'
-      })
-      scopea = $rootScope.$new()
-      scopeb = $rootScope.$new()
-      scopea.group = $group.props
-      scopeb.group = $group.props
-      $group.props.name = 'testgroup'
-      $rootScope.$digest()
-      expect(scopea.group.name).toBeDefined()
-      expect(scopea.group.name).toBe(scopeb.group.name)
+    it 'should switch groups', (done)->
+      inject ($ref, $group, $rootScope)->
+        $ref.base.child("groups/testgroup/props").set({
+          name: 'CPSC 112',
+          groupid: 'testgroup',
+          classcode: 'testclass',
+          parent: false
+        }, (err)->
+              expect(err).toBeFalsy()
+              scopea = $rootScope.$new()
+              scopeb = $rootScope.$new()
+              scopea.group = $group.props
+              scopeb.group = $group.props
+              $group.setGroup('testgroup', ->
+                expect(scopea.group.name).toBeDefined()
+                expect(scopea.group.name).toBe(scopeb.group.name)
+                done()))
 
     it 'should track the user himself', (done)->
       inject ($ref, $trackConnected)->
         $trackConnected($ref.base.child('online'))
         $ref.base.child('online').on 'value', (snap)->
+          expect(snap.val()).toBeDefined()
           expect(snap.val()[$ref.netid]).toBeDefined()
           done()
 
     it 'should track track all the user\'s groups', (done)->
-      inject ($ref, $users)->
-        $ref.base.child('groups/testgroup/users').push $ref.netid, (err1)->
-          $ref.base.child("users/#{$ref.netid}/groups").push 'testgroup', (err2)->
-            $ref.base.child("users/#{$ref.netid}/classes/testclass").set({
-              code: 'testclass',
-              name: 'Test Class',
-              maingroup: 'testgroup',
-              subgroups: []
-            }, (err3)->
-              expect($users.groups['testgroup'].indexOf($ref.netid)).toBeTruthy()
-              done())
+      inject ($ref, $users, $rootScope, $timeout)->
+        $ref.base.child("groups/testgroup/users/#{$ref.netid}").set $ref.netid, (err1)->
+          $ref.base.child("users/#{$ref.netid}/groups/testgroup").set 'testgroup', (err2)->
+            $rootScope.$digest()
+            $users.groups.$digest()
+            $timeout((->
+              expect($users.groups['testgroup']).toBeTruthy()
+              expect($users.groups['testgroup'][$ref.netid]).toBe($ref.netid)
+              done()), 1)
 
 describe "group sidebar", ->
   beforeEach(module('app.group'))
