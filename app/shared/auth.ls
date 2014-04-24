@@ -46,15 +46,15 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
     result.groups[val] = []
     $timeout((->$ref.base.child("groups/#{val}/users").on 'child_added' (user)!->
         netid = user.val!
-        result.groups.$apply(result.groups[val].push(netid))
+        result.groups.$apply(!-> result.groups[val].push(netid))
         if (!result.users[netid])
           result.users[netid] = {}
           $ref.base.child("users/#{netid}/props").once 'value' (snap)!->
-            result.users.$apply(
+            result.users.$apply(!->
               result.users[netid] <<< snap.val!
               result.users[netid].netid = netid)
           $ref.base.child("ratings/" + ratingRef([$ref.netid, netid])).once 'value' (snap)!->
-            result.users.$apply(result.users[netid] <<< snap.val!))
+            result.users.$apply(!-> result.users[netid] <<< snap.val!))
       , 0)
   return result
 
