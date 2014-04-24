@@ -46,10 +46,9 @@ html(ng-app="App", manifest="/web.appcache")
 
       script(type="text/ng-template", id="askId")
           div.modal-header
-            button.close(type='button', aria-hidden='true', ng-click='dismiss()')&times;
             h3 User Information
           div.modal-body
-              form(role="form", class="form-horizontal", ng-submit="dismiss()")
+              form(role="form", class="form-horizontal", ui-keypress="{13:'dismiss()'}")
                   p(class="text-right")
                       a(ng-click="fbLogin()") Connect with Facebook
                   div(class="form-group")
@@ -86,7 +85,7 @@ html(ng-app="App", manifest="/web.appcache")
           div.modal-header
               h3 Quipu first step: join your classes
           div.modal-body
-              include ./tutorial.jade
+              ng-include(src="'app/main/tutorial.jade'")
 
       script(src=ROOT + '/js/angular-file-upload-html5-shim.min.js')
       script(src=ROOT + '/js/vendor.js')

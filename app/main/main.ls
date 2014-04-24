@@ -1,5 +1,5 @@
 window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.group', 'app.modalqueue',
-    'ngRoute', 'firebase', 'app.main.templates', 'ezfb', 'angularFileUpload', 'ngCookies',
+    'ngRoute', 'firebase', 'app.main.templates', 'ezfb', 'angularFileUpload', 'ngCookies', 'ui.keypress',
     'app.auth', 'app.bigevents', 'app.help', 'app.chat', 'app.members', 'app.events', 'app.files'])
 
 .config ($routeProvider, $FBProvider)->
@@ -71,6 +71,8 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
     $scope.setupUser = ->
         $modalQueue.addModal(
             templateUrl: 'askId'
+            backdrop: 'static'
+            keyboard: false
             controller: 'InfoCtrl')
     $scope.$on 'newuser', !-> $scope.setupUser!
     $scope.about = ->
