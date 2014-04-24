@@ -1,4 +1,4 @@
-window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.group',
+window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.group', 'app.modalqueue',
     'ngRoute', 'firebase', 'app.main.templates', 'ezfb', 'angularFileUpload', 'ngCookies',
     'app.auth', 'app.bigevents', 'app.help', 'app.chat', 'app.members', 'app.events', 'app.files'])
 
@@ -67,9 +67,9 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
 .controller 'HelpCtrl', ($scope, $modalInstance)->
     $scope.dismiss = !-> $modalInstance.close!
 
-.controller 'PrefCtrl', ($firebase, $scope, $ref, $modal, $location)->
+.controller 'PrefCtrl', ($firebase, $scope, $ref, $modal, $modalQueue, $location)->
     $scope.setupUser = ->
-        $modal.open(
+        $modalQueue.addModal(
             templateUrl: 'askId'
             controller: 'InfoCtrl')
     $scope.$on 'newuser', !-> $scope.setupUser!
@@ -80,10 +80,10 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
     $scope.help = ->
         $location.path('/help');
 
-.controller 'MainCtrl', ($scope, $location, $modal, $group)!->
+.controller 'MainCtrl', ($scope, $location, $modalQueue, $group)!->
   $scope.group = $group.props
   $scope.big = false
-  $scope.$on 'newuser', !-> $modal.open(
+  $scope.$on 'newuser', !-> $modalQueue.addModal(
             templateUrl: 'tutorialId'
             controller: 'HelpCtrl')
   $scope.$on '$locationChangeSuccess', !->
