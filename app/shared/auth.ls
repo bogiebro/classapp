@@ -35,7 +35,7 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
         childRef.onDisconnect!remove!
 
 # $users.users is a map from netid to user info
-# $users.groups is a map from group id to a list of netids
+# $users.groups is a map from group id to a map of netid to netid
 # see members.js for an example of use
 .factory '$users' ($ref, $rootScope, $timeout)->
   result = {}
@@ -43,10 +43,10 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
   result.users = $rootScope.$new!
   $ref.base.child("users/#{$ref.netid}/groups").on 'child_added' (gsnap)!->
     val = gsnap.val!
-    result.groups[val] = []
+    result.groups[val] = {}
     $timeout((->$ref.base.child("groups/#{val}/users").on 'child_added' (user)!->
         netid = user.val!
-        result.groups.$apply(!-> result.groups[val].push(netid))
+        result.groups.$apply(!-> result.groups[val][netid] = netid)
         if (!result.users[netid])
           result.users[netid] = {}
           $ref.base.child("users/#{netid}/props").once 'value' (snap)!->

@@ -3,8 +3,8 @@ angular.module("app.members", ['app.auth'])
 .filter('userify', function() {
   return function(input, info) {
     if (input) {
-      return input.map(function(id){
-        return info[input];
+      return Object.keys(input).map(function(id){
+        return info[id];
       });
     } else {
       return undefined;
@@ -61,7 +61,7 @@ angular.module("app.members", ['app.auth'])
   });
    
   $scope.member = function () {
-    return $scope.users[$scope.group.id] && $scope.users[$scope.group.id][$ref.netid];
+    return $users.groups[$group.props.id] && $users.groups[$group.props.id][$ref.netid];
   }
 
   $scope.privitize = function () {
