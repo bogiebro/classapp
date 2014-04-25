@@ -1,34 +1,7 @@
-h2 Events for {{group.name}}
-body 
-    button(class="btn btn-default", ng-click="expandCreator()")
-        Toggle {{createButton}}
-    hr
-    div(collapse="isCollapsed")
-        div(class="well well-lg")
-            pre Selected date is: 
-                em {{dayobject.dt | date:"fullDate" }}
-            div 
-                div( style="display:inline-block; min-height:290px;")
-                    div( class="well well-sm", ng-model="dayobject.dt")
-                        datepicker(min="minDate", show-weeks="showWeeks")
-                    
-               
-            form(ng-submit="newEvent()")
-                input(type='text', ng-model='form.messageInput', placeholder='title...')
-                input(type='text', ng-model='form.locationInput', placeholder='location')
-                //input(type='text', ng-model='form.timeInput', placeholder='hour')
-                 
-                //<input type="checkbox" ng-model="form.AM", value = "AM?">
-               
-                //input(class="btn-primary",  type="submit", value="Make Event!")
-    //div(collapse="editing")
-      //h2  Editing event on 
-
-    li(ng-repeat="event in eventRef | orderByPriority  ")
-       h4{{ toDate(event.date) | date:"EEE h a MM/dd/yy" }}
-       h4 {{event.message}}
-          //{{event.$id}}
-       button(popover="Located at: "+ "{{event.location}}"+ " Date: :" + "{{event.date}}" +  "Creator: " + "{{event.Members}}", popover-title="{{event.message}}", class="btn btn-default", popover-placement="right") Details
-     //  button(class="btn btn-default", ng-click="edit( eventId :{{event.$id}} )") Edit
-        
-    h2 {{testing}}
+.well.mywell(ng-repeat='event in events | orderByPriority', ng-dblClick="editEvent(event)", sglclick="showInfo()", ng-style="{'background-color': getColor($index)}")
+  span(ng-if="event.$id != mostRecent") {{event.message}}
+  form.form-inline(ng-show="event.$id == mostRecent")
+    textarea.form-control.myinput(sync-focus-with="event.$id == mostRecent",
+      ng-model="event.message", ui-keypress="{13:'closeMe(event)'}")
+div(ng-dblClick="newEvent()").adder
+  div Double click to create an event
