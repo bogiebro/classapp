@@ -15,7 +15,7 @@ ul.classesBody.nav.nav-pills.nav-stacked(ng-if="!classLoadWaiting", ng-repeat="c
   ul.nav.nav-pills.nav-stacked.subgroup(ng-repeat="subgroup in class.subgroups")
     li(ng-class="{active: subgroup.groupid == group.id}",
       ui-on-drop="onDrop($event, $data, subgroup.groupid)",
-      drag-enter-class='red',
+      drag-hover-class='dragging',
       ng-click="changeGroup(subgroup.groupid)")
         a(href) {{subgroup.name}}
           span.badge.pull-right.hidden-sm {{subgroup.unread}}
