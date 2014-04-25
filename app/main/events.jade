@@ -1,7 +1,16 @@
-.well.mywell(ng-repeat='event in events | orderByPriority', ng-dblClick="editEvent(event)", sglclick="showInfo()", ng-style="{'background-color': getColor($index)}")
-  span(ng-if="event.$id != mostRecent") {{event.message}}
-  form.form-inline(ng-show="event.$id == mostRecent")
-    textarea.form-control.myinput(sync-focus-with="event.$id == mostRecent",
-      ng-model="event.message", ui-keypress="{13:'closeMe(event)'}")
+.well.mywell(ng-repeat='event in events | orderByPriority',
+  ng-dblClick="editEvent(event)", sglclick="showInfo(opts)",
+  ng-init="opts = {}",
+  ng-style="{'background-color': getColor($index)}")
+    div(ng-if="event.$id != mostRecent && opts.details")
+      p.optshead {{event.time}}
+    span(ng-if="event.$id != mostRecent") {{event.message}}
+    form.form-inline(ng-if="event.$id != mostRecent && opts.details").opts
+      div.checkbox.pull-right
+        small <label> <input type="checkbox"> going </input> </label>
+      small <a>event group</a>
+    form.form-inline(ng-if="event.$id == mostRecent")
+      textarea.form-control.myinput(sync-focus-with="event.$id == mostRecent",
+        ng-model="event.message", ui-keypress="{13:'closeMe(event)'}")
 div(ng-dblClick="newEvent()").adder
   div Double click to create an event

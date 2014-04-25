@@ -33,7 +33,8 @@ angular.module("app.events", ['app.auth', 'ui.keypress', 'app.extendui'])
   };
 
   // show a thing to join, see who else has joined. is it a spontanious group?
-  $scope.showInfo = function() {
+  $scope.showInfo = function(opts) {
+    opts.details = !opts.details;
   };
 
   // edit the event text/ date
