@@ -63,3 +63,15 @@ describe "group sidebar", ->
       scope = $rootScope.$new()
       ctrl = $controller('GroupCtrl', {$scope: scope})
       expect(ctrl).toBeDefined()
+
+describe "events sidebar", ->
+  beforeEach(module('app.events'))
+  beforeEach(module(($provide)->
+    $provide.constant('$cookies', {casInfo: params.cookieData})))
+  
+  it 'should create a event controller',
+    inject ($ref, $controller, $rootScope)->
+      scope = $rootScope.$new()
+      ctrl = $controller('EventsCtrl', {$scope: scope})
+      expect(ctrl).toBeDefined()
+  
