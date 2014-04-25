@@ -17,12 +17,9 @@ angular.module("app.events", ['app.auth', 'ui.keypress', 'app.extendui'])
     
   // create a new event
   $scope.newEvent = function () {
-    var d = new Date();
-    d.setDate(d.getDate() + 1);
-    var t = d.getTime();
-    $scope.events.$add({message: 'New event', time: t}).then(function (r) {
+    $scope.events.$add({message: 'New event', time: 'No time set'}).then(function (r) {
       $scope.mostRecent = r.name();
-      r.setPriority(t);
+      r.setPriority('unknown');
     });
   }
 
@@ -44,11 +41,16 @@ angular.module("app.events", ['app.auth', 'ui.keypress', 'app.extendui'])
  
   // close the editing field
   $scope.closeMe = function(elem) {
-    var newtime =  Date.fromString(elem.message).getTime();
-    if (newtime > new Date().getTime()) {
-      elem.time = newtime;
+    var newtime =  Date.fromString(elem.message);
+    var tsecs = newtime.getTime();
+    if (tsecs > new Date().getTime()) {
+      var m = moment(newtime);
+      elem.time = moment().format('dddd MMM Do h:mm');
+      elem.$priority = tsecs;
+    } else {
+      elem.time = 'No time set';
+      elem.$priority = 'unknown';
     }
-    elem.$priority = elem.time;
     $scope.mostRecent = null;
     $scope.events.$save(elem.$id);
   };
