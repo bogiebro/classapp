@@ -1,2 +1,8 @@
-h1 bigevents is here
-p This is not implemented yet. 
+span
+  div.eventTile.panel.panel-default(ng-repeat="group in groups")
+    div.panel-heading
+      h3.panel-title {{names[group].$value}}
+    div.panel-body
+      .well.mywell(ng-repeat="event in groupEvents[group] | orderByPriority",
+        ng-style="{'background-color': getColor($index)}")
+          span {{event.message}}
