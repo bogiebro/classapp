@@ -22,11 +22,12 @@ angular.module("app.members", ['app.auth', 'ui.bootstrap', 'ngDragDrop'])
 
 .controller('MembersCtrl', function ($scope, $ref, $group, $users, $location, $modal, $timeout) {
   $scope.my = {}
-  $scope.selected = {}
   $scope.users = $users.groups;
   $scope.info = $users.users;
   $scope.group = $group.props;
   $scope.subgroups = {};
+  $scope.opts = {};
+  $scope.opts.selected = {};
   var watching = {};
  
   $scope.$watch('group.id', function (newvalue, oldvalue) {
@@ -91,14 +92,19 @@ angular.module("app.members", ['app.auth', 'ui.bootstrap', 'ngDragDrop'])
         parent: $group.props.parent || $group.props.groupid
     }, function (err) {
       $group.setGroup(newname);
-      $scope.joinGroup(newname);
+      $scope.joinGroup(newname, $scope.opts.selected);
       $scope.changeName();
     });
   }
 
-  $scope.joinGroup = function (gid) {
-    $ref.base.child('groups/' + gid + '/users/' + $ref.netid).set($ref.netid);
-    $ref.base.child('users/' + $ref.netid + '/groups/' + gid).set(gid);
+  $scope.joinGroup = function (gid, who) {
+    if (!who) who = {};
+    who[$ref.netid] = $ref.netid
+    console.log(who);
+    for (var p in who) {
+      $ref.base.child('groups/' + gid + '/users/' + p).set(p);
+      $ref.base.child('users/' + p + '/groups/' + gid).set(gid);
+    }
   }
 
   $scope.changeName = function () {

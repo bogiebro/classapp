@@ -27,8 +27,8 @@
 .row
   span(ng-repeat="usr in users[group.id] | userify: info | filter: my.searchtext")
     div.picsquare(ui-draggable='true', drag='usr.netid')
-      img(ng-class="{'img-rounded': !selected[usr.netid], 'img-thumbnail': selected[usr.netid]}",
-        ng-src="{{usr.pic || '/img/anonymous.jpeg'}}", width='80', height='60', ng-click="selected[usr.netid] = !selected[usr.netid]")
+      img(ng-class="{'img-rounded': !opts.selected[usr.netid], 'img-thumbnail': opts.selected[usr.netid]}",
+        ng-src="{{usr.pic || '/img/anonymous.jpeg'}}", width='80', height='60', ng-click="opts.selected[usr.netid] = !opts.selected[usr.netid]")
       p
         small {{usr.name}}
 div(ng-if="group.parent")
