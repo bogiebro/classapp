@@ -1,4 +1,4 @@
-angular.module("app.events", ['app.auth', 'ui.keypress', 'app.extendui'])
+angular.module("app.events", ['app.auth', 'ui.keypress', 'app.extendui', 'ui.bootstrap.tooltip'])
 
 
 .controller('EventsCtrl', function ($scope, $firebase, $group, $ref, $users, $timeout) {
@@ -23,13 +23,39 @@ angular.module("app.events", ['app.auth', 'ui.keypress', 'app.extendui'])
     });
   }
 
+  // check whether the current user is going
+  $scope.checkGoing = function (eid, obj) {
+    if ($scope.events[eid].users && $scope.events[eid].users[$ref.netid]) {
+      obj.going = true;
+    }
+  }
+
+  // add users to the event
+  $scope.changeGoing = function (obj, opts, e) {
+    if (!opts.going) {
+      opts.going = true;
+      $ref.base.child('groups/' + $group.props.id + '/events/' + obj.$id + '/users/' + $ref.netid).set($ref.netid);
+    } else {
+      opts.going = false;
+      $ref.base.child('groups/' + $group.props.id + '/events/' + obj.$id + '/users/' + $ref.netid).remove();
+    }
+    e.stopPropagation();
+  }
+  
+  // take the chat to the knot for this event
+  $scope.showChat = function (obj) {
+    console.log('do something here')
+  }
+  
+  // track who's going
+  $scope.userinfo = $users.users
+
   // get the color of the event at index i
   var colors = ['LightBlue', 'LightCyan', 'Plum', 'LavenderBlush', '', 'rgba(245, 245, 245, 0.4)'];
   $scope.getColor = function(i) {
     return colors[i % colors.length];
   };
 
-  // show a thing to join, see who else has joined. is it a spontanious group?
   $scope.showInfo = function(opts) {
     opts.details = !opts.details;
   };
@@ -45,7 +71,7 @@ angular.module("app.events", ['app.auth', 'ui.keypress', 'app.extendui'])
     var tsecs = newtime.getTime();
     if (tsecs > new Date().getTime()) {
       var m = moment(newtime);
-      elem.time = moment().format('dddd MMM Do h:mm');
+      elem.time = moment().format('dddd MMM Do h:mm a');
       elem.$priority = tsecs;
     } else {
       elem.time = 'No time set';
