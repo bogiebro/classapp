@@ -1,9 +1,12 @@
-angular.module("app.bigevents", ['app.auth', 'firebase'])
+angular.module("app.bigevents", ['app.auth', 'firebase', 'app.color'])
 
-.controller('BigEventsCtrl', function ($scope, $ref, $firebase) {
+.controller('BigEventsCtrl', function ($scope, $ref, $color, $firebase) {
   $scope.names = {};
   $scope.groupEvents = {};
   $scope.groups = {};
+
+  // use the color scheme
+  $scope.getColor = $color;
   
   $ref.base.child('users/' + $ref.netid + '/groups').on('child_added', function (snap) {
     var gid = snap.val();

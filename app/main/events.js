@@ -1,7 +1,6 @@
-angular.module("app.events", ['app.auth', 'ui.keypress', 'app.extendui', 'ui.bootstrap.tooltip'])
+angular.module("app.events", ['app.auth', 'ui.keypress', 'app.extendui', 'app.color', 'ui.bootstrap.tooltip'])
 
-
-.controller('EventsCtrl', function ($scope, $firebase, $group, $ref, $users, $timeout) {
+.controller('EventsCtrl', function ($scope, $firebase, $group, $color, $ref, $users, $timeout) {
 
   // track the current group's events
   $scope.group = $group.props;
@@ -22,6 +21,9 @@ angular.module("app.events", ['app.auth', 'ui.keypress', 'app.extendui', 'ui.boo
       r.setPriority('unknown');
     });
   }
+
+  // Use standard colors
+  $scope.getColor = $color;
 
   // check whether the current user is going
   $scope.checkGoing = function (eid, obj) {
@@ -50,12 +52,7 @@ angular.module("app.events", ['app.auth', 'ui.keypress', 'app.extendui', 'ui.boo
   // track who's going
   $scope.userinfo = $users.users
 
-  // get the color of the event at index i
-  var colors = ['LightBlue', 'LightCyan', 'Plum', 'LavenderBlush', '', 'rgba(245, 245, 245, 0.4)'];
-  $scope.getColor = function(i) {
-    return colors[i % colors.length];
-  };
-
+  // toggle the expanded event view
   $scope.showInfo = function(opts) {
     opts.details = !opts.details;
   };
