@@ -129,8 +129,9 @@ app.get '/' (req, res)!->
 
 # get an appcache
 app.get /^\/(\w+\.appcache)/ (req, res)!->
-  if development then res.send 404 else
-    res.sendfile(path.join(__dirname, req.params[0]));
+  res.send 404
+  #if development then res.send 404 else
+  #  res.sendfile(path.join(__dirname, req.params[0]));
 
 # log out
 app.get '/logout' (req, res)!->
