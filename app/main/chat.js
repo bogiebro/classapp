@@ -1,79 +1,110 @@
+/*
+Implement:
+  search
+  click to toggle reply/unreply
+  delete messages
+  tags/hashtags
+
+Edge cases to deal with:
+  Replying to an unselected chat, no selChatID = ''
+
+Style:
+  message design
+  chat design
+    accordian
+  textbar design
+    fixed at bottom
+    minimal buttons
+
+*/
 angular.module("app.chat", ['app.auth'])
 
-.controller('ChatCtrl', function ($scope, $ref, $firebase, $group) {
-    $group.props.id = "JJdUQVNZiTsrLOJpxsD";
-    $scope.quipu = $firebase($ref.base.child('groups/'+ "JJdUQVNZiTsrLOJpxsD" + '/Quipu'));
-
-
-    // $scope.ref = $ref.base;
-
-
-    $scope.toggled = true;          // checks whether search is toggled
-    $scope.textBox = "";
-    $scope.focus = {};              // holds the reference to the chain in focus
-    $scope.chains = [               // holds all chains, as head and tail structure
-        {
-            head : {content: "How does angular work?", user: "Marco", date: "Should be a date"},
-            tail : [
-                {content: "You're an idiot", user: "Polo", date: "string for now"},
-                {content: "Hello", user: "Peter", date: "asdas"}
-            ]
-        },
-        { 
-            head: {content: "angular works?", user: "Pablo", date: "June 1, 2014"},
-            tail : [
-            {content: "You're still stupid", user: "Bob", date: "still string"},
-            {content: "Hi!", user: "Emily", date: "love"}
-            ]
-        }
-    ];
-
-
-
-    $scope.toggle = function () {
-        $scope.toggled = !scope.toggled;
+.controller('ChatCtrl', function ($scope, $timeout, $ref, $group, $users, $location) { 
+  var userinfo = $users.users[$ref.netid]; // capture logged in user's info: name, netid
+  $scope.groupChats = {}; // holds all chats for a group
+  var chatsRef = {}; // firebase ref to selected group's chats
+  
+  //
+  $scope.$watch('group.id', function (newvalue, oldvalue) {
+    if (!newvalue) {
+      $location.path('/bigevents');
+      console.log("group unselected");
+    } else {
+      chatsRef = $ref.base.child('groups/'+ $group.props.id + '/quipu');      
+      chatsRef.once('value', function (chatsSnapshot) {
+        $timeout(function () {
+          $scope.$apply(function () {
+            $scope.groupChats = chatsSnapshot.val();
+          }, 0);
+        }); 
+      });
     }
+  });
 
-    // Util function to filter comments by textbox contents when search toggled 
-    $scope.commentSearch = function () {
-        if ($scope.toggled) {
-            return $scope.textBox;
-        } else {
-            return "";
-        }
-    }
+  // $scope.toggled = true;          // checks whether search is toggled
+  $scope.textBox = "";
+  $scope.props = {};
+  $scope.props.selChatID = ""; // holds the reference to the chat in focus
+  // Will need record of chatid
 
-    // Displays proper placeholder for textbox, when searching or writing
-    $scope.placeholder = function () {
-        if ($scope.toggled === true) {
-            return "search here"
-        } else {
-            return "add comment here"
-        }
-    };
+  $scope.toggle = function () {
+      $scope.toggled = !scope.toggled;
+  }
 
-    // Adds comment to an existing focused chain, to end of tail
-    $scope.addComment = function () {
-        if(!$scope.toggled && $scope.textBox.trim() != "") {
-            $scope.focus.chain.tail.push({content: $scope.textBox, user: "John", date: "May 2, 2014"});
-            $scope.textBox = "";
-            $scope.error = "";
-        } else {
-            $scope.error = "ERROR"; 
-        }
-    }
+  // Util function to filter comments by textbox contents when search toggled 
+  $scope.commentSearch = function () {
+      if ($scope.toggled) {
+          return $scope.textBox;
+      } else {
+          return "";
+      }
+  }
 
-    // Adds a comment as the head of a new chain
-    $scope.newComment = function () {
-        if(!$scope.toggled && $scope.textBox.trim() != "") {
-            $scope.chains.push({
-                head: {content: $scope.textBox, user: "Noah", date: "June 2, 2014"},
-                tail : []
-            });
-            $scope.textBox = "";
-            $scope.error = "";  
-        } else {
-            $scope.error = "ERROR"; 
-        }
-    }
+  // Displays proper placeholder for textbox, when searching or writing
+  $scope.placeholder = function () {
+      if ($scope.toggled === true) {
+          return "search here"
+      } else {
+          return "add comment here"
+      }
+  };
+
+  // Input: Obj, firebase chatRef;
+  // side input: Str, $scope.textBox; userinfo props
+  // Creates new child in chat, adds message  
+  $scope.newMessage = function (chatRef) {
+    chatRef.push({
+      'content': $scope.textBox || "Test Message", 
+      'date': new Date().getTime(), 
+      'name': userinfo.name, 
+      'netid': userinfo.netid
+    });
+    $scope.props.selChatID = "";
+    chatsRef.on('value', function (chatsSnapshot) {
+        $timeout(function () {
+          $scope.$apply(function () {
+            $scope.groupChats = chatsSnapshot.val();
+          }, 0);
+        }); 
+    });
+  }
+
+  // Input: Num, epoch seconds
+  // Output: Str, representation of date
+  $scope.renderDate = function(epochsecs) {
+    return moment(new Date(epochsecs)).format("h:mma, ddd MMM Do, YYYY");
+  }
+
+  // Creates new chat chain in firebase, calls $scope.newMessage() to add message
+  $scope.newChat = function () {
+    var newchat = chatsRef.push();
+    var chatid = newchat.name();
+    $scope.newMessage($scope.makeChatRef(chatid));
+  }
+
+  // input: Str, chatid fetched from $scope.props.
+  // output: Obj, firebase ref to chatid
+  $scope.makeChatRef = function (chatid) {
+    return $ref.base.child('groups/'+ $group.props.id + '/quipu/' + chatid); 
+  }
 })
