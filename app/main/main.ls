@@ -9,7 +9,6 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
         .when('/members', {controller:'MembersCtrl', templateUrl:'app/main/members.jade'})
         .when('/files', {controller:'FilesCtrl', templateUrl:'app/main/files.jade'})
         .when('/help', {controller:'PrefCtrl', templateUrl:'app/main/help.jade'})
-        .when('/welcome', {controller:'PrefCtrl', templateUrl:'app/main/welcome.jade'})
         .when('/events', {controller:'EventsCtrl', templateUrl:'app/main/events.jade'})
         .when('/bigevents', {controller:'BigEventsCtrl', templateUrl:'app/main/bigevents.jade'})
         .otherwise({redirectTo: '/bigevents'})
@@ -23,7 +22,6 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
 
     # facebook integration
     fillFBData = (token)->
-      console.log('filling data')
       $http.post('/extendToken', {token: token, netid: $ref.netid})
       api <- $FB.api('/me?fields=id,name,picture')
       $ref.base.child("/users/#{$ref.netid}/props").update do
@@ -31,9 +29,7 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
         name: api.name
         image: api.picture.data.url
     $scope.fbLogin = ->
-        console.log('got called')
         $FB.getLoginStatus (sres)->
-          console.log(sres.status)
           if sres.status != 'connected'
             $FB.login(((res)->
                 if (res.authResponse)
@@ -48,7 +44,6 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
     $scope.image = {}
     $scope.image.progress = 0
     $scope.onImgSelect = ($files)->
-      console.log('hi there')
       if $scope.image.progress == 0
         $upload.upload(
           url: '/upload'
@@ -67,7 +62,7 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
 .controller 'HelpCtrl', ($scope, $modalInstance)->
     $scope.dismiss = !-> $modalInstance.close!
 
-.controller 'PrefCtrl', ($firebase, $scope, $ref, $modal, $modalQueue, $location)->
+.controller 'PrefCtrl', ($firebase, $scope, $ref, $modal, $modalQueue, $group, $location)->
     $scope.setupUser = ->
         $modalQueue.addModal(
             templateUrl: 'askId'
@@ -80,19 +75,18 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
             templateUrl: 'aboutId'
             controller: 'AboutCtrl')
     $scope.help = ->
-        $location.path('/help');
+      $group.clearGroup()
+      $location.path('/help');
 
 .controller 'MainCtrl', ($scope, $location, $modalQueue, $group)!->
   $scope.group = $group.props
-  $scope.big = false
-  $scope.$on 'newuser', !-> $modalQueue.addModal(
-            templateUrl: 'tutorialId'
-            controller: 'HelpCtrl')
+  $scope.$on 'newuser', !->
+    $modalQueue.addModal(
+        templateUrl: 'tutorialId'
+        controller: 'HelpCtrl')
   $scope.$on '$locationChangeSuccess', !->
     if $location.path! is '/bigevents'
-      $scope.big = true
       $group.clearGroup!
-    else $scope.big = false
 
 .controller 'NavCtrl', ($scope, $location, $group)!->
   $scope.$on '$locationChangeSuccess', !->

@@ -34,9 +34,9 @@ html(ng-app="App", manifest="/web.appcache")
         .row(ng-controller="MainCtrl")
           .col-sm-2(ng-controller="GroupCtrl", ng-class="{'hidden-xs': group.id}")
             ng-include(src="'app/main/group.jade'")
-          .scrollit(ng-class="{'col-sm-8': !big, 'col-sm-10': big, 'hidden-xs': !group.id}")
+          .scrollit(ng-class="{'col-sm-8': group.id, 'col-sm-10': !group.id, 'hidden-xs': !group.id}")
             div(ng-view)
-          .scrollit.hidden-xs(ng-class="{'col-sm-2': !big, hidden: big}", ng-controller="EventsCtrl")
+          .scrollit.hidden-xs(ng-class="{'col-sm-2': group.id, hidden: !group.id}", ng-controller="EventsCtrl")
             ng-include(src="'app/main/events.jade'")
       .options(ng-controller="PrefCtrl") 
           a.spaced(ng-click="about()") About
@@ -83,7 +83,7 @@ html(ng-app="App", manifest="/web.appcache")
 
       script(type="text/ng-template", id="tutorialId")
           div.modal-header(id='help')
-              h3 Quipu first step: join your classes
+              h3 Welcome to Quipu
           div.modal-body
               ng-include(src="'app/main/tutorial.jade'")
 
