@@ -42,7 +42,7 @@ html(ng-app="App", manifest="/web.appcache")
           a.spaced(ng-click="about()") About
           a.spaced(ng-click="setupUser()") Preferences
           a.spaced(ng-click="help()") FAQ
-          a.spaced(href='/logout') Log out
+          a.spaced(href='/logout', id='logout') Log out
 
       script(type="text/ng-template", id="askId")
           div.modal-header

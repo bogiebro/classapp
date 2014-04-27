@@ -16,5 +16,5 @@
     form.form-inline(ng-if="event.$id == mostRecent")
       textarea.form-control.myinput(sync-focus-with="event.$id == mostRecent",
         ng-model="event.message", ui-keypress="{13:'closeMe(event)'}")
-div(ng-dblClick="newEvent()").adder
+div(id="newevent", ng-dblClick="newEvent()").adder
   div Double click to create an event

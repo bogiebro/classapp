@@ -80,7 +80,45 @@ describe("selecting groups", function() {
     expect(element(by.repeater('class in myclasses').row(0)).isPresent()).toBe(false);
   });
 });
-    //Switch Main Groups in Group Sidebar
+
+describe('adding the class back', function () {
+  it('should work correctly', function () {
+    browser.get('http://localhost:5000/');
+    browser.driver.sleep(3000);
+    element(by.id('searcher')).sendKeys('a\n');
+    element(by.id('searcher')).sendKeys(protractor.Key.ENTER);
+    browser.driver.sleep(3000);
+    var all = element.all(by.repeater('class in myclasses'));
+    all.then(function (arr) {
+      expect(arr.length).toEqual(1);
+    });
+  })
+});
+
+describe('events', function () {
+  beforeEach(function () {
+    browser.get('http://localhost:5000/');
+    browser.driver.sleep(3000);
+    element(by.repeater('class in myclasses').row(0)).click();
+  });
+
+  it('should create an event on double-click', function () {
+    browser.driver.actions().doubleClick(element(by.id('newevent'))).perform();
+    browser.driver.sleep(3000);
+    expect(element(by.css('.myinput')).isPresent()).toBe(true);
+  });
+});
+
+describe('logout', function () {
+  it ('should clear the user\'s cookie', function () {
+    browser.get('http://localhost:5000/');
+    element(by.id('logout')).click();
+    browser.driver.get('http://localhost:5000/');
+    browser.driver.getTitle().then(function(title) {
+      expect(title).not.toContain('Yale');
+    });
+  });
+});
 
     //Test Calendar
     //Create an Event 
@@ -106,7 +144,5 @@ describe("selecting groups", function() {
     //Leave Subgroup
 
 
-    //Leave Group
 
-    //log out of application
 
