@@ -45,6 +45,7 @@ angular.module("app.chat", ['app.auth'])
   $scope.textBox = "";
   $scope.props = {};
   $scope.props.selChatID = ""; // holds the reference to the chat in focus
+  $scope.props.index = -1;
   // Will need record of chatid
 
   $scope.toggle = function () {
@@ -68,6 +69,18 @@ angular.module("app.chat", ['app.auth'])
           return "add comment here"
       }
   };
+
+  // Input: Num, $index of chats ngrepeat; Str, chatid
+  // Toggles focus, highlight of chat elmt for reply, style 
+  $scope.select = function (index, chatid) {
+    if ($scope.props.index == index) {
+      $scope.props.index = -1;
+      $scope.props.selChatID = "";
+    } else {
+      $scope.props.index = index;
+      $scope.props.selChatID = chatid;
+    }
+  }
 
   // Input: Obj, firebase chatRef;
   // side input: Str, $scope.textBox; userinfo props
@@ -104,7 +117,7 @@ angular.module("app.chat", ['app.auth'])
 
   // input: Str, chatid fetched from $scope.props.
   // output: Obj, firebase ref to chatid
-  $scope.makeChatRef = function (chatid) {
+  $scope.makeChatRef = function (chatid) { // CHECK FOR BAD CHATIDS HERE; REPLY ERRORS
     return $ref.base.child('groups/'+ $group.props.id + '/quipu/' + chatid); 
   }
 })

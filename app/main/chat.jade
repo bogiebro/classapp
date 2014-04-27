@@ -22,9 +22,11 @@
 
 div(ng-controller="ChatCtrl")
     //- div {{groupChats}}
-    div.list-group(ng-repeat="(chatid, chatmessages) in groupChats", ng-click="props.selChatID = chatid")
-        div {{chatid}}
-        div(class="head-{{$first}} sel-{{}}", ng-repeat="(messid, message) in chatmessages")
+    div.list-group(ng-repeat="(chatid, chatmessages) in groupChats", 
+        ng-click="select($index, chatid)", ng-class="{sel: $index == props.index}")
+        div {{"chat_id: " + chatid}}
+        div{{"index: " + $index}}
+        div(class="head-{{$first}}", ng-repeat="(messid, message) in chatmessages")
             div {{message.content}}
             div {{message.name}}
             div {{renderDate(message.date)}}
@@ -36,5 +38,6 @@ div(ng-controller="ChatCtrl")
         input(type="button", class="btn btn-primary", value="reply", ng-click="newMessage(makeChatRef(props.selChatID))")
         input(type="button", class="btn btn-primary", type="submit", value="new chat", ng-click="newChat()")
         //- input(type="button", class="btn btn-primary", type="submit", value="cancel comment", disabled)
-    div selected =
-    em {{props.selChatID}}
+    div {{"selected_id: " + props.selChatID}}
+    //- em {{props.selChatID}}
+    div {{"index: " + props.index}}
