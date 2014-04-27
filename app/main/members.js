@@ -1,5 +1,6 @@
 angular.module("app.members", ['app.auth', 'ui.bootstrap', 'ngDragDrop'])
 
+// turn an object of netids into a list of user objects
 .filter('userify', function() {
   return function(input, info) {
     if (input) {
@@ -12,6 +13,7 @@ angular.module("app.members", ['app.auth', 'ui.bootstrap', 'ngDragDrop'])
   }
 })
 
+// dialog for changing a group's name
 .controller('NameCtrl', function ($scope, $ref, $group, $modalInstance) {
   $scope.newprops = {};
   $scope.setName = function () {
@@ -20,16 +22,25 @@ angular.module("app.members", ['app.auth', 'ui.bootstrap', 'ngDragDrop'])
   };
 })
 
+// main members controller
 .controller('MembersCtrl', function ($scope, $ref, $group, $users, $location, $modal, $timeout) {
-  $scope.my = {}
+
+  // bring group tracking info into scope
   $scope.users = $users.groups;
   $scope.info = $users.users;
   $scope.group = $group.props;
+
+  // map from subgroup id to props object
   $scope.subgroups = {};
+
+  // object to handle scope issues in the view
   $scope.opts = {};
   $scope.opts.selected = {};
+
+  // groups whose properties we watch
   var watching = {};
  
+  // update collections when the group changes
   $scope.$watch('group.id', function (newvalue, oldvalue) {
     if (!newvalue) {
       $location.path('/bigevents');
@@ -58,11 +69,13 @@ angular.module("app.members", ['app.auth', 'ui.bootstrap', 'ngDragDrop'])
       }
     }
   });
-   
+  
+  // is the current user a member of the current group? 
   $scope.member = function () {
     return $users.groups[$group.props.id] && $users.groups[$group.props.id][$ref.netid];
   }
 
+  // toggle the public/ private state of a subgroup
   $scope.privitize = function () {
     if ($group.props.private) {
       $ref.base.child('groups/' + $group.props.id + '/props/private').set(false);
@@ -74,6 +87,7 @@ angular.module("app.members", ['app.auth', 'ui.bootstrap', 'ngDragDrop'])
     }
   }
  
+  // create a new subgroup
   $scope.newSubgroup = function () {
     var newgroup = $ref.base.child('groups').push();
     var newname = newgroup.name();
@@ -95,6 +109,7 @@ angular.module("app.members", ['app.auth', 'ui.bootstrap', 'ngDragDrop'])
     });
   }
 
+  // add all selected users to a new group, or just the current user
   $scope.joinGroup = function (gid, who) {
     if (!who) who = {};
     who[$ref.netid] = $ref.netid
@@ -104,6 +119,7 @@ angular.module("app.members", ['app.auth', 'ui.bootstrap', 'ngDragDrop'])
     }
   }
 
+  // open the name-change dialog
   $scope.changeName = function () {
     $modal.open({
       templateUrl: 'changeNameId',
@@ -111,6 +127,7 @@ angular.module("app.members", ['app.auth', 'ui.bootstrap', 'ngDragDrop'])
     });
   };
 
+  // bring setGroup into scope
   $scope.setGroup = function (id) {
     $group.setGroup(id);
   };

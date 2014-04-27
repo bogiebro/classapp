@@ -1,4 +1,4 @@
-h2.noevents(ng-if="events.$getIndex().length == 0") <small> No scheduled events </small>
+h2.noevents.ng-cloak(ng-if="events.$getIndex().length == 0") <small> No scheduled events </small>
 .well.mywell(ng-repeat='event in events | orderByPriority',
   ng-dblClick="editEvent(event)", sglclick="showInfo(opts)",
   ng-init="opts = {}; checkGoing(event.$id, opts)",
