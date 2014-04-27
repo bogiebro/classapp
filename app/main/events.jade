@@ -1,3 +1,4 @@
+h2.noevents(ng-if="events.$getIndex().length == 0") <small> No scheduled events </small>
 .well.mywell(ng-repeat='event in events | orderByPriority',
   ng-dblClick="editEvent(event)", sglclick="showInfo(opts)",
   ng-init="opts = {}; checkGoing(event.$id, opts)",
@@ -17,4 +18,4 @@
       textarea.form-control.myinput(sync-focus-with="event.$id == mostRecent",
         ng-model="event.message", ui-keypress="{13:'closeMe(event)'}")
 div(id="newevent", ng-dblClick="newEvent()").adder
-  div Double click to create an event
+  p <small> Double click to create an event </small>
