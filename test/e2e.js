@@ -61,11 +61,23 @@ describe("selecting groups", function() {
   beforeEach(function () {
     browser.get('http://localhost:5000/');
     browser.driver.sleep(3000);
+    element(by.repeater('class in myclasses').row(0)).click();
   });
 
   it('should update the ui when a class is clicked', function () {
-    element(by.repeater('class in myclasses').row(0)).click();
     expect(element(by.id('groupnav')).isDisplayed()).toBeTruthy();
+  });
+
+  it('should have tester as a member', function () {
+    expect(
+      element(by.repeater("usr in users[group.id] | userify: info | filter: my.searchtext")
+      .row(0)).isPresent()).toBe(true);
+  });
+
+  it('should allow users to leave', function () {
+    element(by.id('remover')).click();
+    browser.driver.sleep(3000);
+    expect(element(by.repeater('class in myclasses').row(0)).isPresent()).toBe(false);
   });
 });
     //Switch Main Groups in Group Sidebar

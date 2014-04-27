@@ -22,7 +22,7 @@
       button.btn.btn-default(type='button', tooltip-placement="bottom", tooltip="Make group {{group.private ? 'public' : 'private'}}",
         ng-if='group.parent && member()', ng-click='privitize()')
           span.glyphicon(ng-class="{'glyphicon-lock': group.private, 'glyphicon-globe': !group.private}")
-      button.btn.btn-default(type='button', tooltip='Leave group', tooltip-placement="bottom", ng-if='member()', ng-click='removeUser()')
+      button.btn.btn-default(type='button', id="remover", tooltip='Leave group', tooltip-placement="bottom", ng-if='member()', ng-click='removeUser()')
           span.glyphicon.glyphicon-trash
 .row
   span(ng-repeat="usr in users[group.id] | userify: info | filter: my.searchtext")
