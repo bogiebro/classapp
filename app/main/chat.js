@@ -19,12 +19,12 @@ Style:
 */
 angular.module("app.chat", ['app.auth'])
 
-.controller('ChatCtrl', function ($scope, $timeout, $ref, $group, $users, $location) { 
+.controller('ChatCtrl', function ($scope, $timeout, $ref, $group, $users, $location, $anchorScroll) { 
   var userinfo = $users.users[$ref.netid]; // capture logged in user's info: name, netid
   $scope.groupChats = {}; // holds all chats for a group
   var chatsRef = {}; // firebase ref to selected group's chats
   
-  //
+  // ADD COMMENT DOC
   $scope.$watch('group.id', function (newvalue, oldvalue) {
     if (!newvalue) {
       $location.path('/bigevents');
@@ -43,10 +43,9 @@ angular.module("app.chat", ['app.auth'])
 
   // $scope.toggled = true;          // checks whether search is toggled
   $scope.textBox = "";
-  $scope.props = {};
-  $scope.props.selChatID = ""; // holds the reference to the chat in focus
-  $scope.props.index = -1;
-  // Will need record of chatid
+  $scope.props = {selChatID: "", index: -1};
+  // $scope.props.selChatID = ""; // holds the reference to the chat in focus
+  // $scope.props.index = -1;
 
   $scope.toggle = function () {
       $scope.toggled = !scope.toggled;
@@ -93,7 +92,7 @@ angular.module("app.chat", ['app.auth'])
       'netid': userinfo.netid
     });
     $scope.props.selChatID = "";
-    chatsRef.on('value', function (chatsSnapshot) {
+    chatsRef.on('value', function (chatsSnapshot) { // abstract to separate function?
         $timeout(function () {
           $scope.$apply(function () {
             $scope.groupChats = chatsSnapshot.val();
