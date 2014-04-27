@@ -44,12 +44,12 @@ describe("greeting users", function() {
       expect(element(by.id('help')).isPresent()).toBe(false);
     });
 
-    it('should allow searching for classes', function () {
+    it('should allow adding classes', function () {
       browser.get('http://localhost:5000/');
       browser.driver.sleep(3000);
       element(by.id('searcher')).sendKeys('a\n');
       element(by.id('searcher')).sendKeys(protractor.Key.ENTER);
-      browser.driver.sleep(1000);
+      browser.driver.sleep(3000);
       var all = element.all(by.repeater('class in myclasses'));
       all.then(function (arr) {
         expect(arr.length).toEqual(1);
@@ -57,6 +57,17 @@ describe("greeting users", function() {
     });
 });
 
+describe("selecting groups", function() {
+  beforeEach(function () {
+    browser.get('http://localhost:5000/');
+    browser.driver.sleep(3000);
+  });
+
+  it('should update the ui when a class is clicked', function () {
+    element(by.repeater('class in myclasses').row(0)).click();
+    expect(element(by.id('groupnav')).isDisplayed()).toBeTruthy();
+  });
+});
     //Switch Main Groups in Group Sidebar
 
     //Test Calendar
@@ -87,4 +98,3 @@ describe("greeting users", function() {
 
     //log out of application
 
-});

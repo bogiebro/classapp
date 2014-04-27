@@ -11,7 +11,7 @@ html(ng-app="App", manifest="/web.appcache")
         .container-fluid.hidden-xs
           .navbar-header
             a.navbar-brand.ng-cloak(href ng-click="go('/bigevents')") Quipu{{group.name ? ': ' + group.name : ''}}
-          ul.nav.navbar-nav.navbar-right.hidden-xs(ng-show="group.name")
+          ul.nav.navbar-nav.navbar-right.hidden-xs(ng-show="group.name", id='groupnav')
             li(ng-class='{active: path == "/members"}') <a href ng-click="go('/members')">Members</a>
             li(ng-class='{active: path == "/chat"}') <a href ng-click="go('/chat')">Chat</a>
             li(ng-class='{active: path == "/files"}') <a href ng-click="go('/files')">Files</a>

@@ -37,7 +37,6 @@ angular.module("app.members", ['app.auth', 'ui.bootstrap', 'ngDragDrop'])
       if (!watching[newvalue]) {
         watching[newvalue] = true;
         $ref.base.child('groups/' + newvalue + '/subgroups').on('child_added', function (snap) {
-          console.log('child added');
           var subid = snap.val();
           $ref.base.child('groups/' + subid + '/props/name').on('value', function (name) {
             $timeout(function () {
@@ -49,7 +48,6 @@ angular.module("app.members", ['app.auth', 'ui.bootstrap', 'ngDragDrop'])
         });
         $ref.base.child('groups/' + newvalue + '/subgroups').on('child_removed', function (snap) {
           var subid = snap.val();
-          console.log('child removed');
           $timeout(function () {
             $scope.$apply(function () {
               delete $scope.subgroups[subid];
@@ -100,7 +98,6 @@ angular.module("app.members", ['app.auth', 'ui.bootstrap', 'ngDragDrop'])
   $scope.joinGroup = function (gid, who) {
     if (!who) who = {};
     who[$ref.netid] = $ref.netid
-    console.log(who);
     for (var p in who) {
       $ref.base.child('groups/' + gid + '/users/' + p).set(p);
       $ref.base.child('users/' + p + '/groups/' + gid).set(gid);
@@ -120,14 +117,14 @@ angular.module("app.members", ['app.auth', 'ui.bootstrap', 'ngDragDrop'])
 
   // remove a user from the group
   $scope.removeUser = function() {
-    $ref.base.child('users/' + $ref.netid + '/groups/' + $group.props.id).remove();
-    $ref.base.child('groups/' + $group.props.id + '/users/' + $ref.netid).remove(function (err) {
-      $ref.base.child('groups/' + $group.props.id + '/users').limit(1).once('value', function (snap) {
-        if (!snap.val()) {
-          var gid = $group.props.id;
-          if ($group.props.parent) {
-            $ref.base.child('groups/' + $group.props.parent + '/subgroups/' + gid).remove();
-          }
+    var gid = $group.props.id;
+    var gparent = $group.props.parent;
+    $ref.base.child('users/' + $ref.netid + '/groups/' + gid).remove();
+    $ref.base.child('groups/' + gid + '/users/' + $ref.netid).remove(function (err) {
+      $ref.base.child('groups/' + gid + '/users').limit(1).once('value', function (snap) {
+        if (!snap.val() && gparent) {
+          console.log('should delete this group ' + gid);
+          $ref.base.child('groups/' + gparent + '/subgroups/' + gid).remove();
           $ref.base.child('groups/' + gid).remove();
         };
       });

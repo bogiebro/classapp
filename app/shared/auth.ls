@@ -44,19 +44,21 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
   $ref.base.child("users/#{$ref.netid}/groups").on 'child_added' (gsnap)!->
     val = gsnap.val!
     result.groups[val] = {}
-    $timeout((->$ref.base.child("groups/#{val}/users").on 'child_added' (user)!->
+    $ref.base.child("groups/#{val}/users").on 'child_added' (user)!->
         netid = user.val!
-        result.groups.$apply(!->
-          result.groups[val][netid] = netid)
+        $timeout((!->
+          result.groups.$apply(!->
+            result.groups[val][netid] = netid)), 0)
         if (!result.users[netid])
           result.users[netid] = {}
           $ref.base.child("users/#{netid}/props").once 'value' (snap)!->
-            result.users.$apply(!->
-              result.users[netid] <<< snap.val!
-              result.users[netid].netid = netid)
+            $timeout((!->
+              result.users.$apply(!->
+                result.users[netid] <<< snap.val!
+                result.users[netid].netid = netid)), 0)
           $ref.base.child("ratings/" + ratingRef([$ref.netid, netid])).once 'value' (snap)!->
-            result.users.$apply(!-> result.users[netid] <<< snap.val!))
-      , 0)
+            $timeout((!->
+              result.users.$apply(!-> result.users[netid] <<< snap.val!)), 0)
   return result
 
 # $group.props gives the currently selected group's properties (name, id, etc)
