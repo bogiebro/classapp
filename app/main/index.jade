@@ -5,7 +5,7 @@ html(ng-app="App", manifest="/web.appcache")
 
         link(rel="stylesheet", href=ROOT + "/css/vendor.css")
         link(rel='stylesheet', href=ROOT + "/css/main.css")
-
+        meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
     body
       nav.navbar.navbar-default.navbar-fixed-top.navbar-inverse(role="navigation", ng-controller="NavCtrl")
         .container-fluid.hidden-xs
