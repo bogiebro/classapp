@@ -4,6 +4,7 @@
 # http://www.sitepoint.com/unit-and-e2e-testing-in-angularjs/
 # https://github.com/angular/protractor/blob/master/docs/getting-started.md
 
+# tests for abstract services
 describe "auth", ->
     beforeEach(module('app.auth'))
     beforeEach(module(($provide)->
@@ -51,8 +52,10 @@ describe "auth", ->
             $timeout((->
               expect($users.groups['testgroup']).toBeTruthy()
               expect($users.groups['testgroup'][$ref.netid]).toBe($ref.netid)
-              done()), 1)
+              done()), 4)
 
+# test controller initialization;
+# most controller functionality tested in e2e.js
 describe "group sidebar", ->
   beforeEach(module('app.group'))
   beforeEach(module(($provide)->
@@ -73,5 +76,16 @@ describe "events sidebar", ->
     inject ($ref, $controller, $rootScope)->
       scope = $rootScope.$new()
       ctrl = $controller('EventsCtrl', {$scope: scope})
+      expect(ctrl).toBeDefined()
+
+describe "members page", ->
+  beforeEach(module('app.members'))
+  beforeEach(module(($provide)->
+    $provide.constant('$cookies', {casInfo: params.cookieData})))
+  
+  it 'should create a event controller',
+    inject ($ref, $controller, $rootScope)->
+      scope = $rootScope.$new()
+      ctrl = $controller('MembersCtrl', {$scope: scope})
       expect(ctrl).toBeDefined()
   

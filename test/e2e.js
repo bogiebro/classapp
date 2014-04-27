@@ -1,33 +1,61 @@
-.describe("greeting users", function() {
+describe("greeting users", function() {
+
     it('should have a splash screen', function() {
         browser.driver.get('http://localhost:5000/');
         browser.driver.getTitle().then(function(title) {
           expect(title).not.toContain('Yale')
         });
     });
+
     it('should direct un-loggedin users to CAS', function() {
         browser.driver.get('http://localhost:5000/main');
         browser.driver.getTitle().then(function(title) {
           expect(title).toContain('Yale')
         });
     });
-    //Account Creation Tests
-    //Upload Picture
+
     it('should direct logged-in users to the main page', function() {
         browser.driver.get('http://localhost:5000/testlogin').then( function(){
-          browser.get('http://localhost:5000/')
+          browser.get('http://localhost:5000/');
           browser.driver.getTitle().then(function(title) {
             expect(title).not.toContain('Yale');
           })
         });
     });
-    //Test FAQ, About Page
-    //Edit Account info
+    
+    it('should greet users with a welcome splash', function() {
+      browser.get('http://localhost:5000/');
+      browser.driver.sleep(3500);
+      expect(element(by.id('help')).isPresent()).toBe(true);
+    });
 
+    it('should allow users to make an account', function() {
+      browser.get('http://localhost:5000/');
+      browser.driver.sleep(3000);
+      element(by.css('body')).sendKeys(protractor.Key.ESCAPE);
+      element(by.id('namefield')).sendKeys('Tester');
+      element(by.id('namefield')).sendKeys(protractor.Key.ENTER);
+      expect(element(by.id('namefield')).isPresent()).toBe(false);
+    });
 
-    //Search should be able to display classes (test input)
+    it('should not show a splash when the user has a name', function() {
+      browser.get('http://localhost:5000/');
+      browser.driver.sleep(3000);
+      expect(element(by.id('help')).isPresent()).toBe(false);
+    });
 
-    //Add Class (as many as we want but at least 2) (maybe we can create a fake test class)
+    it('should allow searching for classes', function () {
+      browser.get('http://localhost:5000/');
+      browser.driver.sleep(3000);
+      element(by.id('searcher')).sendKeys('a\n');
+      element(by.id('searcher')).sendKeys(protractor.Key.ENTER);
+      browser.driver.sleep(1000);
+      var all = element.all(by.repeater('class in myclasses'));
+      all.then(function (arr) {
+        expect(arr.length).toEqual(1);
+      });
+    });
+});
 
     //Switch Main Groups in Group Sidebar
 

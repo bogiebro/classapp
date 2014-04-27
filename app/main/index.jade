@@ -54,7 +54,7 @@ html(ng-app="App", manifest="/web.appcache")
                   div(class="form-group")
                       label(class="col-sm-2 control-label") Full name
                       div(class="col-sm-10")
-                          input(type="text", ng-model="me.name", placeholder="Full name", class="form-control")
+                          input(type="text", id='namefield', ng-model="me.name", placeholder="Full name", class="form-control")
                   div(class="form-group")
                       label(class="col-sm-2 control-label") College
                       div(class="col-sm-10")
@@ -82,7 +82,7 @@ html(ng-app="App", manifest="/web.appcache")
                       | James Batchelder, Peter Nguyen, Jadon Montero
 
       script(type="text/ng-template", id="tutorialId")
-          div.modal-header
+          div.modal-header(id='help')
               h3 Quipu first step: join your classes
           div.modal-body
               ng-include(src="'app/main/tutorial.jade'")

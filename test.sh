@@ -12,6 +12,7 @@ echo "
 ./node_modules/.bin/karma start --single-run
 if [ $1 ]
 then
+    curl -X DELETE https://torid-fire-3655.firebaseio.com/tests/$UUID.json
     echo "
     ####### Starting the server #######
     "
