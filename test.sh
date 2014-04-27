@@ -10,9 +10,10 @@ echo "
 ####### Running Unit Tests #######
 "
 ./node_modules/.bin/karma start --single-run
+curl -X DELETE https://torid-fire-3655.firebaseio.com/tests/$UUID.json
+eval $(cat publicvars .env) ./node_modules/.bin/lsc copier.ls
 if [ $1 ]
 then
-    curl -X DELETE https://torid-fire-3655.firebaseio.com/tests/$UUID.json
     echo "
     ####### Starting the server #######
     "
