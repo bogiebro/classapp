@@ -3,16 +3,16 @@
     input.form-control.input-sm(type='text', placeholder="Search members", ng-model="opts.searchtext")
   form.pull-right
     .btn-group.visible-xs
-      button.btn.btn-sm(type='button', tooltip-placement="bottom", tooltip="Create subgroup", ng-if="member()", ng-click='newSubgroup()')
+      button.btn.btn-default.btn-sm(type='button', tooltip-placement="bottom", tooltip="Create subgroup", ng-if="member()", ng-click='newSubgroup()')
           span.glyphicon.glyphicon-plus
-      button.btn.btn-sm(type='button', ng-if='!member()', tooltip-placement="bottom", tooltip="Join Group", ng-click='joinGroup(group.id)') 
+      button.btn.btn-default.btn-sm(type='button', ng-if='!member()', tooltip-placement="bottom", tooltip="Join Group", ng-click='joinGroup(group.id)') 
           span.glyphicon.glyphicon-heart-empty
-      button.btn.btn-sm(type='button', tooltip-placement="bottom", tooltip='Edit', ng-if='group.parent && member()', ng-click='changeName()')
+      button.btn.btn-default.btn-sm(type='button', tooltip-placement="bottom", tooltip='Edit', ng-if='group.parent && member()', ng-click='changeName()')
           span.glyphicon.glyphicon-pencil
-      button.btn.btn-sm(type='button', tooltip-placement="bottom", tooltip="Make group {{group.private ? 'public' : 'private'}}",
+      button.btn.btn-default.btn-sm(type='button', tooltip-placement="bottom", tooltip="Make group {{group.private ? 'public' : 'private'}}",
         ng-if='group.parent && member()', ng-click='privitize()')
           span.glyphicon(ng-class="{'glyphicon-lock': group.private, 'glyphicon-globe': !group.private}")
-      button.btn.btn-sm(type='button', tooltip='Leave group', tooltip-placement="bottom", ng-if='member()', ng-click='removeUser()')
+      button.btn.btn-default.btn-sm(type='button', tooltip='Leave group', tooltip-placement="bottom", ng-if='member()', ng-click='removeUser()')
           span.glyphicon.glyphicon-trash
     .btn-group.hidden-xs
       button.btn.btn-default(type='button', ng-if="member()", ng-click='newSubgroup()') Create Subgroup

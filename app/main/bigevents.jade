@@ -2,7 +2,7 @@ div.container(ng-if="numGroups == 0")
   .jumbotron.nogroups
     h1 <small> You don't have any groups yet </small>
     p Search for a class to get started
-span
+span.nowrap
   div.eventTile.panel.panel-default(ng-repeat="group in groups")
     div.panel-heading
       h3.panel-title {{names[group].$value}}
