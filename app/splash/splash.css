@@ -8,10 +8,17 @@ body, html {
 	height: 80%;
 }
 
-.vcentered_element {
-	
-	margin-top: 20%;
-	text-align: center;
+
+@media (min-width: 751px) {
+  .vcentered_element {
+      margin-top: 20%;
+      text-align: center;
+  }
+}
+@media (max-width: 750px) {
+  .vcentered_element {
+    text-align: center
+  }
 }
 
 .hcentered_element {

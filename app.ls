@@ -30,6 +30,7 @@ netidparse = (req, res, next)!->
   try
     throw new Error 'no cookie' if (!req.cookies.casInfo)
     req.netid = JSON.parse(req.cookies.casInfo).netid
+    console.log(req.netid)
     next!
   catch
     res.send 403
@@ -69,6 +70,7 @@ app.post '/upload', netidparse, (req, res)!->
   form.on 'part', (part)!->
     if part.filename is /png|jpg|jpeg|pdf/i
       uploadName = "/pics/#{req.netid}.jpg"
+      console.log(uploadName)
       im(part, part.filename).resize(80, 60).setFormat('jpeg').toBuffer (err, buffer)!->
         if err then console.error err else
           s3.putBuffer(buffer, uploadName, {}, s3result res)
