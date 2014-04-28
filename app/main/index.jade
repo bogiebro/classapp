@@ -41,7 +41,7 @@ html(ng-app="App", manifest="/web.appcache")
       .options(ng-controller="PrefCtrl") 
           a.spaced(ng-click="about()") About
           a.spaced(ng-click="setupUser()") Preferences
-          a.spaced(ng-click="help()") FAQ
+          a.spaced.hidden-xs(ng-click="help()") FAQ
           a.spaced(href='/logout', id='logout') Log out
 
       script(type="text/ng-template", id="askId")
