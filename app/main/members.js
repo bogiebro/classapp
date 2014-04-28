@@ -58,7 +58,6 @@ angular.module("app.members", ['app.auth', 'ui.bootstrap', 'ngDragDrop'])
               $scope.$apply(function () {
                 $scope.subgroups[subid] = {groupid: subid, name: name.val()};
                 $scope.groupsubs[newvalue][subid] = subid;
-                console.log($scope.groupsubs);
               })
             }, 0);
           });
