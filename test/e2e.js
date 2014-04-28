@@ -57,6 +57,56 @@ describe("greeting users", function() {
     });
 });
 
+/*New Tests Start Here
+describe('Edit Acount Info', function () {
+  it('should let me change my name and college'), function(){
+    browser.get('http://localhost:5000/');
+    browser.driver.sleep(3000);
+    //click the right thing
+    element(by.id('namefield')).sendKeys('Tom Tester');
+    element(by.id('')).sendKeys('Swing Space');
+    element(by.id('')).sendKeys(protractor.Key.ENTER);
+    //click it again, fix test
+    element(by.id('namefield')).
+  }
+
+  it('should let me add a picture'), function(){
+    browser.get('http://localhost:5000/');
+    browser.driver.sleep(3000);
+    //drag favicon?
+  }
+})
+
+//Except that the About page is a modal, so might have to use an alert text checker?
+describe('About', function () {
+  it('should not show the about page until clicked'), function(){
+    browser.get('http://localhost:5000/');
+    broswer.driver.sleep(3000);
+    expect element(by.id('aboutId')).isPresent()).toBe(false);
+  }
+  //Have to use the prefctrl and click the button
+  it('should show users the about page'), function(){
+    browser.get('http://localhost:5000/');
+    browser.driver.sleep(3000);
+    element(by.id('aboutId')).click();
+    browser.driver.sleep(3000);
+    expect element(by.id('aboutId')).isPresent()).toBe(true);
+  }
+});
+
+describe('FAQ', function() {
+  it('should direct users to FAQ page when clicked', function() {
+    //is this correct?
+    broswer.get('http://localhost:5000/#/help');
+    //how do I click this button?
+    expect //that the page contains some phrase that's helpful
+  }
+});
+
+*/
+
+
+
 describe("selecting groups", function() {
   beforeEach(function () {
     browser.get('http://localhost:5000/');
@@ -75,12 +125,15 @@ describe("selecting groups", function() {
       .row(0)).isPresent()).toBe(true);
   });
 
+
+
   it('should allow users to leave', function () {
     element(by.id('remover')).click();
     browser.driver.sleep(3000);
     expect(element(by.repeater('class in myclasses').row(0)).isPresent()).toBe(false);
   });
 });
+
 
 describe('adding the class back', function () {
   it('should work correctly', function () {
@@ -96,6 +149,7 @@ describe('adding the class back', function () {
   })
 });
 
+
 describe('events', function () {
   beforeEach(function () {
     browser.get('http://localhost:5000/');
@@ -110,6 +164,24 @@ describe('events', function () {
   });
 });
 
+//describe("member search", function())
+//it('should be able to find a member');
+//it('should be able to drag members to a subgroup');
+
+
+//describe("chat")
+//Send Message, Reply
+
+describe("files", function() {
+  browser.get('http://localhost:5000/');
+  element(by.repeater('class in myclasses').row(0)).click();
+  //click files
+
+  //it('should display the files page') how to get titles?
+  //it('should upload files')
+  //it('should be able to edit files')
+}
+
 describe('logout', function () {
   it ('should clear the user\'s cookie', function () {
     browser.get('http://localhost:5000/');
@@ -121,28 +193,6 @@ describe('logout', function () {
   });
 });
 
-    //Test Calendar
-    //Create an Event 
-    //View Test Event
-    //Edit Event
-
-    //Members
-    //Search for Members
-
-    //Chat
-    //Send message, cancel message
-
-    //Files
-    //Upload File, Download File
-
-
-    //Subgroup Tests
-
-    //Add to subgroup by dragging
-
-    //Use main group tests for members, chat, and files
-
-    //Leave Subgroup
 
 
 
