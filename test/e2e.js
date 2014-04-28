@@ -69,6 +69,7 @@ describe("selecting groups", function() {
   });
 
   it('should have tester as a member', function () {
+    browser.driver.sleep(3000);
     expect(
       element(by.repeater("usr in users[group.id] | userify: info | filter: my.searchtext")
       .row(0)).isPresent()).toBe(true);
