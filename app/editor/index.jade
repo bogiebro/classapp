@@ -16,12 +16,12 @@ html
     div.hidden-xs
       div(ng-app="Editor", ng-controller="EditorCtrl")
         nav.navbar.navbar-default.navbar-fixed-top.navbar-inverse
-          .container-fluid
+          .container-fluid.ng-cloak
             .navbar-header
               a.navbar-brand(href) Quipu Editor: {{info.noteName.$value}}
             div(class="navbar-right", ng-repeat="(netid, user) in users")
               .square(tooltip="{{user.name}}", tooltip-placement="bottom")
-                img(ng-src="{{user.pic}}", height="32", width="32")
+                img(ng-src="{{user.pic || '/img/anonymous.jpeg'}}", height="32", width="32")
       #firepad
 
         script(src="/js/vendor.js")
