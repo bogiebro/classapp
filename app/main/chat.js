@@ -1,12 +1,12 @@
 /*
 Implement:
-  search
+  search x
   click to toggle reply/unreply
-  delete messages
-  tags/hashtags
+  delete messages 
+  tags/hashtags 
 
 Edge cases to deal with:
-  Replying to an unselected chat, no selChatID = ''
+  x Replying to an unselected chat, no selChatID = ''
 
 Style:
   message design
@@ -54,11 +54,8 @@ angular.module("app.chat", ['app.auth', 'ui.bootstrap.collapse'])
 
   // returns CHATS that match
   $scope.search = function (text, index) {
-    // console.log(index);
-    // if (index == $scope.props.index) return true; 
     return function (chat) {
       if ($scope.props.selChatID != "") {
-        console.log("chatid: " + $scope.props.selChatID);
         return true;
       }
       if (text == undefined || text == '') return true;

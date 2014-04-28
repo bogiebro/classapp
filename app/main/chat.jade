@@ -13,24 +13,26 @@ div(ng-controller="ChatCtrl")
     //- div {{arrChats}}
     //- div {{mapChatIDs}}
     div.chat-container(ng-init="isCollapsed = []")
-        div.list-group.e(ng-repeat="chat in arrChats | filter: search(textBox)", ng-init="index = $index; isCollapsed.push(true)",
+        div.list-group.e(ng-repeat="chat in arrChats | filter: search(textBox)", ng-init="isCollapsed.push(true)",
             ng-class="{sel: $index == props.index}")
             //- select($index, chatid); once I implement reply
             div(ng-repeat="(key, message) in chat")
                 div(collapse="!($first) && isCollapsed[$parent.$index]", ng-class="{children: !$first}")
                     H4 {{message.content}} 
                     p {{message.name}}  {{renderDate(message.date)}}
-            input(type="button", class="btn btn-primary", value="reply", ng-click="select($index)")
-            input(type="button", class="btn btn-primary", value="expand", ng-click="isCollapsed[$index] = !isCollapsed[$index]")
+            div.btn-group
+                button.btn.btn-default(type="button", ng-click="select($index)") reply
+                button.btn.btn-default(type="button", ng-click="isCollapsed[$index] = !isCollapsed[$index]") expand
     form(name="textForm", novalidate)
         div.form-group(ng-class="{'has-error' : (textForm.text.$invalid && !textForm.text.$pristine) || props.error}")
             input.form-control(type="text", name="text", ng-model="textBox", size="100", placeholder="new chat", required)
             p.help-block(ng-show="(textForm.text.$invalid && !textForm.text.$pristine) || props.error") text is required!
-        input(type="button", class="btn btn-primary", value="reply", ng-click="newMessage(makeChatRef(props.selChatID))")
-        input(type="button", class="btn btn-primary", value="new chat", ng-click="newChat()")
-        input(type="button", class="btn btn-primary", value="cancel reply", ng-click="resetProps()")
+        div.btn-group
+            button.btn.btn-default(ng-click="newMessage(makeChatRef(props.selChatID))") reply
+            button.btn.btn-default(ng-click="newChat()") new chat
+            button.btn.btn-default(ng-click="resetProps()") cancel reply
 
         //- cancel reply/new chat
-    div {{"index: " + props.index}}
+    //- div {{"index: " + props.index}}
     //- div {{props.error}}        
-    div{{props.selChatID}}
+    //- div{{props.selChatID}}
