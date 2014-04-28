@@ -34,9 +34,9 @@ html(ng-app="App", manifest="/web.appcache")
         .row(ng-controller="MainCtrl")
           .col-sm-2(ng-controller="GroupCtrl", ng-class="{'hidden-xs': group.id}")
             ng-include(src="'app/main/group.jade'")
-          .scrollit(ng-class="{'col-sm-8': group.id, 'col-sm-10': !group.id, 'hidden-xs': !group.id}")
+          div(ng-class="{'col-sm-8': group.id, 'col-sm-10': !group.id, 'hidden-xs': !group.id}")
             div(ng-view)
-          .scrollit.hidden-xs(ng-class="{'col-sm-2': group.id, hidden: !group.id}", ng-controller="EventsCtrl")
+          div.hidden-xs(ng-class="{'col-sm-2': group.id, hidden: !group.id}", ng-controller="EventsCtrl")
             ng-include(src="'app/main/events.jade'")
       .options(ng-controller="PrefCtrl") 
           a.spaced(ng-click="about()") About
@@ -65,8 +65,8 @@ html(ng-app="App", manifest="/web.appcache")
                         div(class="dropbox", ng-show="dropSupported",
                           ng-file-drop="onImgSelect($files);",
                           ng-file-drop-available="dropSupported=true")
-                            span(ng-if="!me.image") Drop Image Here
-                            img(ng-if="me.image", ng-src="{{me.image}}")
+                            span(ng-if="!me.pic") Drop Image Here
+                            img(ng-if="me.pic", ng-src="{{me.pic}}")
           div.modal-footer
 
       script(type="text/ng-template", id="aboutId")

@@ -19,6 +19,7 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
     $scope.me = {}
     $firebase($ref.base.child("users/#{$ref.netid}/props/name")).$bind($scope, "me.name")
     $firebase($ref.base.child("users/#{$ref.netid}/props/college")).$bind($scope, "me.college")
+    $firebase($ref.base.child("users/#{$ref.netid}/props/pic")).$bind($scope, "me.pic")
 
     # facebook integration
     fillFBData = (token)->
@@ -27,7 +28,7 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
       $ref.base.child("/users/#{$ref.netid}/props").update do
         fbid: api.id
         name: api.name
-        image: api.picture.data.url
+        pic: api.picture.data.url
     $scope.fbLogin = ->
         $FB.getLoginStatus (sres)->
           if sres.status != 'connected'
@@ -40,7 +41,7 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
 
     # drag and drop image uploading with progress support
     $ref.base.child("/users/#{$ref.netid}/props/pic").once 'value' (snap)->
-        $scope.me.image = snap.val!
+        $scope.me.pic = snap.val!
     $scope.image = {}
     $scope.image.progress = 0
     $scope.onImgSelect = ($files)->
@@ -52,7 +53,7 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
           fileFormDataName: 'myFile'
         ).then((response)->
           $scope.image.progress = 0
-          $scope.me.image = "#{$PROCESS_ENV_S3URL}/pics/#{$ref.netid}.jpg" + '?a=' + new Date!.getTime!
+          $scope.me.pic = "#{$PROCESS_ENV_S3URL}/pics/#{$ref.netid}.jpg" + '?a=' + new Date!.getTime!
         , null, (evt)->
           $scope.image.progress = parseInt(100.0 * evt.loaded / evt.total))
 

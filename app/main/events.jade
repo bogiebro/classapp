@@ -1,21 +1,22 @@
 h2.noevents.ng-cloak(ng-if="events.$getIndex().length == 0") <small> No scheduled events </small>
-.well.mywell(ng-repeat='event in events | orderByPriority',
-  ng-dblClick="editEvent(event)", sglclick="showInfo(opts)",
-  ng-init="opts = {}; checkGoing(event.$id, opts)",
-  ng-style="{'background-color': getColor($index)}")
-    div(ng-if="event.$id != mostRecent && opts.details")
-      p.optshead {{event.time}}
-    span(ng-if="event.$id != mostRecent") {{event.message}}
-    .userlist(ng-if="event.$id != mostRecent && opts.details")
-      span(ng-repeat="usr in event.users")
-        div.minisquare(tooltip='{{userinfo[usr].name}}', tooltip-placement="bottom")
-          img.img-rounded(ng-src="{{userinfo[usr].pic || '/img/anonymous.jpeg'}}", width='20', height='20')
-    form.form-inline(ng-if="event.$id != mostRecent && opts.details").opts
-      div.checkbox.pull-right
-        small <label><input ng-model="opts.going" ng-click="changeGoing(event, opts, $event)" type="checkbox"> going </input></label>
-      small <a ng-click='showChat(event)'>event group</a>
-    form.form-inline(ng-if="event.$id == mostRecent")
-      textarea.form-control.myinput(sync-focus-with="event.$id == mostRecent",
-        ng-model="event.message", ui-keypress="{13:'closeMe(event)'}")
-div(id="newevent", ng-dblClick="newEvent()").adder
-  p <small> Double click to create an event </small>
+.eventscroll
+  .well.mywell(ng-repeat='event in events | orderByPriority',
+    ng-dblClick="editEvent(event)", sglclick="showInfo(opts)",
+    ng-init="opts = {}; checkGoing(event.$id, opts)",
+    ng-style="{'background-color': getColor($index)}")
+      div(ng-if="event.$id != mostRecent && opts.details")
+        p.optshead {{event.time}}
+      span(ng-if="event.$id != mostRecent") {{event.message}}
+      .userlist(ng-if="event.$id != mostRecent && opts.details")
+        span(ng-repeat="usr in event.users")
+          div.minisquare(tooltip='{{userinfo[usr].name}}', tooltip-placement="bottom")
+            img.img-rounded(ng-src="{{userinfo[usr].pic || '/img/anonymous.jpeg'}}", width='20', height='20')
+      form.form-inline(ng-if="event.$id != mostRecent && opts.details").opts
+        div.checkbox.pull-right
+          small <label><input ng-model="opts.going" ng-click="changeGoing(event, opts, $event)" type="checkbox"> going </input></label>
+        small <a ng-click='showChat(event)'>event group</a>
+      form.form-inline(ng-if="event.$id == mostRecent")
+        textarea.form-control.myinput(sync-focus-with="event.$id == mostRecent",
+          ng-model="event.message", ui-keypress="{13:'closeMe(event)'}")
+  div(id="newevent", ng-dblClick="newEvent()").adder
+    p <small> Double click to create an event </small>

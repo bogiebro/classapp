@@ -24,7 +24,7 @@
           span.glyphicon(ng-class="{'glyphicon-lock': group.private, 'glyphicon-globe': !group.private}")
       button.btn.btn-default(type='button', id="remover", tooltip='Leave group', tooltip-placement="bottom", ng-if='member()', ng-click='removeUser()')
           span.glyphicon.glyphicon-trash
-.row
+.row.scrollit
   span(ng-repeat="usr in users[group.id] | userify: info | filter: opts.searchtext")
     div.picsquare(ui-draggable='true', drag='usr.netid')
       img(ng-class="{'img-rounded': !opts.selected[usr.netid], 'img-thumbnail': opts.selected[usr.netid]}",
