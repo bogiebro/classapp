@@ -99,7 +99,7 @@ angular.module("app.chat", ['app.auth', 'ui.bootstrap.collapse'])
   // side input: Str, $scope.textBox; userinfo props
   // Creates new child in chat, adds message  
   $scope.newMessage = function (chatRef) {
-    if ($scope.textBox == undefined || $scope.textBox.trim() == "") {
+    if ($scope.textBox == undefined || $scope.textBox.trim() == "" || chatRef == false) {
       $scope.props.error = true;
       console.log("Submit pressed");
     } else {
@@ -147,6 +147,7 @@ angular.module("app.chat", ['app.auth', 'ui.bootstrap.collapse'])
   // input: Str, chatid fetched from $scope.props.
   // output: Obj, firebase ref to chatid
   $scope.makeChatRef = function (chatid) { // CHECK FOR BAD CHATIDS HERE; REPLY ERRORS
-    return $ref.base.child('groups/'+ $group.props.id + '/quipu/' + chatid); 
+    if (chatid == '') return false;
+    else return $ref.base.child('groups/'+ $group.props.id + '/quipu/' + chatid); 
   }
 })
