@@ -35,9 +35,9 @@ div(ng-if="group.parent")
   h2.text-center.draginfo <small>Drag users from the main group to add members</small>
 div(ng-if="!group.parent")
   h2.text-center.draginfo <small>Drag users to subgroups in the sidebar to add members</small>
-  p.subgroups Subgroups:
-    span.label.label-default.subgrouplabel(ng-repeat="subgroup in subgroups", ng-click="setGroup(subgroup.groupid)")
-      | {{subgroup.name}}
+  p.subgroups.ng-cloak Subgroups:
+    span.label.label-default.subgrouplabel(ng-repeat="subgroup in groupsubs[group.id]", ng-click="setGroup(subgroup)")
+      | {{subgroups[subgroup].name}}
 
 script(type='text/ng-template', id='changeNameId')
   div.modal-header

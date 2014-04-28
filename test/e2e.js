@@ -180,16 +180,16 @@ describe('events', function () {
 //describe("chat")
 //Send Message, Reply
 
-describe("files", function() {
-  browser.get('http://localhost:5000/');
-  element(by.repeater('class in myclasses').row(0)).click();
-  //click files
-
-  //it('should display the files page') how to get titles?
-  //it('should upload files')
-  //it('should create files')
-  //it('should be able to edit files')
-}
+// describe("files", function() {
+//   browser.get('http://localhost:5000/');
+//   element(by.repeater('class in myclasses').row(0)).click();
+//   //click files
+//
+//   //it('should display the files page') how to get titles?
+//   //it('should upload files')
+//   //it('should create files')
+//   //it('should be able to edit files')
+// });
 
 describe('logout', function () {
   it ('should clear the user\'s cookie', function () {

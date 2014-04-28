@@ -33,6 +33,9 @@ angular.module("app.members", ['app.auth', 'ui.bootstrap', 'ngDragDrop'])
   // map from subgroup id to props object
   $scope.subgroups = {};
 
+  // map from group id to a map from subgroupid to subgroupid
+  $scope.groupsubs = {};
+
   // object to handle scope issues in the view
   $scope.opts = {};
   $scope.opts.selected = {};
@@ -47,12 +50,15 @@ angular.module("app.members", ['app.auth', 'ui.bootstrap', 'ngDragDrop'])
     } else {
       if (!watching[newvalue]) {
         watching[newvalue] = true;
+        $scope.groupsubs[newvalue] = {};
         $ref.base.child('groups/' + newvalue + '/subgroups').on('child_added', function (snap) {
           var subid = snap.val();
           $ref.base.child('groups/' + subid + '/props/name').on('value', function (name) {
             $timeout(function () {
               $scope.$apply(function () {
                 $scope.subgroups[subid] = {groupid: subid, name: name.val()};
+                $scope.groupsubs[newvalue][subid] = subid;
+                console.log($scope.groupsubs);
               })
             }, 0);
           });
@@ -61,6 +67,7 @@ angular.module("app.members", ['app.auth', 'ui.bootstrap', 'ngDragDrop'])
           var subid = snap.val();
           $timeout(function () {
             $scope.$apply(function () {
+              delete $scope.groupsubs[newvalue][subid];
               delete $scope.subgroups[subid];
             });
           }, 0);
