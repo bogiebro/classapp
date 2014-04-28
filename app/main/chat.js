@@ -17,7 +17,7 @@ Style:
     minimal buttons
 
 */
-angular.module("app.chat", ['app.auth'])
+angular.module("app.chat", ['app.auth', 'ui.bootstrap.collapse'])
 
 .controller('ChatCtrl', function ($scope, $timeout, $ref, $group, $users, $location, $anchorScroll) { 
   var userinfo = $users.users[$ref.netid]; // capture logged in user's info: name, netid

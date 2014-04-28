@@ -22,19 +22,20 @@
 
 div(ng-controller="ChatCtrl")
     div.chat-container
-        div.list-group(ng-repeat="(chatid, chatmessages) in groupChats", 
-            ng-click="select($index, chatid)", ng-class="{sel: $index == props.index}")
+        div.list-group.e(ng-repeat="(chatid, chatmessages) in groupChats", ng-init="isCollapsed = true",
+            ng-click="select($index, chatid); isCollapsed = !isCollapsed", ng-class="{sel: $index == props.index}")
             //- div {{"chat_id: " + chatid}}
             //- div{{"index: " + $index}}
-            div.e(class="head-{{$first}}", ng-repeat="(messid, message) in chatmessages")
-                div 
+            div(ng-repeat="(messid, message) in chatmessages | filter: textBox")
+                div(collapse="!($first) && isCollapsed", ng-class="{children: !$first}")
                     H4 {{message.content}} 
                     p {{message.name}}  {{renderDate(message.date)}}
+                    //- div(ng-show="$first", class="ng-hide") {{filtered.length}}
     form(name="textForm", novalidate)
         div.form-group(ng-class="{'has-error' : (textForm.text.$invalid && !textForm.text.$pristine) || props.error}")
             input.form-control(type="text", name="text", ng-model="textBox", size="100", placeholder="new chat", required)
             p.help-block(ng-show="(textForm.text.$invalid && !textForm.text.$pristine) || props.error") text is required!
         input(type="button", class="btn btn-primary", value="reply", ng-click="newMessage(makeChatRef(props.selChatID))")
         input(type="button", class="btn btn-primary", type="submit", value="new chat", ng-click="newChat()")
-    div {{"index: " + props.index}}
-    div {{props.error}}        
+    //- div {{"index: " + props.index}}
+    //- div {{props.error}}        
