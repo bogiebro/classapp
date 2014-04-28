@@ -21,15 +21,15 @@
 //-     //- div {{"My name is: " + stuff.netid}}
 
 div(ng-controller="ChatCtrl")
-    //- div {{groupChats}}
-    div.list-group(ng-repeat="(chatid, chatmessages) in groupChats", 
-        ng-click="select($index, chatid)", ng-class="{sel: $index == props.index}")
-        //- div {{"chat_id: " + chatid}}
-        //- div{{"index: " + $index}}
-        div(class="head-{{$first}}", ng-repeat="(messid, message) in chatmessages")
-            div 
-                H4 {{message.content}} 
-                p {{message.name}}  {{renderDate(message.date)}}
+    div.chat-container
+        div.list-group(ng-repeat="(chatid, chatmessages) in groupChats", 
+            ng-click="select($index, chatid)", ng-class="{sel: $index == props.index}")
+            //- div {{"chat_id: " + chatid}}
+            //- div{{"index: " + $index}}
+            div.e(class="head-{{$first}}", ng-repeat="(messid, message) in chatmessages")
+                div 
+                    H4 {{message.content}} 
+                    p {{message.name}}  {{renderDate(message.date)}}
     form(name="textForm", novalidate)
         div.form-group(ng-class="{'has-error' : (textForm.text.$invalid && !textForm.text.$pristine) || props.error}")
             input.form-control(type="text", name="text", ng-model="textBox", size="100", placeholder="new chat", required)
