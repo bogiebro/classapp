@@ -125,8 +125,6 @@ describe("selecting groups", function() {
       .row(0)).isPresent()).toBe(true);
   });
 
-
-
   it('should allow users to leave', function () {
     element(by.id('remover')).click();
     browser.driver.sleep(3000);
@@ -149,6 +147,18 @@ describe('adding the class back', function () {
   })
 });
 
+//describe('subgroup stuff', () {
+
+//it should be able to create a subgroup
+//it should be able to edit the name of the subgroup
+//it should be able to make the group private/public
+//it('should be able to search for a member');
+//it('should be able to drag members to a subgroup');
+//it should be able to navigate between the class and the subgroup
+//it should be able to leave the subgroup
+
+//})
+
 
 describe('events', function () {
   beforeEach(function () {
@@ -164,9 +174,7 @@ describe('events', function () {
   });
 });
 
-//describe("member search", function())
-//it('should be able to find a member');
-//it('should be able to drag members to a subgroup');
+
 
 
 //describe("chat")
@@ -179,6 +187,7 @@ describe("files", function() {
 
   //it('should display the files page') how to get titles?
   //it('should upload files')
+  //it('should create files')
   //it('should be able to edit files')
 }
 
