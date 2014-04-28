@@ -5,7 +5,10 @@ angular.module("app.auth", ['firebase', 'ngCookies'])
 # and the user's netid ($ref.netid) as string
 .factory '$ref' ($cookies, $rootScope, $firebase, $window)->
     refScope = {}
-    cookieData = JSON.parse($cookies.casInfo)
+    try
+      cookieData = JSON.parse($cookies.casInfo)
+    catch
+      window.location = '/logout'
     netid = cookieData.netid
     firebase = new Firebase($PROCESS_ENV_FIREBASE)
     do
