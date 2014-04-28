@@ -19,12 +19,12 @@ Style:
 */
 angular.module("app.chat", ['app.auth'])
 
-.controller('ChatCtrl', function ($scope, $timeout, $ref, $group, $users, $location) { 
+.controller('ChatCtrl', function ($scope, $timeout, $ref, $group, $users, $location, $anchorScroll) { 
   var userinfo = $users.users[$ref.netid]; // capture logged in user's info: name, netid
   $scope.groupChats = {}; // holds all chats for a group
   var chatsRef = {}; // firebase ref to selected group's chats
   
-  //
+  // ADD COMMENT DOC
   $scope.$watch('group.id', function (newvalue, oldvalue) {
     if (!newvalue) {
       $location.path('/bigevents');
@@ -42,11 +42,10 @@ angular.module("app.chat", ['app.auth'])
   });
 
   // $scope.toggled = true;          // checks whether search is toggled
-  $scope.textBox = "";
-  $scope.props = {};
-  $scope.props.selChatID = ""; // holds the reference to the chat in focus
-  $scope.props.index = -1;
-  // Will need record of chatid
+  // $scope.textBox = "";
+  $scope.props = {selChatID: "", index: -1, error: false};
+  // $scope.props.selChatID = ""; // holds the reference to the chat in focus
+  // $scope.props.index = -1;
 
   $scope.toggle = function () {
       $scope.toggled = !scope.toggled;
@@ -62,8 +61,9 @@ angular.module("app.chat", ['app.auth'])
   }
 
   // Displays proper placeholder for textbox, when searching or writing
-  $scope.placeholder = function () {
-      if ($scope.toggled === true) {
+  $scope.toggleSearch = function () {
+      if ($scope.props.index != -1) {
+          // untoggle search
           return "search here"
       } else {
           return "add comment here"
@@ -74,32 +74,45 @@ angular.module("app.chat", ['app.auth'])
   // Toggles focus, highlight of chat elmt for reply, style 
   $scope.select = function (index, chatid) {
     if ($scope.props.index == index) {
-      $scope.props.index = -1;
-      $scope.props.selChatID = "";
+      resetProps();
     } else {
       $scope.props.index = index;
       $scope.props.selChatID = chatid;
     }
   }
 
+  var resetProps = function () {
+    $scope.props.index = -1;
+    $scope.props.selChatID = "";
+    // $scope.props.error = false;
+  }
+
   // Input: Obj, firebase chatRef;
   // side input: Str, $scope.textBox; userinfo props
   // Creates new child in chat, adds message  
   $scope.newMessage = function (chatRef) {
-    chatRef.push({
-      'content': $scope.textBox || "Test Message", 
-      'date': new Date().getTime(), 
-      'name': userinfo.name, 
-      'netid': userinfo.netid
-    });
-    $scope.props.selChatID = "";
-    chatsRef.on('value', function (chatsSnapshot) {
-        $timeout(function () {
-          $scope.$apply(function () {
-            $scope.groupChats = chatsSnapshot.val();
-          }, 0);
-        }); 
-    });
+    if ($scope.textBox == undefined || $scope.textBox.trim() == "") {
+      $scope.props.error = true;
+      console.log("Submit pressed");
+    } else {
+      chatRef.push({
+        'content': $scope.textBox || "Test Message", 
+        'date': new Date().getTime(), 
+        'name': userinfo.name, 
+        'netid': userinfo.netid
+      });
+      resetProps();
+      $scope.props.error = false;
+      $scope.textBox = "";
+      $scope.textForm.$setPristine();
+      chatsRef.on('value', function (chatsSnapshot) { // abstract to separate function?
+          $timeout(function () {
+            $scope.$apply(function () {
+              $scope.groupChats = chatsSnapshot.val();
+            }, 0);
+          }); 
+      });
+    }
   }
 
   // Input: Num, epoch seconds
