@@ -1,41 +1,36 @@
-//- div(ng-controller="ChatCtrl")
-//-     div.list-group(ng-repeat="cmtchain in chains", style="width : 200px; float: left", ng-click="focus.chain = cmtchain")
-//-         em
-//-             strong
-//-                 li.list-group-item {{cmtchain.head.content}}
-//-                 li.list-group-item {{cmtchain.head.user}}
-//-                 li.list-group-item {{cmtchain.head.date}}
-//-         div(ng-repeat="tail in cmtchain.tail  | filter: commentSearch()")
-//-             li.list-group-item {{tail.content}}
-//-             li.list-group-item {{tail.user}}
-//-     form(style="clear: both")
-//-         input(type="text", ng-model="textBox", size="100", placeholder="poo")
-//-         input(type="button", class="btn btn-primary", type="submit", value="toggle", ng-click="toggle()")
-//-             span Toggle Search
-//-         input(type="button", class="btn btn-primary", type="submit", value="add comment", ng-click="addComment()")
-//-         input(type="button", class="btn btn-primary", type="submit", value="new comment", ng-click="newComment()")
-//-         input(type="button", class="btn btn-primary", type="submit", value="cancel comment", disabled)
-//-     div.error(ng-model="error") {{error}}
-//-     //- div {{focus.chain}}
-//-     //- div {{toggled}}
-//-     //- div {{"My name is: " + stuff.netid}}
+//- expand == false
+//- closed == true
+//- select implies reply
+
+
+        //- div.list-group.e(ng-repeat="(chatid, chatmessages) in groupChats", ng-init="isCollapsed.push(true)",
+        //-     ng-click="isCollapsed[$index] = !isCollapsed[$index]", ng-class="{sel: $index == props.index}")
+            //-  div(ng-repeat="(messid, message) in chatmessages | filter: textBox")
+                div(collapse="!($first) && isCollapsed[$parent.$index]", ng-class="{children: !$first}")
 
 div(ng-controller="ChatCtrl")
-    div.chat-container
-        div.list-group.e(ng-repeat="(chatid, chatmessages) in groupChats", ng-init="isCollapsed = true",
-            ng-click="select($index, chatid); isCollapsed = !isCollapsed", ng-class="{sel: $index == props.index}")
-            //- div {{"chat_id: " + chatid}}
-            //- div{{"index: " + $index}}
-            div(ng-repeat="(messid, message) in chatmessages | filter: textBox")
-                div(collapse="!($first) && isCollapsed", ng-class="{children: !$first}")
+    //- div {{groupChats}}
+    //- div {{arrChats}}
+    //- div {{mapChatIDs}}
+    div.chat-container(ng-init="isCollapsed = []")
+        div.list-group.e(ng-repeat="chat in arrChats | filter: search(textBox)", ng-init="index = $index; isCollapsed.push(true)",
+            ng-class="{sel: $index == props.index}")
+            //- select($index, chatid); once I implement reply
+            div(ng-repeat="(key, message) in chat")
+                div(collapse="!($first) && isCollapsed[$parent.$index]", ng-class="{children: !$first}")
                     H4 {{message.content}} 
                     p {{message.name}}  {{renderDate(message.date)}}
-                    //- div(ng-show="$first", class="ng-hide") {{filtered.length}}
+            input(type="button", class="btn btn-primary", value="reply", ng-click="select($index)")
+            input(type="button", class="btn btn-primary", value="expand", ng-click="isCollapsed[$index] = !isCollapsed[$index]")
     form(name="textForm", novalidate)
         div.form-group(ng-class="{'has-error' : (textForm.text.$invalid && !textForm.text.$pristine) || props.error}")
             input.form-control(type="text", name="text", ng-model="textBox", size="100", placeholder="new chat", required)
             p.help-block(ng-show="(textForm.text.$invalid && !textForm.text.$pristine) || props.error") text is required!
         input(type="button", class="btn btn-primary", value="reply", ng-click="newMessage(makeChatRef(props.selChatID))")
-        input(type="button", class="btn btn-primary", type="submit", value="new chat", ng-click="newChat()")
-    //- div {{"index: " + props.index}}
+        input(type="button", class="btn btn-primary", value="new chat", ng-click="newChat()")
+        input(type="button", class="btn btn-primary", value="cancel reply", ng-click="resetProps()")
+
+        //- cancel reply/new chat
+    div {{"index: " + props.index}}
     //- div {{props.error}}        
+    div{{props.selChatID}}
