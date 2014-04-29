@@ -24,7 +24,7 @@
           span.glyphicon(ng-class="{'glyphicon-lock': group.private, 'glyphicon-globe': !group.private}")
       button.btn.btn-default(type='button', id="remover", tooltip='Leave group', tooltip-placement="bottom", ng-if='member()', ng-click='removeUser()')
           span.glyphicon.glyphicon-trash
-.row.scrollit
+.row.memberscroll
   span(ng-repeat="usr in users[group.id] | userify: info | filter: opts.searchtext")
     div.picsquare(ui-draggable='true', drag='usr.netid')
       img(ng-class="{'img-rounded': !opts.selected[usr.netid], 'img-thumbnail': opts.selected[usr.netid]}",
@@ -35,9 +35,9 @@ div(ng-if="group.parent")
   h2.text-center.draginfo <small>Drag users from the main group to add members</small>
 div(ng-if="!group.parent")
   h2.text-center.draginfo <small>Drag users to subgroups in the sidebar to add members</small>
-  p.subgroups Subgroups:
-    span.label.label-default.subgrouplabel(ng-repeat="subgroup in subgroups", ng-click="setGroup(subgroup.groupid)")
-      | {{subgroup.name}}
+  p.subgroups.ng-cloak Subgroups:
+    span.label.label-default.subgrouplabel(ng-repeat="subgroup in groupsubs[group.id]", ng-click="setGroup(subgroup)")
+      | {{subgroups[subgroup].name}}
 
 script(type='text/ng-template', id='changeNameId')
   div.modal-header

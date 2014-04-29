@@ -65,6 +65,7 @@ angular.module("app.events", ['app.auth', 'ui.keypress', 'app.extendui', 'app.co
   // close the editing field
   $scope.closeMe = function(elem) {
     var newtime =  Date.fromString(elem.message);
+    console.log(newtime);
     var tsecs = newtime.getTime();
     if (tsecs > new Date().getTime()) {
       var m = moment(newtime);

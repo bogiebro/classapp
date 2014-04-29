@@ -211,7 +211,6 @@ describe('files', function () {
 })
 */
 
-
 describe('logout', function () {
   it ('should clear the user\'s cookie', function () {
     browser.get('http://localhost:5000/');

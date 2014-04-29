@@ -8,7 +8,7 @@ img.center-block.loading(src="/img/loader.gif", ng-if="classLoadWaiting")
 h3.helptext(ng-if="!classLoadWaiting && numGroups == 0")
   small Search for a class to join study groups
 
-div.groupscroll
+div.groupscroll.fullheight
   ul.classesBody.nav.nav-pills.nav-stacked(ng-if="!classLoadWaiting", ng-repeat="class in myclasses")
     li(ng-class="{active: group.id == class.props.groupid}")
       a(href, ng-click='changeGroup(class.props.groupid)') {{class.props.classcode}}

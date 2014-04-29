@@ -8,7 +8,7 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
         .when('/chat', {controller:'ChatCtrl', templateUrl:'app/main/chat.jade'})
         .when('/members', {controller:'MembersCtrl', templateUrl:'app/main/members.jade'})
         .when('/files', {controller:'FilesCtrl', templateUrl:'app/main/files.jade'})
-        .when('/help', {controller:'PrefCtrl', templateUrl:'app/main/help.jade'})
+        .when('/help', {controller:'FAQCtrl', templateUrl:'app/main/help.jade'})
         .when('/events', {controller:'EventsCtrl', templateUrl:'app/main/events.jade'})
         .when('/bigevents', {controller:'BigEventsCtrl', templateUrl:'app/main/bigevents.jade'})
         .otherwise({redirectTo: '/bigevents'})
@@ -76,8 +76,11 @@ window.App = angular.module("App", ['ui.bootstrap', 'ui.bootstrap.tpls', 'app.gr
             templateUrl: 'aboutId'
             controller: 'AboutCtrl')
     $scope.help = ->
-      $group.clearGroup()
       $location.path('/help');
+
+.controller 'FAQCtrl', ($scope, $group)!->
+  $group.props.name = '';
+  $group.props.id = '';
 
 .controller 'MainCtrl', ($scope, $location, $modalQueue, $group)!->
   $scope.group = $group.props
