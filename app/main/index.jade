@@ -30,14 +30,14 @@ html(ng-app="App", manifest="/web.appcache")
               span(class="glyphicon glyphicon-comment")
             button(type="button", ng-click="go('/files')", class="btn navbar-btn btn-default btn-sm")
               span(class="glyphicon glyphicon-folder-open")
-      .container-fluid
-        .row(ng-controller="MainCtrl")
-          .col-sm-2(ng-controller="GroupCtrl", ng-class="{'hidden-xs': group.id}")
-            ng-include(src="'app/main/group.jade'")
-          div(ng-class="{'col-sm-8': group.id, 'col-sm-10': !group.id, 'hidden-xs': !group.id}")
-            div(ng-view)
-          div.hidden-xs(ng-class="{'col-sm-2': group.id, hidden: !group.id}", ng-controller="EventsCtrl")
-            ng-include(src="'app/main/events.jade'")
+      .container-fluid.fillpage
+        .row.fullheight(ng-controller="MainCtrl")
+          .col-sm-2.fullheight(ng-controller="GroupCtrl", ng-class="{'hidden-xs': group.id}")
+            ng-include.fullheight(src="'app/main/group.jade'")
+          div.fullheight(ng-class="{'col-sm-8': group.id, 'col-sm-10': !group.id, 'hidden-xs': !group.id}")
+            div.fullheight(ng-view)
+          div.fullheight.hidden-xs(ng-class="{'col-sm-2': group.id, hidden: !group.id}", ng-controller="EventsCtrl")
+            ng-include.fullheight(src="'app/main/events.jade'")
       .options(ng-controller="PrefCtrl") 
           a.spaced(ng-click="about()") About
           a.spaced(ng-click="setupUser()") Preferences
