@@ -15,11 +15,11 @@ describe("greeting users", function() {
     });
 
     it('should direct logged-in users to the main page', function() {
-        browser.driver.get('http://localhost:5000/testlogin').then( function(){
+        browser.driver.get('http://localhost:5000/testlogin').then( function() {
           browser.get('http://localhost:5000/');
           browser.driver.getTitle().then(function(title) {
             expect(title).not.toContain('Yale');
-          })
+          });
         });
     });
     
@@ -81,13 +81,13 @@ describe('Edit Acount Info', function () {
 */
 
 describe('About', function () {
-  it('should not show the about page until clicked'), function(){
+  it('should not show the about page until clicked', function(){
     browser.get('http://localhost:5000/');
     broswer.driver.sleep(3000);
     expect(element(by.id('aboutId')).isPresent()).toBe(false);
   });
 
-  it('should show users the about page'), function(){
+  it('should show users the about page', function(){
     browser.get('http://localhost:5000/');
     browser.driver.sleep(3000);
     element(by.id('aboutButton')).click();
@@ -98,10 +98,11 @@ describe('About', function () {
 
 describe('FAQ', function() {
   it('should direct users to FAQ page when clicked', function() {
+    //browser.sleep
     broswer.get('http://localhost:5000/');
     element(by.id('FAQButton')).click();
     expect(element(by.id('FAQTest')).isPresent()).toBe(true);
-  }
+  });
 });
 
 describe("selecting groups", function() {
