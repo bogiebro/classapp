@@ -32,7 +32,7 @@ div(ng-controller="ChatCtrl")
                     p {{message.name}}  {{renderDate(message.date)}}
     form(name="textForm", novalidate)
         div.form-group(ng-class="{'has-error' : (textForm.text.$invalid && !textForm.text.$pristine) || props.error}")
-            input.form-control(type="text", name="text", ng-model="textBox", size="100", placeholder="new chat", required)
+            input.form-control(type="text", id='chatfield', name="text", ng-model="textBox", size="100", placeholder="new chat", required)
             p.help-block(ng-show="(textForm.text.$invalid && !textForm.text.$pristine) || props.error") text is required!
         input(type="button", class="btn btn-primary", value="reply", ng-click="newMessage(makeChatRef(props.selChatID))")
         input(type="button", class="btn btn-primary", type="submit", value="new chat", ng-click="newChat()")

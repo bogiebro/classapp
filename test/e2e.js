@@ -25,7 +25,7 @@ describe("greeting users", function() {
     
     it('should greet users with a welcome splash', function() {
       browser.get('http://localhost:5000/');
-      browser.driver.sleep(3500);
+      browser.driver.sleep(300);
       expect(element(by.id('help')).isPresent()).toBe(true);
     });
 
@@ -57,55 +57,52 @@ describe("greeting users", function() {
     });
 });
 
-/*New Tests Start Here
+
 describe('Edit Acount Info', function () {
-  it('should let me change my name and college'), function(){
+  it('should let me change my name and college', function(){
     browser.get('http://localhost:5000/');
     browser.driver.sleep(3000);
-    //click the right thing
+    element(by.id('setupUserButton')).click();
     element(by.id('namefield')).sendKeys('Tom Tester');
-    element(by.id('')).sendKeys('Swing Space');
-    element(by.id('')).sendKeys(protractor.Key.ENTER);
-    //click it again, fix test
-    element(by.id('namefield')).
-  }
+    element(by.id('collegefield')).sendKeys('Swing Space');
+    element(by.id('collegefield')).sendKeys(protractor.Key.ENTER);
+    element(by.id('setupUserButton')).click();
+    expect(element(by.id('namefield'))).toContain('Tom');
+  });
+});
 
+/* Add to the above
   it('should let me add a picture'), function(){
     browser.get('http://localhost:5000/');
     browser.driver.sleep(3000);
     //drag favicon?
   }
 })
+*/
 
-//Except that the About page is a modal, so might have to use an alert text checker?
 describe('About', function () {
   it('should not show the about page until clicked'), function(){
     browser.get('http://localhost:5000/');
     broswer.driver.sleep(3000);
-    expect element(by.id('aboutId')).isPresent()).toBe(false);
-  }
-  //Have to use the prefctrl and click the button
+    expect(element(by.id('aboutId')).isPresent()).toBe(false);
+  });
+
   it('should show users the about page'), function(){
     browser.get('http://localhost:5000/');
     browser.driver.sleep(3000);
-    element(by.id('aboutId')).click();
+    element(by.id('aboutButton')).click();
     browser.driver.sleep(3000);
-    expect element(by.id('aboutId')).isPresent()).toBe(true);
-  }
+    expect(element(by.id('aboutId')).isPresent()).toBe(true);
+  });
 });
 
 describe('FAQ', function() {
   it('should direct users to FAQ page when clicked', function() {
-    //is this correct?
-    broswer.get('http://localhost:5000/#/help');
-    //how do I click this button?
-    expect //that the page contains some phrase that's helpful
+    broswer.get('http://localhost:5000/');
+    element(by.id('FAQButton')).click();
+    expect(element(by.id('FAQTest')).isPresent()).toBe(true);
   }
 });
-
-*/
-
-
 
 describe("selecting groups", function() {
   beforeEach(function () {
@@ -147,17 +144,27 @@ describe('adding the class back', function () {
   })
 });
 
-//describe('subgroup stuff', () {
+describe('subgroup functionality', function() {
 
-//it should be able to create a subgroup
-//it should be able to edit the name of the subgroup
-//it should be able to make the group private/public
-//it('should be able to search for a member');
-//it('should be able to drag members to a subgroup');
-//it should be able to navigate between the class and the subgroup
-//it should be able to leave the subgroup
+  it('should be able to create a subgroup and have tester as member', function () {
+    browser.get('http://localhost:5000/');
+    broswer.driver.sleep(3000);
+    element(by.repeater('class in myclasses').row(0)).click();
+    element(by.id('newSubgroupButton')).click();
+    element(by.id('setGroupName')).sendKeys('testgroupunique\n');
+    element(by.id('setGroupName')).sendKeys(protractor.Key.ENTER);
+    expect(element(by.repeater('subgroup in subgroups').row(0)).isPresent()).toBe(true);
 
-//})
+    })
+
+    //it should be able to make the group private/public
+    //it('should be able to drag members to a subgroup');
+    //it should be able to leave the subgroup
+
+  })
+
+
+
 
 
 describe('events', function () {
@@ -176,20 +183,34 @@ describe('events', function () {
 
 
 
+describe('chat', function () {
+    it('should send messages', function() {
+      browser.get('http://localhost:5000/');
+      browser.driver.sleep(3000);
+      element(by.repeater('class in myclasses').row(0)).click();
+      element(by.id('chatfield')).sendKeys('testtext');
+      element(by.id('chatfield')).sendKeys(protractor.Key.ENTER);
+      element(by.id('chatfield')).sendKeys('testtext');
+      expect()
+      var all = element.all(by.repeater('class in myclasses'));
+      all.then(function (arr) {
+        expect(arr.length).toBeGreaterThan(0);
+      });
+    });
+});
 
-//describe("chat")
-//Send Message, Reply
+/*
+describe('files', function () {
+  //how do you drop a file?
+  it('should create new documents', function() {
+    browser.get('http://localhost:5000/');
+    browser.driver.sleep(3000);
 
-describe("files", function() {
-  browser.get('http://localhost:5000/');
-  element(by.repeater('class in myclasses').row(0)).click();
-  //click files
-
-  //it('should display the files page') how to get titles?
+  })
   //it('should upload files')
-  //it('should create files')
-  //it('should be able to edit files')
-}
+})
+*/
+
 
 describe('logout', function () {
   it ('should clear the user\'s cookie', function () {

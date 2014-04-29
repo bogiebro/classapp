@@ -15,9 +15,9 @@
       button.btn.btn-default.btn-sm(type='button', tooltip='Leave group', tooltip-placement="bottom", ng-if='member()', ng-click='removeUser()')
           span.glyphicon.glyphicon-trash
     .btn-group.hidden-xs
-      button.btn.btn-default(type='button', ng-if="member()", ng-click='newSubgroup()') Create Subgroup
-      button.btn.btn-default(type='button', ng-if='!member()', ng-click='joinGroup(group.id)') Join group
-      button.btn.btn-default(type='button', tooltip-placement="bottom", tooltip='Edit', ng-if='group.parent && member()', ng-click='changeName()')
+      button.btn.btn-default(type='button', ng-if="member()", ng-click='newSubgroup()', id='newSubgroupButton') Create Subgroup
+      button.btn.btn-default(type='button', ng-if='!member()', ng-click='joinGroup(group.id)', id='joinSubgroupButton') Join group
+      button.btn.btn-default(type='button', tooltip-placement="bottom", tooltip='Edit', ng-if='group.parent && member()', ng-click='changeName()', id='removeSubgroupButton')
           span.glyphicon.glyphicon-pencil
       button.btn.btn-default(type='button', tooltip-placement="bottom", tooltip="Make group {{group.private ? 'public' : 'private'}}",
         ng-if='group.parent && member()', ng-click='privitize()')
@@ -45,6 +45,6 @@ script(type='text/ng-template', id='changeNameId')
   div.modal-body
     form(ng-submit='setName(group.name)')
       .input-group
-        input.form-control(type="text", ng-model='newprops.name')
+        input.form-control(type="text", ng-model='newprops.name', id='setGroupName')
         span.input-group-btn
           button.btn.btn-default(type='button', ng-click='setName(group.name)') update 
