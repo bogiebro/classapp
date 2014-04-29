@@ -28,7 +28,7 @@ div(ng-controller="ChatCtrl")
             //-     button.btn.btn-default(type="button", ng-click="select($index)") reply
             //-     button.btn.btn-default(type="button", ng-click="isCollapsed[$index] = !isCollapsed[$index]") expand
     form(name="textForm", ng-submit="submitHandler()", novalidate)
-        div.form-group(ng-class="{'has-error' : (textForm.text.$invalid && !textForm.text.$pristine) || props.error}")
+        div.bottom.form-group(ng-class="{'has-error' : (textForm.text.$invalid && !textForm.text.$pristine) || props.error}")
             input.form-control(type="text", name="text", ng-model="textBox", size="100", placeholder="new chat", required)
             p.help-block(ng-show="(textForm.text.$invalid && !textForm.text.$pristine) || props.error") text is required!
         //- div.btn-group

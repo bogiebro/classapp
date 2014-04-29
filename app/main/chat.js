@@ -1,20 +1,14 @@
 /*
 Implement:
-  search x
-  click to toggle reply/unreply
   delete messages 
   tags/hashtags 
-
-Edge cases to deal with:
-  x Replying to an unselected chat, no selChatID = ''
 
 Style:
   message design
   chat design
   textbar design
-    minimal buttons
-
 */
+
 angular.module("app.chat", ['app.auth', 'ui.bootstrap.collapse'])
 
 .controller('ChatCtrl', function ($scope, $timeout, $ref, $group, $users, $location, $anchorScroll) { 
